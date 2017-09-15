@@ -1,9 +1,10 @@
 ##**CS 308 Cell Society Design**
-Team Members:
+======
+####Team Members:
 * Sam Slack
 * Archana
 * Adithya
-=====
+-------
 
 ###**Introduction**
 This section describes the problem your team is trying to solve by writing this program, the primary design goals of the project (i.e., where is it most flexible), and the primary architecture of the design (i.e., what is closed and what is open). This section should discuss the program at a high-level (i.e., without referencing specific classes, data structures, or code).
