@@ -72,5 +72,15 @@ frontend
 cellmanager
 rules
 
+###**Team Responsibilities**
+
+####Adithya:
+Front-end piece -- creating the user interface and taking in user input.
+
+####Sam:
+Back-end piece -- creating all the methods and logic behind the Rules class.
+
+####Archana:
+Interface between front-end and back-end -- creating cells, the cellManager, and reading XML files.
 
 
