@@ -16,6 +16,35 @@ A single XML file will specify the exact nature of the simulation to be run. Ind
 
 The overarching design architecture consists of initially reading in the XML file to specify certain front end and back end conditions. The back end will control the logic occuring between successive iterations of the game loop, and will relate this information to the front end by means of a central interface. The front end will control the visual display and hadnle user input.
 
+###**Overview**
+The program consists of 6 main components. They are as follows:
+* Main
+* Initializer
+* FrontEnd
+* Rules
+* CellManager
+* Cell
+
+_Main_ is the top-level class that will be run. Its job is to firstly launch the _FrontEnd_ component whose role is described next, and wait on a signal from the FrontEnd as to which game has been selected. Once this signal is received, it proceeds to initialize the Initializer with the XML file name corresponding to the chosen game, as well as a reference to the FrontEnd component. 
+
+Initializer takes the name of an XML config file and a reference to a _FrontEnd_ as initializing arguments, proceeding to parse the XML file (after asserting the file exists and corresponds to a valid game). The retrieved config is then used to initialize an appropriate sub-class of _Rules_ and _CellManager_ with a reference to _FrontEnd_.
+
+_FrontEnd_ is in charge of both displaying / updating the GUI and handling user inputs (button presses, file uploads, key inputs for change of config, etc). The main update loop of the _FrontEnd_ calls the _CellManager.performUpdate(int steps)_ public method of _CellManager_ (described further soon) to progress the simulation. User inputs would be handled by calling the _Rules.setConfig(String key, String value)_ public method on the _Rules_ class.
+
+_Rules_ embodies the logic of state transitions, both on general and game-specific levels. It is an abstract superclass that will be extended by game-specific sub-classes. It stores most of the config read from the XML other than the actual cell matrix. The _Cell_ component calls the _Rules.applyRule(Cell current, Cell neighbor)_ method and / or _Rules.applyRule(Cell current, List<Cell> neighbors)_ method of the _Rules_ class to retrieve a new _State_ result, which is returned to the _CellManager_. 
+
+_CellManager_ holds a reference to the matrix of Cells (_Cell[][] matrix_) which it only exposes through a public API method _getMatrix()_. This matrix is initialized either during the initialization of _CellManager_ or through a _setMatrix(Cel[][] matrix)_ method. Its _performUpdate(int steps)_ method performs each step in 2 parts. Firstly, it iterates through every _Cell_ in the current matrix, computing its next state by calling _Cell.computeState(List<Cell> neighbors, Rules rules)_ on each _Cell_. These results are saved in a local matrix, _State[][] newResults_. Then, it iterates through every _Cell_, calling _Cell.setState(State newState)_ based on the new results computed above.
+
+_Cell_ represents a single cell of Cell Society, regardless of the game. It is an abstract superclass that is extended by game-specific _Cell_ types. At minimum, it stores its current _State_, the exact type and value depending on the game type. It may also hold other information such as color through its instance variables. Its _computeState(List<Cell> neighbors, Rules rules)_ method iterates through each neighbor, passing its own _State_ and neighbor's _State_ to the rules instance to derive its new state. This state is then returned to the caller. The _State_ of the cell can be retrieved and updated through _getState()_ and _setState(State state)_ methods.
+
+These relationships are summarized in the below UML diagram.
+
+
+__UML Diagram__
+![Overview UML Diagram](CellSocietyUMLDiagram.png "Overview UML")
+ 
+
+
 ###**User Interface**
 All the text for the user interface will come from a text file.  This text information will be read out and stored by a class separate from main.
 
