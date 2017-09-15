@@ -30,6 +30,10 @@ The panel will also have an option to upload a new configuration file.  If the u
 ####Catching Errors
 If the user inputs a configuration file that doesn't match the needed input, the program will create a pop-up error message that will tell the user that the chosen file is not in the right format and to upload a new one.  If the user inputs words instead of numbers into the grid size box, they will be prompted to input a number.
 
+These images show our basic UI designs.
+![Basic Design 1](StartPage.JPG)
+![Basic Design 2](SimulationPage.JPG)
+
 
 
 ###**Design Details**
