@@ -101,6 +101,34 @@ frontend
 cellmanager
 rules
 
+###**Design Considerations**
+
++ Flexibility / Extensibility to new simulation types
+
+In keeping with the 'Open-Closed' design principle discussed in the readings, our design hopes to support easy addition of new simulation types (or rules) with pure code _addition_ rather than _modification_. To this end, the design generously employs abstract super-classes such as _Cell_ and _Rules_. These abstractions, rather than concrete game-specific sub-classes (such as _GameOfLifeCell_), are used especially in the interfaces such as _CellManager_ and _FrontEnd_. This way, new simulations can introduce rules of their own by _extend_ing _Rules_ and state of their own by _extend_ing _Cell_.
+
++ Isolation (private data) & Interfaces (public APIs) / Abstraction Boundaries
+
+To maintain abstraction boundaries between components and minimize 'back-channels' for data-sharing, each component will provide a public interface / API that provides carefully calibrated access to its private data. This interface will abstract away from each component's private data storage so as to facilitate concurrent development by team members.
+
+This is evident from the UML diagram displayed in the _Overview_ section. For instance, consider the _performUpdate(int numSteps)_ method of _CellManager_ which is called from (potentially among others) the _FrontEnd_ component. The caller of this method is not given any access to the internal state of _CellManager_.
+
++ Testability / Ease of debugging
+
+The design seeks to encapsulate as much information as possible in function signatures (through parameters), as opposed to referencing global variables or instance properties. This way, testability (especially unit-testing) and debugging are facilitated.
+
+Each team-member is expected to unit-test every method of his / her public API before releasing it to the team. This way, end-to-end testing is simplified as faults can be isolated quickly.
+
++ Naming - intuitiveness and readability
+
+Even at a design level, naming of components and public interface methods is a significant consideration. Accurate and descriptive names will support quick look-up of code by functionality and easy addition of new code to the right place. This has spill-over benefits in terms of other design factors such as testability / ease of debugging.
+
+This implies that names may have to be updated as the design and functionality get updated. For instance, the _Initializer_ component was initially called _XMLParser_. However, based on the observation that the config read from the XML may be a collection of arbitrary types, it was decided that the initialization of _CellManager_ and _Rules_ components would occur within this component. Thus, it was renamed to _Initializer_.
+
++ Even division of work
+
+As a final consideration (or tie-breaker) when deciding which component should encapsulate a certain functionality, the even division of work is considered. In other words, if a function fits equally well in 2 components without violating any of the above principles (such as abstraction boundaries), it is assigned to the smaller component.
+
 ###**Team Responsibilities**
 
 ####Adithya:
