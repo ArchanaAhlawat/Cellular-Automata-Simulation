@@ -103,7 +103,9 @@ The CellManager tracks the current status and position of every cell. It will co
 
 Cell:
 
-The Cell will possess any necessary instance variables to keep track of the Cell's possible states, colors, and other traits. Besides existing as an Object to populate the simulation, it will also be used as a way to bridge the communication gap between CellManager and Rules, and allow CellManager to use Rules to get the next state of the Cell. 
+The Cell will possess any necessary instance variables to keep track of the Cell's possible states, colors, and other traits. Besides existing as an Object to populate the simulation, it will also be used as a way to bridge the communication gap between CellManager and Rules, and allow CellManager to use Rules to get the next state of the Cell.
+
+### Design Considerations 
 
 + Flexibility / Extensibility to new simulation types
 
