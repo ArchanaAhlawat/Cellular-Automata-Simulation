@@ -2,21 +2,21 @@
 ======
 ####Team Members:
 * Sam Slack
-* Archana
-* Adithya
+* Archana Ahlawat
+* Adithya Raghunathan
+
 -------
 
 ###**Introduction**
-This section describes the problem your team is trying to solve by writing this program, the primary design goals of the project (i.e., where is it most flexible), and the primary architecture of the design (i.e., what is closed and what is open). This section should discuss the program at a high-level (i.e., without referencing specific classes, data structures, or code).
 
+This CellSociety project is intended to create a framweork for running Cellular Automata (CA) simulations. The design should be robust and flexible enough to quickly implement new CA simulations. Each CA simulation is characterized by a grid of a finite set of cells possessing different states. Unique rules specify how these cells change over time, taking into consideration both cell-specific traits and relationships with neighboring cells. 
 
-This CellSociety project is intended to create a framweork for running Cellular Automata (CA) simulations. The design should be robust enough to quickly implement new CA simulations. Each CA simulation is characterized by a grid of a finite set of Cells possessing different states. Unique rules specify how these Cells change over time, taking into consideration both Cell-specific traits and relationships with neighboring Cells. 
+A single XML file will specify the exact nature of the simulation to be run. Individuals can explicitly modify the XML attributes to change the simulation, or interface directly with a GUI. Benefits of modifying the XML directly are that specific simulation states can be saved and compared. 
 
-A single XML file will specify the exact nature of the simulation to be run. Individuals can explicitly modify the XML attibutes to change the simulation, or interface directly with a GUI. Benefits of modifying the XML directly are that specific simulation states can be saved and compared. 
-
-The overarching design architecture consists of initially reading in the XML file to specify certain front end and back end conditions. The back end will control the logic occuring between successive iterations of the game loop, and will relate this information to the front end by means of a central interface. The front end will control the visual display and hadnle user input.
+The overarching design architecture consists of initially reading in the XML file to specify certain front end and back end conditions. The back end will control the logic occurring between successive iterations of the game loop, and will relate this information to the front end by means of a central interface. The front end will control the visual display and handle user input.  The way that the user interacts with the GUI and the overall logic behind updating the matrix of cells based on rules will be closed, since the flow of the program is pretty set.  However, the design will allow for easy addition of other CA simulations and other rules.
 
 ###**Overview**
+
 The program consists of 6 main components. They are as follows:
 * Main
 * Initializer
@@ -25,9 +25,9 @@ The program consists of 6 main components. They are as follows:
 * CellManager
 * Cell
 
-_Main_ is the top-level class that will be run. Its job is to firstly launch the _FrontEnd_ component whose role is described next, and wait on a signal from the FrontEnd as to which game has been selected. Once this signal is received, it proceeds to initialize the Initializer with the XML file name corresponding to the chosen game, as well as a reference to the FrontEnd component. 
+_Main_ is the top-level class that will be run. Its job is to firstly launch the _FrontEnd_ component whose role is described next, and wait on a signal from the FrontEnd as to which simulation has been selected. Once this signal is received, it proceeds to initialize the Initializer with the XML file name corresponding to the chosen simulation, as well as a reference to the FrontEnd component. 
 
-Initializer takes the name of an XML config file and a reference to a _FrontEnd_ as initializing arguments, proceeding to parse the XML file (after asserting the file exists and corresponds to a valid game). The retrieved config is then used to initialize an appropriate sub-class of _Rules_ and _CellManager_ with a reference to _FrontEnd_.
+Initializer takes the name of an XML config file and a reference to a _FrontEnd_ as initializing arguments, proceeding to parse the XML file (after asserting the file exists and corresponds to a valid simulation). The retrieved config is then used to initialize an appropriate sub-class of _Rules_ and _CellManager_ with a reference to _FrontEnd_.
 
 _FrontEnd_ is in charge of both displaying / updating the GUI and handling user inputs (button presses, file uploads, key inputs for change of config, etc). The main update loop of the _FrontEnd_ calls the _CellManager.performUpdate(int steps)_ public method of _CellManager_ (described further soon) to progress the simulation. User inputs would be handled by calling the _Rules.setConfig(String key, String value)_ public method on the _Rules_ class.
 
@@ -46,17 +46,21 @@ __UML Diagram__
 
 
 ###**User Interface**
+
 All the text for the user interface will come from a text file.  This text information will be read out and stored by a class separate from main.
 
 ####Start and Configuration
+
 The program will begin with a screen that displays an explanation of the simulation and the use of it.  This screen will have a button that allows the user to upload an XML configuration file.  Once it is uploaded, the user can input the grid's desired size in a text box, and then click a "Start" button.  The "Start" button will not do anything if it is clicked at there is no file uploaded.
 
 ####Run Simulation
+
 The "Start" button will create a new page where the initial grid will be displayed.  The user will be prompted to press the spacebar in order to begin the simulation.  On this same page, there will be a small panel in a corner with buttons that allow the user to pause and resume the simulation, and fast-forward and slow-down the simulation.  There will be additional buttons that allow the user to move forward by 10 generations automatically.
 
 The panel will also have an option to upload a new configuration file.  If the user clicks on this, then the simulation will stop, the user will have to input the new simulation's desired grid size, and then click a "Start" button again in order to begin the new simulation.
 
 ####Catching Errors
+
 If the user inputs a configuration file that doesn't match the needed input, the program will create a pop-up error message that will tell the user that the chosen file is not in the right format and to upload a new one.  If the user inputs words instead of numbers into the grid size box, they will be prompted to input a number.
 
 These images show our basic UI designs.
@@ -64,26 +68,32 @@ These images show our basic UI designs.
 ![Basic Design 2](SimulationPage.JPG)
 
 
-
 ###**Design Details**
 
-This section describes each component introduced in the Overview in detail (as well as any other sub-components that may be needed but are not significant to include in a high-level description of the program). It should describe how each component handles specific features given in the assignment specification, what resources it might use, how it collaborates with other components, and how each could be extended to include additional requirements (from the assignment specification or discussed by your team). Include the steps needed to complete the Use Cases below to help make your descriptions more concrete. Finally, justify the decision to create each component with respect to the design's key goals, principles, and abstractions. This section should go into as much detail as necessary to cover all your team wants to say.
+ It should describe how each component handles specific features given in the assignment specification, what resources it might use, how it collaborates with other components, and how each could be extended to include additional requirements (from the assignment specification or discussed by your team). 
+Include the steps needed to complete the Use Cases below to help make your descriptions more concrete. 
+
+Finally, justify the decision to create each component with respect to the design's key goals, principles, and abstractions. This section should go into as much detail as necessary to cover all your team wants to say.
 
 
-The entry point into our program is in the `main()` method. This method will immediately contruct a new instance of the `FrontEnd` class. Initially, a GUI will appear to allow the user to choose basic setup requirements, such as the specific CA simulation to run and the size of the simulation's window. Once the user has selected the setup criteria, the `main()` method will will call an `initializer()` that identifies the XML file associated with the user-selected simulation. The `initializer()` will read this file and subsequently establish the rules and Cell types to implement. The front end will update the display to the simulation's initial status, and the game loop will be entered.
+Main:
+
+The entry point into our program is in the `main()` method. This method will immediately construct a new instance of the `FrontEnd` class. Initially, through this `FrontEnd` class, a GUI will be created to allow the user to choose basic setup requirements, such as the specific CA simulation to run and the size of the simulation's window. Once the user has selected the setup criteria, the `main()` method will call an `initializer()` that identifies the XML file associated with the user-selected simulation. The `initializer()` will read this file and subsequently establish the rules and Cell types to implement. The front end will update the display to the simulation's initial status, and the game loop will be entered.
 
 
 FrontEnd: 
+
+The `FrontEnd` class will be initialized through the `main` class immediately.  It will have a private variable, "steps", that will keep track of how many generations the simulation has gone through. The user interface will be constructed in the `FrontEnd` class using JavaFX nodes attached to a scene. This UI will be able to handle user actions such as clicking buttons ('Upload', 'Start'), uploading a file, and inputting text. JavaFX EventHandlers will be used to implement this user interaction.  When the user clicks the "Start" button, the `FrontEnd` class will handle that by passing the simulation information (XML file name) to `main`.  
+
+Once the XML file has been read through `Initializer`, `FrontEnd` will create a matrix of Cells and display these Cells on a new screen based on initial positions as read by `Initializer`.  The new screen will be the simulation screen and will have panels constructed in `FrontEnd` that allow the user to take action during a simulation.  `FrontEnd` will have an _update()_ method in which it will call _CellManager.performUpdate(int steps)_.  This method will return an updated matrix of cells, that is then used to update the positions and states of Cell nodes in the scene.
+
+The `FrontEnd` class will have EventHandlers to deal with users interacting with the simulation while it is happening.  The user will be able to pause, slow down, fast forward, and start a completely new simulation while the current one is running.
 
 Rules:
 
 There is a superclass `Rules()` that controls the general behavior consistent among rules of all simulations. Simulation specififc rules are contained in extended subclasses. The `initializer()` will create an instance of the necessary Rules subclass for the user-chosen simulation. 
 
-The function of each Rules() class is to take in a Collection of a Cell under consideration and a Cell's neighbors (note that neighbors can be defined in any way desired), and return the new state of the Cell under consideration. The rules of each simulation are coded prior to running the program, but specific values that change the functionality of the rules will be determined directly from the XML file or from user input. This will be accomplished by creating a Map from all possible rule variables to their values. The `initialize()` will construct a new Rules() instance using this Map. The FrontEnd class can get the full map from the Rules, and can set individual {key, val} pairs. 
-
-
-
-
+The function of each Rules() subclass is to take in a Collection of a Cell under consideration and a Cell's neighbors (note that neighbors can be defined in any way desired), and return the new state of the Cell under consideration. The rules of each simulation are coded prior to running the program, but specific values that change the functionality of the rules will be determined directly from the XML file or from user input. This will be accomplished by creating a Map from all possible rule variables to their values. The `initialize()` will construct a new Rules() instance using this Map. The FrontEnd class can get the full map from the Rules, and can set individual {key, val} pairs. 
 
 CellManager:
 
