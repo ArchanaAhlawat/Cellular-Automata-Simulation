@@ -91,27 +91,19 @@ The `FrontEnd` class will have EventHandlers to deal with users interacting with
 
 Rules:
 
-There is a superclass `Rules()` that controls the general behavior consistent among rules of all simulations. Simulation specififc rules are contained in extended subclasses. The `initializer()` will create an instance of the necessary Rules subclass for the user-chosen simulation. 
+There is a superclass `Rules()` that controls the general behavior consistent among rules of all simulations. Simulation-specififc rules are contained in extended subclasses. The `initializer()` will create an instance of the necessary Rules subclass for the user-chosen simulation. 
 
-The function of each Rules() subclass is to take in a Collection of a Cell under consideration and a Cell's neighbors (note that neighbors can be defined in any way desired), and return the new state of the Cell under consideration. The rules of each simulation are coded prior to running the program, but specific values that change the functionality of the rules will be determined directly from the XML file or from user input. This will be accomplished by creating a Map from all possible rule variables to their values. The `initialize()` will construct a new Rules() instance using this Map. The FrontEnd class can get the full map from the Rules, and can set individual {key, val} pairs. 
+The function of each Rules() subclass's method `applyRules` is to take in the arguments of a Cell under consideration and a Cell's neighbors (note that neighbors can be defined in any way desired), and return the new state of the Cell under consideration. The rules of each simulation are coded prior to running the program, but specific values that change the functionality of the rules will be determined directly from the XML file or from user input. This will be accomplished by creating a Map from all possible rule variables to their values. The `initialize()` will construct a new Rules() instance using this Map. The FrontEnd class can get the full map from the Rules, and can set individual {key, val} pairs.
+
+
 
 CellManager:
 
+The CellManager tracks the current status and position of every cell. It will communicate directly with the FrontEnd to determine the number of iterations of the simulations to progress at any given time. Then, the CellManager class will loop through all Cells and compute their neighbors. It will also have every Cell compute its next state. Next, all Cells will turn into their next state and the CellManager will locally keep track of this new configuration. It will return to the FrontEnd the new Cell configuration to display. 
+
 Cell:
 
-
-
-
-construct a new XMLParser() instance to process the 
-construct new instance of the `FrontEnd()` class. 
-
-main
-xmlparser
-frontend
-cellmanager
-rules
-
-###**Design Considerations**
+The Cell will possess any necessary instance variables to keep track of the Cell's possible states, colors, and other traits. Besides existing as an Object to populate the simulation, it will also be used as a way to bridge the communication gap between CellManager and Rules, and allow CellManager to use Rules to get the next state of the Cell. 
 
 + Flexibility / Extensibility to new simulation types
 
