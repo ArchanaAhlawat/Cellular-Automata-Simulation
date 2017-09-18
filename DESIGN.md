@@ -51,13 +51,13 @@ All the text for the user interface will come from a text file.  This text infor
 
 ####Start and Configuration
 
-The program will begin with a screen that displays an explanation of the simulation and the use of it.  This screen will have a button that allows the user to upload an XML configuration file.  Once it is uploaded, the user can input the grid's desired size in a text box, and then click a "Start" button.  The "Start" button will not do anything if it is clicked at there is no file uploaded.
+The program will begin with a screen that displays an explanation of the simulation and the use of it.  This screen will have radio buttons that allow the user to specify a particular game to play. A more advanced option will be for the user to specify a specific XML file, allowing them to modify the XML directly beforehand, and then see the simulation.  Once a file is uploaded, the user can input the grid's desired size in a text box, and then click a "Start" button.  The "Start" button will not do anything if it is clicked at there is no file uploaded.
 
 ####Run Simulation
 
 The "Start" button will create a new page where the initial grid will be displayed.  The user will be prompted to press the spacebar in order to begin the simulation.  On this same page, there will be a small panel in a corner with buttons that allow the user to pause and resume the simulation, and fast-forward and slow-down the simulation.  There will be additional buttons that allow the user to move forward by 10 generations automatically.
 
-The panel will also have an option to upload a new configuration file.  If the user clicks on this, then the simulation will stop, the user will have to input the new simulation's desired grid size, and then click a "Start" button again in order to begin the new simulation.
+The panel will also have an option to start a new game. The simulation will stop and prompt the user to choose a game or directly upload an XML file. Then, the user will have to input the new simulation's desired grid size, and then click a "Start" button again in order to begin the new simulation.
 
 ####Catching Errors
 
