@@ -1,4 +1,4 @@
-##**CS 308 Cell Society Design**
+## **CS 308 Cell Society Design**
 ======
 ## Team Members:
 * Sam Slack
@@ -78,7 +78,7 @@ Finally, justify the decision to create each component with respect to the desig
 
 Main:
 
-The entry point into our program is in the *main()* method. This method will immediately construct a new instance of the *FrontEnd* class. Initially, through this *FrontEnd* class, a GUI will be created to allow the user to choose basic setup requirements, such as the specific CA simulation to run and the size of the simulation's window. Once the user has selected the setup criteria, the *main()* method will call an *initializer()* that identifies the XML file associated with the user-selected simulation. The `initializer()` will read this file and subsequently establish the rules and Cell types to implement. The front end will update the display to the simulation's initial status, and the game loop will be entered.
+The entry point into our program is in the *main()* method. This method will immediately construct a new instance of the *FrontEnd* class. Initially, through this *FrontEnd* class, a GUI will be created to allow the user to choose basic setup requirements, such as the specific CA simulation to run and the size of the simulation's window. Once the user has selected the setup criteria, the *main()* method will call an *initializer()* that identifies the XML file associated with the user-selected simulation. The *initializer()* will read this file and subsequently establish the rules and Cell types to implement. The front end will update the display to the simulation's initial status, and the game loop will be entered.
 
 
 FrontEnd: 
@@ -131,15 +131,15 @@ This implies that names may have to be updated as the design and functionality g
 
 As a final consideration (or tie-breaker) when deciding which component should encapsulate a certain functionality, the even division of work is considered. In other words, if a function fits equally well in 2 components without violating any of the above principles (such as abstraction boundaries), it is assigned to the smaller component.
 
-###**Team Responsibilities**
+### **Team Responsibilities**
 
-####Adithya:
+#### Adithya:
 Front-end piece -- creating the user interface and taking in user input.
 
-####Sam:
+#### Sam:
 Back-end piece -- creating all the methods and logic behind the Rules class.
 
-####Archana:
+#### Archana:
 Interface between front-end and back-end -- creating cells, the cellManager, and reading XML files.
 
 
