@@ -1,16 +1,23 @@
 package frontend;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Scanner;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -58,15 +65,18 @@ public class SimulationDisplay {
 	// Simulation-specific states TODO - Fill in states for other games based on
 	// info from Rules (From Sam)
 	// SEGREGATION
-	public static final String OCCUPIED_CROSS = "cross";
-	public static final String OCCUPIED_CIRCLE = "circle";
-	public static final String VACANT = "vacant";
+	public static final String OCCUPIED_CROSS = "cross.png";
+	public static final String OCCUPIED_CIRCLE = "circle.png";
+	public static final String VACANT = "vacant.png";
 
 	// IMAGE_URLs corresponding to above states
 	public static final String STATES_IMAGES_FOLDER = "states/";
 	public static final String OCCUPIED_CROSS_IMAGE_URL = "occupied_cross.png";
 	public static final String OCCUPIED_CIRCLE_IMAGE_URL = "occupied_circle.png";
 	public static final String VACANT_IMAGE_URL = "vacant.png";
+
+	// CONFIG folder
+	public static final String XML_CONFIG_FOLDER = "config/";
 
 	static {
 		HashMap<String, int[]> myMap = new HashMap<>();
@@ -96,19 +106,19 @@ public class SimulationDisplay {
 	private int height;
 	private int cellWidth;
 	private int cellHeight;
-	private TilePane tiles;
 	private Button toggleButton;
 	private Scene scene;
 	// Would ImageView[][] be more appropriate? Then will need to keep calling a
 	// helper function to convert from Cell[][] to ImageView[][], which is less
 	// memory-efficient
 	private Cell[][] grid;
+	private TilePane tiles;
 
 	// Simulation state
 	private String currentSimulation;
 	private boolean inProgress = false;
 
-	public void initialize(int width, int height) {
+	public SimulationDisplay(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}
@@ -116,12 +126,14 @@ public class SimulationDisplay {
 	// Boilerplate layout set-up code from Oracle docs for Layouts at
 	// http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm#CHDCJDBD
 	public Scene getMenuScene(Stage primaryStage, String startString, String stopString, String uploadString,
-			String simulationChoiceString, String[] simulationStrings, EventHandler<ActionEvent> onStartButtonClicked) {
+			String simulationChoiceString, String[] simulationStrings, String dialogHeaderText,
+			String dialogContentText, String errorDialogTitleText, String errorDialogHeaderText,
+			String errorDialogContentText, EventHandler<ActionEvent> onStartButtonClicked) {
 		// Use BorderPane, HBox, VBox, TilePane
 		// TilePane in center of BorderPane
 		BorderPane border = new BorderPane();
-		// border.setTop(initUploadBox(uploadString));
-		border.setTop(initConfigBox(uploadString, simulationChoiceString, simulationStrings));
+		border.setTop(initConfigBox(uploadString, simulationChoiceString, simulationStrings, dialogHeaderText,
+				dialogContentText, errorDialogTitleText, errorDialogHeaderText, errorDialogContentText));
 		border.setBottom(initStartPanel(startString, onStartButtonClicked));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
@@ -142,11 +154,11 @@ public class SimulationDisplay {
 		return inProgress;
 	}
 
-	// TODO
+	// TODO - Uncomment calls to backend methods when ready
 	public void advanceOneCycle() {
 		System.out.println("Advancing one cycle");
 		// cellManager.performUpdates();
-		// colorMatrix(cellManager.getMatrix())
+		// updateTiles(cellManager.getMatrix())
 	}
 
 	public void advance(int cycles) {
@@ -178,11 +190,9 @@ public class SimulationDisplay {
 		 *
 		 * try { grid = initializer.loadConfig(chosenConfigFileName) } catch (Exception
 		 * e) { // TODO - Raise error dialog
-		 * System.out.println("Invalid config file loaded! Not starting."); return; }
-		 * if (grid == null || grid.length == 0 || grid[0].length == 0) {
-		 * 	throw new IllegalStateException();
-		 * }
-		 * // Set cell dimensions appropriately
+		 * System.out.println("Invalid config file loaded! Not starting."); return; } if
+		 * (grid == null || grid.length == 0 || grid[0].length == 0) { throw new
+		 * IllegalStateException(); } // Set cell dimensions appropriately
 		 * calculateCellDimensions(grid.length, grid[0].length, height, width);
 		 * 
 		 */
@@ -193,10 +203,12 @@ public class SimulationDisplay {
 	public void toggleSimulationPlayState() {
 		if (inProgress) {
 			pauseSimulation();
-			toggleButton.setGraphic(getGraphicFromImageURL(PLAY_BUTTON_IMAGE_URL, DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT));
+			toggleButton.setGraphic(getGraphicFromImageURL(PLAY_BUTTON_IMAGE_URL, DEFAULT_IMAGE_BUTTON_FIT_WIDTH,
+					DEFAULT_IMAGE_BUTTON_FIT_HEIGHT));
 		} else {
 			resumeSimulation();
-			toggleButton.setGraphic(getGraphicFromImageURL(PAUSE_BUTTON_IMAGE_URL, DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT));
+			toggleButton.setGraphic(getGraphicFromImageURL(PAUSE_BUTTON_IMAGE_URL, DEFAULT_IMAGE_BUTTON_FIT_WIDTH,
+					DEFAULT_IMAGE_BUTTON_FIT_HEIGHT));
 		}
 	}
 
@@ -215,7 +227,7 @@ public class SimulationDisplay {
 		BorderPane border = new BorderPane();
 		border.setBottom(initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL));
 		// TODO - should take matrix from getMatrix() instead of rows and cols as
-		//border.setCenter(initTiles(grid));
+		// border.setCenter(initTiles(grid));
 		// DUMMY FOR NOW, just for testing
 		border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
 		this.scene = new Scene(border, width, height);
@@ -240,10 +252,13 @@ public class SimulationDisplay {
 		return container;
 	}
 
-	private Node initConfigBox(String uploadText, String simulationChoiceText, String[] simulationTexts) {
+	private Node initConfigBox(String uploadText, String simulationChoiceText, String[] simulationTexts,
+			String dialogHeaderText, String dialogContentText, String errorDialogTitleText,
+			String errorDialogHeaderText, String errorDialogContentText) {
 		HBox container = new HBox();
 		container.getChildren().add(initSimulationDropDownMenu(simulationChoiceText, simulationTexts));
-		container.getChildren().add(new Button(uploadText));
+		container.getChildren().add(initUploadButton(uploadText, dialogHeaderText, dialogContentText,
+				errorDialogTitleText, errorDialogHeaderText, errorDialogContentText));
 		container.setAlignment(Pos.CENTER);
 		return container;
 	}
@@ -253,31 +268,88 @@ public class SimulationDisplay {
 		HBox container = new HBox();
 		container.getChildren().add(new Text(simulationChoiceText));
 		ChoiceBox<String> simulationChoices = new ChoiceBox<String>(FXCollections.observableArrayList(simulationTexts));
-		simulationChoices.setValue(simulationChoices.getItems().get(0));
+		String defaultSimulationName = simulationChoices.getItems().get(0);
+		simulationChoices.setValue(defaultSimulationName);
+		currentSimulation = defaultSimulationName;
+		simulationChoices.getSelectionModel().selectedIndexProperty().addListener((observable, oldVal, newVal) -> {
+			currentSimulation = simulationTexts[(int) newVal];
+		});
 		container.getChildren().add(simulationChoices);
 		container.setAlignment(Pos.BASELINE_CENTER);
 		return container;
 	}
 
-	private TilePane initTiles(Cell[][] matrix) throws IllegalArgumentException {
+	private Node initUploadButton(String uploadText, String headerText, String contentText, String errorDialogTitleText,
+			String errorDialogHeaderText, String errorDialogContentText) {
+		HBox container = new HBox();
+		Button uploadButton = new Button(uploadText);
+		uploadButton.setOnMouseClicked(e -> displayFileNameInputDialog(uploadText, headerText, contentText,
+				errorDialogTitleText, errorDialogHeaderText, errorDialogContentText));
+		container.getChildren().add(uploadButton);
+		container.setAlignment(Pos.CENTER);
+		return container;
+	}
+
+	private void displayFileNameInputDialog(String uploadText, String headerText, String contentText,
+			String errorDialogTitleText, String errorDialogHeaderText, String errorDialogContentText) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle(uploadText);
+		dialog.setHeaderText(headerText);
+		dialog.setContentText(contentText);
+		Optional<String> result = dialog.showAndWait();
+		result.ifPresent(fileName -> validateFileAndWarnIfNotValid(fileName, errorDialogTitleText,
+				errorDialogHeaderText, errorDialogContentText));
+	}
+
+	private void validateFileAndWarnIfNotValid(String fileName, String errorDialogTitleText,
+			String errorDialogHeaderText, String errorDialogContentText) {
+		File file = new File(XML_CONFIG_FOLDER + fileName);
+		try {
+			Scanner in = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			// TEMP
+			System.out.println("Invalid file!");
+			// TODO - Present Warning Dialog
+			displayWarningDialog(errorDialogTitleText, errorDialogHeaderText, errorDialogContentText);
+			return;
+		}
+		System.out.println("File exists!");
+	}
+
+	private void displayWarningDialog(String errorDialogTitle, String errorDialogHeaderText,
+			String errorDialogContentText) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle(errorDialogTitle);
+		alert.setHeaderText(errorDialogHeaderText);
+		alert.setContentText(errorDialogContentText);
+		alert.showAndWait();
+	}
+
+	private TilePane updateTiles(Cell[][] matrix) throws IllegalArgumentException {
 		if (matrix == null || matrix.length == 0) {
 			throw new IllegalArgumentException();
 		}
 		int rows = matrix.length;
 		int cols = matrix[0].length;
-		tiles = new TilePane();
+		if (tiles == null) {
+			tiles = new TilePane();
+		} else {
+			tiles.getChildren().clear();
+		}
 		tiles.setPrefColumns(matrix[0].length);
 		tiles.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
 		// TEMP - Make a dummy of texts with nums
 		// In future, need Cell[][] matrix from CellManager.getMatrix()
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-				tiles.getChildren().add(getImageViewForSimulationAndState(currentSimulation, matrix[row][col].getState()));
+				tiles.getChildren()
+						.add(getImageViewForSimulationAndState(currentSimulation, matrix[row][col].getState()));
 			}
 		}
 		return tiles;
 	}
-	
+
+	// TEMP - ONLY FOR TESTING WHILE BACKEND IS NOT READY
 	private TilePane initTilesDummy(int rows, int cols) {
 		tiles = new TilePane();
 		tiles.setPrefColumns(cols);
@@ -300,8 +372,8 @@ public class SimulationDisplay {
 	}
 
 	private ImageView getImageViewForSimulationAndState(String currentSimulation, String state) {
-		return getGraphicFromImageURL(
-				STATES_IMAGES_FOLDER + STATE_TO_IMAGE_URL.get(currentSimulation).get(state), cellWidth, cellHeight);
+		return getGraphicFromImageURL(STATES_IMAGES_FOLDER + STATE_TO_IMAGE_URL.get(currentSimulation).get(state),
+				cellWidth, cellHeight);
 	}
 
 	private Button makeButton(String buttonText, EventHandler<ActionEvent> handler) {
@@ -313,7 +385,8 @@ public class SimulationDisplay {
 
 	private Button makeImageButton(String buttonImageURL, EventHandler<ActionEvent> handler) {
 		Button button = new Button();
-		button.setGraphic(getGraphicFromImageURL(buttonImageURL, DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT));
+		button.setGraphic(getGraphicFromImageURL(buttonImageURL, DEFAULT_IMAGE_BUTTON_FIT_WIDTH,
+				DEFAULT_IMAGE_BUTTON_FIT_HEIGHT));
 		button.setOnAction(handler);
 		return button;
 	}
@@ -335,7 +408,7 @@ public class SimulationDisplay {
 		cellWidth = gridWidth / rows;
 		cellHeight = gridHeight / rows;
 	}
-	
+
 	private int getIndex(int row, int col, int numColsPerRow) {
 		return row * numColsPerRow + col;
 	}

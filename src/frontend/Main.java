@@ -28,12 +28,14 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		this.stage = stage;
 		reader = new UITextReader(UITextReader.RESOURCE_PACKAGE, DEFAULT_LOCALE);
-		display = new SimulationDisplay();
-		display.initialize(reader.getWidth(), reader.getHeight());
+		display = new SimulationDisplay(reader.getWidth(), reader.getHeight());
 		stage.setTitle(reader.getTitleText());
 		registerAnimation();
 		updateStage(display.getMenuScene(stage, reader.getStartText(), reader.getStopText(), reader.getUploadText(),
-				reader.getSimulationChoiceText(), reader.getSimulationTexts(), e -> updateStage(display.startSimulation())));
+				reader.getSimulationChoiceText(), reader.getSimulationTexts(), reader.getDialogHeaderText(),
+				reader.getDialogContentText(), reader.getMissingFileErrorDialogTitleText(),
+				reader.getMissingFileErrorDialogHeaderText(), reader.getMissingFileErrorDialogContentText(),
+				e -> updateStage(display.startSimulation())));
 	}
 
 	@Override
