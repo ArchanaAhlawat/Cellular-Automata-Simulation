@@ -25,13 +25,13 @@ public class SegregationRules extends Rules{
 	
 	
 	@Override
-	public Object applyRules(Cell cell, Collection<Cell> cellNeighbors) {
-		double similarNeighbors;
+	public Object applyRules(CellSocietyCell cell, Collection<CellSocietyCell> cellNeighbors) {
+		double similarNeighbors = 0;
 		double totalNeighbors = cellNeighbors.size();
 		
 		String current_cell_state = cell.getState();
 		
-		for (Cell neighbor: cellNeighbors) {
+		for (CellSocietyCell neighbor: cellNeighbors) {
 			String neighbor_state = neighbor.getState();
 			
 			similarNeighbors = neighbor_state.equals(current_cell_state) ? similarNeighbors+1 : similarNeighbors;

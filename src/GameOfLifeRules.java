@@ -1,4 +1,5 @@
 package src;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class GameOfLifeRules extends Rules{
@@ -18,12 +19,12 @@ public class GameOfLifeRules extends Rules{
 	}
 
 	@Override
-	public Object applyRules(Cell cell, Collection<Cell> cellNeighbors) {
-		String currentCellState = cell.getState();
-		int neighborsAliveCount;
-		int neighborsDeadCount;
+	public Object applyRules(CellSocietyCell cell, Collection<CellSocietyCell> cellNeighbors) {
+		String currentCellSocietyCellState = cell.getState();
+		int neighborsAliveCount = 0;
+		int neighborsDeadCount = 0;
 		
-		for (Cell neighbor: cellNeighbors) {
+		for (CellSocietyCell neighbor: cellNeighbors) {
 			if (neighbor.getState().equals("alive")) {
 				neighborsAliveCount+=1;
 			} else {
@@ -35,7 +36,7 @@ public class GameOfLifeRules extends Rules{
 			return "dead";
 		} else if (neighborsAliveCount>this.myOverpopulationThreshold) {
 			return "dead";
-		} else if (neighborsAliveCount==this.myReproductionCriticalNumber && currentCellState.equals("dead")) {
+		} else if (neighborsAliveCount==this.myReproductionCriticalNumber && currentCellSocietyCellState.equals("dead")) {
 			return "alive";
 		} else {
 			return "alive";
