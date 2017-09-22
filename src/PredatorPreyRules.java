@@ -10,25 +10,26 @@ public class PredatorPreyRules extends Rules {
 	public PredatorPreyRules(HashMap<String, String> map) {
 		super(map);
 	}
-	
-	
-	chooseRandomCell
+
+	@Override
+	public PredatorPreyCell getCurrentCell() {
+		return (PredatorPreyCell) myCell;
+	}
 
 	@Override
 	protected void setInstanceVariables() {
 		// TODO Auto-generated method stub
 
-	}	
+	}
 
-	public void applyRules(PredatorPreyCell cell, Collection<PredatorPreyCell> cellNeighbors) {
-		this.myNeighbors = cellNeighbors;
-		String currentCellState = cell.getState();
+	public void performRules() {
+		String currentCellState = getCellState();
 		switch (currentCellState) {
 		case "fish":
-			fishRules(cell);
+			fishRules();
 			break;
 		case "shark":
-			sharkRules(cell);
+			sharkRules();
 			break;
 		case "empty":
 			break;
@@ -38,21 +39,21 @@ public class PredatorPreyRules extends Rules {
 	}
 
 	public int getCellSpawnCount() {
-		if (getCurrentCell().
-			return Integer.parseInt(getCurrentCell().getParameterMap().get("spawncount"));
-		} else {
-			return -1;
+		return getCurrentCell().getSpawnCount();
+	}
+
+	public void fishRules() {
+		if (getCurrentCell().spawnNow()) {
+			spawnNewFish();
+		} 
+		setMoveAdjacent();
+	}
+
+	public void sharkRules() {
+		if (!eatFish()) {
+			setMoveAdjacent();
 		}
-
-	}
-
-	public void fishRules(PredatorPreyCell fish) {
 		
-		spawnNewFish();
-	}
-
-	public void sharkRules(PredatorPreyCell shark) {
-		eatFish();
 	}
 
 	public void spawnNewFish() {
@@ -71,13 +72,14 @@ public class PredatorPreyRules extends Rules {
 		return calculateNeighborsOfState("fish");
 	}
 
-	public void eatFish() {
+	public boolean eatFish() {
 		ArrayList<PredatorPreyCell> fishNeighbors = calculateFishNeighbors();
 		PredatorPreyCell targetFishCell = chooseRandomCellFromList(fishNeighbors);
 		if (targetFishCell != null) {
 			targetFishCell.setNextState("empty");
+			return true;
 		}
+		return false;
 	}
-
 
 }

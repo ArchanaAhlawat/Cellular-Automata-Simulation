@@ -7,11 +7,16 @@ public abstract class CellSocietyCell {
 	
 	String currentState;
 	String nextState;
+	String nextMove;
 	HashMap<String, String> myParameterMap = new HashMap<String, String>();
 	
 	public CellSocietyCell(String state, HashMap<String, HashMap<String, String>> instanceVariables) {
 		this.myParameterMap = instanceVariables.get(state);
 		this.currentState = state;
+	}
+	
+	public void setNextMove(String s) {
+		this.nextMove = s;
 	}
 
 	public String getState() {

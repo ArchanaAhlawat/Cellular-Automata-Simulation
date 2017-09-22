@@ -48,18 +48,36 @@ public abstract class Rules {
 	 *            collection of primary Cell's neighbor Cells
 	 * @return Object newCellState
 	 */
-	//public abstract <T extends CellSocietyCell> void applyRules(T cell, Collection<T> cellNeighbors);
-
-	protected <T extends CellSocietyCell> Collection<T> getNeighbors() {
-		return (Collection<T>) this.myNeighbors;
+	public <T extends CellSocietyCell> void applyRules(T cell, Collection<T> cellNeighbors) {
+		setNeighbors(cellNeighbors);
+		setCurrentCell(cell);
+		performRules();
 	}
 	
-	protected <T extends CellSocietyCell> T getCurrentCell() {
-		return (T) this.myCell;
+	protected abstract void performRules();
+
+	protected Collection<? extends CellSocietyCell> getNeighbors() {
+		return this.myNeighbors;
+	}
+	
+	protected <T extends CellSocietyCell> void setNeighbors(Collection<T> neighbors) {
+		this.myNeighbors = neighbors;
+	}
+	
+	protected CellSocietyCell getCurrentCell() {
+		return this.myCell;
+	}
+	
+	public <T extends CellSocietyCell> void setCurrentCell(T cell) {
+		this.myCell = cell;
+	}
+	
+	protected String getCellState() {
+		return getCurrentCell().getState();
 	}
 
 	public <T extends CellSocietyCell> ArrayList<T> calculateNeighborsOfState(String state) {
-		Collection<T> cellNeighbors = this.getNeighbors();
+		Collection<T> cellNeighbors = (Collection<T>) this.getNeighbors();
 		ArrayList<T> stateNeighbors = new ArrayList<>();
 		for (T cell : cellNeighbors) {
 			if (cell.getState().equals(state)) {
@@ -68,6 +86,18 @@ public abstract class Rules {
 		}
 		return stateNeighbors;
 
+	}
+	
+	protected void setNextMove(String s) {
+		getCurrentCell().setNextMove(s);
+	}
+	
+	protected void setMoveAdjacent() {
+		setNextMove("adjacent");
+	}
+	
+	protected void setMoveRandom() {
+		setNextMove("random");
 	}
 
 
