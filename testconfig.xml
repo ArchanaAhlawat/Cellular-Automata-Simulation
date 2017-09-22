@@ -1,0 +1,14 @@
+<Info>
+	<CellTypes>
+		<CellType simName="Game Of Life">
+		</CellType>
+	</CellTypes>
+	<Cells>
+		<Cell type="fire">
+			<attrib>fake</attrib>
+		</Cell>
+		<Cell type="fire">
+			<attrib>fake2</attrib>
+		</Cell>
+	</Cells>
+</Info>

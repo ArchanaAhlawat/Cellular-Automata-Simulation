@@ -1,5 +1,6 @@
 # cellsociety
 
-check check
- check again!!!!
+Interface between front-end and back-end.
+
+Main, CellManager, Cells, Initializer.
 
