@@ -19,7 +19,6 @@ public class PredatorPreyRules extends Rules {
 	@Override
 	protected void setInstanceVariables() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void performRules() {

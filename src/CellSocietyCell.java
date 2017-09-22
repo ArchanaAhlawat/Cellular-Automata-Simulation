@@ -15,6 +15,10 @@ public abstract class CellSocietyCell {
 		this.currentState = state;
 	}
 	
+	public String getNextMove(String s) {
+		return this.nextMove;
+	}
+	
 	public void setNextMove(String s) {
 		this.nextMove = s;
 	}
