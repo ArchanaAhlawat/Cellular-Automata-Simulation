@@ -37,29 +37,48 @@ public class PredatorPreyRules extends Rules {
 		}
 	}
 
-	public int getCellSpawnCount() {
-		return getCurrentCell().getSpawnCount();
-	}
-
 	public void fishRules() {
-		if (getCurrentCell().spawnNow()) {
-			spawnNewFish();
-		} 
+		checkAndImplementSpawn();
 		setMoveAdjacent();
 	}
 
 	public void sharkRules() {
+		checkAndImplementSpawn();
 		if (!eatFish()) {
 			setMoveAdjacent();
 		}
-		
+	}
+
+	public void checkAndImplementSpawn() {
+		if (getCurrentCell().spawnNow()) {
+			spawnNew();
+		}
 	}
 
 	public void spawnNewFish() {
+		spawnNew("fish");
+	}
+
+	public void spawnNewShark() {
+		spawnNew("shark");
+	}
+
+	public void spawnNew(String s) {
 		ArrayList<PredatorPreyCell> emptyNeighbors = calculateEmptyNeighbors();
 		PredatorPreyCell targetSpawnCell = (PredatorPreyCell) chooseRandomCellFromList(emptyNeighbors);
 		if (targetSpawnCell != null) {
-			targetSpawnCell.setNextState("newfish");
+			targetSpawnCell.setNextState("new" + s);
+			targetSpawnCell.setNextMove("stay");
+		}
+	}
+
+	public void spawnNew() {
+		String s = getCellState();
+		ArrayList<PredatorPreyCell> emptyNeighbors = calculateEmptyNeighbors();
+		PredatorPreyCell targetSpawnCell = (PredatorPreyCell) chooseRandomCellFromList(emptyNeighbors);
+		if (targetSpawnCell != null) {
+			targetSpawnCell.setNextState("new" + s);
+			targetSpawnCell.setNextMove("stay");
 		}
 	}
 

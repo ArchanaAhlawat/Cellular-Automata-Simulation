@@ -99,6 +99,10 @@ public abstract class Rules {
 	protected void setMoveRandom() {
 		setNextMove("random");
 	}
+	
+	protected void setMoveStay() {
+		setNextMove("stay");
+	}
 
 
 

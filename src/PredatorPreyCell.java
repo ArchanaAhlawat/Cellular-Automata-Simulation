@@ -6,7 +6,7 @@ public class PredatorPreyCell extends CellSocietyCell{
 
 	int spawnCount = 0;
 	int deathCount = 0;
-	int reproduceThreshold;
+	int spawnThreshold;
 
 	
 	public PredatorPreyCell(String state, HashMap<String, HashMap<String, String>> instanceVariables) {
@@ -17,14 +17,19 @@ public class PredatorPreyCell extends CellSocietyCell{
 	private void setInstanceVariables() {
 		spawnCount = Integer.parseInt(this.getParameterMap().get("spawncount"));
 		deathCount = Integer.parseInt(this.getParameterMap().get("deathcount"));	
+		spawnThreshold = Integer.parseInt(this.getParameterMap().get("spawnthreshold"));
 	}
 	
-	public int getSpawnCount() {
+	private int getSpawnCount() {
 		return this.spawnCount;
 	}
 	
+	private int getSpawnThreshold() {
+		return this.spawnThreshold;
+	}
+	
 	public boolean spawnNow() {
-		return this.spawnCount>this.reproduceThreshold;
+		return getSpawnCount()>getSpawnThreshold();
 	}
 	
 	
