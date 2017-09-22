@@ -28,6 +28,10 @@ public class PredatorPreyCell extends CellSocietyCell{
 		return this.spawnThreshold;
 	}
 	
+	private void setSpawnThreshold(int num) {
+		this.spawnThreshold = num;
+	}
+	
 	public boolean spawnNow() {
 		return getSpawnCount()>getSpawnThreshold();
 	}

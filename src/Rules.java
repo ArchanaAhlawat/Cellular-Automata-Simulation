@@ -76,6 +76,10 @@ public abstract class Rules {
 		return getCurrentCell().getState();
 	}
 
+	protected void setCellNextState(String s) {
+		getCurrentCell().setNextState(s);
+	}
+	
 	public <T extends CellSocietyCell> ArrayList<T> calculateNeighborsOfState(String state) {
 		Collection<T> cellNeighbors = (Collection<T>) this.getNeighbors();
 		ArrayList<T> stateNeighbors = new ArrayList<>();

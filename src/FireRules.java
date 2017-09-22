@@ -26,14 +26,13 @@ public class FireRules extends Rules {
 	}
 
 	@Override
-	public Object applyRules(Cell cell, Collection<Cell> cellNeighbors) {
-		String currentCellState = cell.getState();
+	public void performRules() {
 		
-		if (currentCellState.equals("empty")) {
-			return "empty";
+		if (getCellState().equals("empty")) {
+			setCellNextState("empty");
 		}
 		
-		if (currentCellState.equals("fire")) {
+		if (getCellState().equals("fire")) {
 			return "empty";
 		}
 		
