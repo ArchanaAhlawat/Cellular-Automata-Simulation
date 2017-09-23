@@ -4,11 +4,14 @@
 		</CellType>
 	</CellTypes>
 	<Cells>
-		<Cell type="fire">
-			<attrib>fake</attrib>
+		<Cell>
+			<attrib>alive</attrib>
 		</Cell>
-		<Cell type="fire">
-			<attrib>fake2</attrib>
+		<Cell>
+			<attrib>dead</attrib>
+		</Cell>
+		<Cell>
+			<attrib>alive</attrib>
 		</Cell>
 	</Cells>
 </Info>
