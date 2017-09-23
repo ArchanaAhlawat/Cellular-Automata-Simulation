@@ -11,7 +11,8 @@ public class CellManager {
 	 * 1st, matrix is initialized to default --> received from initializer
 	 * holds matrix of cell objects --> COMPUTE and SETSTATE.
 	 */
-	static ArrayList<Cell> currentMatrix = new ArrayList<Cell>();
+	static ArrayList<Cell> initializerList = new ArrayList<Cell>();
+	private Cell[][] currentMatrix; // SIZE WILL BE SET AFTER WE CREATE ALL THE CELLS.
 
 	/*
 	 * use XML parsed data to create cells
@@ -39,7 +40,25 @@ public class CellManager {
 		//}
 	}
 	
+	public Cell[][] getMatrix() {
+		return currentMatrix;
+	}
+	
+	public void performUpdates() {
+		computeState();
+		setState(); // can be added to computeState()? 
+		// TO DO
+	}
+	
+	private void computeState() {
+		// TO DO
+	}
+	
+	private void setState() {
+		// TO DO
+	}
+	
 	public static void setInitialCurrentMatrix(Cell c) {
-		currentMatrix.add(c);
+		initializerList.add(c);
 	}
 }

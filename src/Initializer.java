@@ -20,11 +20,11 @@ public class Initializer {
 	private static Document dom;
 	private static String simName;
 	
-	private static void parseXMLfile() {
+	private static void parseXMLFile(String configFileName) { // handle exceptions 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			dom = db.parse("Segregation.xml");
+			dom = db.parse(configFileName);
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -64,8 +64,17 @@ public class Initializer {
 		return simName;
 	}
 	
+	/*  USE FOR DEBUGGING ONLY
     public static void main(String[] args) {
         parseXMLfile();
         parseDocument();  
     }
+    */
+	
+	public static void loadConfig(String configFileName) {
+		parseXMLFile(configFileName);
+		parseDocument();
+	}
+	
+
 }
