@@ -24,7 +24,7 @@ public class Initializer {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			dom = db.parse("testconfig.xml");
+			dom = db.parse("Segregation.xml");
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();

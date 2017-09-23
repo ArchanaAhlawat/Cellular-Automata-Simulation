@@ -18,14 +18,9 @@ public class Cell {
 		type = typee;
 	}
 	
-	// method to debug
-	public Cell(ArrayList<String> attributes) {
-		
-	}
 	
-	public Cell(String state, HashMap<String, HashMap<String, String>> instanceVariables) {
-		this.myParameterMap = instanceVariables.get(state);
-		this.currentState = state;
+	public Cell(HashMap<String, String> instanceVariables) {
+		//this.myParameterMap = instanceVariables.get(state);
 	}
 	
 	public String getNextMove(String s) {

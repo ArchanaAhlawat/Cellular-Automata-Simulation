@@ -1,17 +1,18 @@
 <Info>
 	<CellTypes>
-		<CellType simName="Game Of Life">
+		<CellType simName="Fire">
+			<probCatch>50</probCatch>
 		</CellType>
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<state>alive</state>
+			<state>burning</state>
 		</Cell>
 		<Cell>
-			<state>dead</state>
+			<state>empty</state>
 		</Cell>
 		<Cell>
-			<state>alive</state>
+			<state>tree</state>
 		</Cell>
 	</Cells>
 </Info>
