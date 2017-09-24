@@ -11,7 +11,7 @@ public class CellManager {
 	 * 1st, matrix is initialized to default --> received from initializer
 	 * holds matrix of cell objects --> COMPUTE and SETSTATE.
 	 */
-	static ArrayList<Cell> initializerList = new ArrayList<Cell>();
+	private ArrayList<Cell> initializerList = new ArrayList<Cell>();
 	private Cell[][] currentMatrix = new Cell[GRID_SIZE][GRID_SIZE]; // SIZE ? 
 	private Rules rules = new Rules();
 
@@ -27,18 +27,7 @@ public class CellManager {
 			System.out.println(ele.getFirstChild().getParentNode().getNodeName());
 			System.out.println(ele.getFirstChild().getNodeValue());
 		}
-		if (simName.equals("Game Of Life")) {  // this section prob not the smartest/best designed way...
-			setInitialCurrentMatrix(new GameOfLifeCell(attributeMap));
-		}
-		if (simName.equals("Segregation")) {
-			setInitialCurrentMatrix(new SegregationCell(attributeMap));
-		}
-		if (simName.equals("Predator Prey")) {
-			setInitialCurrentMatrix(new PredatorPreyCell(attributeMap));
-		}
-		//if (simName.equals("Fire")) {
-		//	setInitialCurrentMatrix(new FireCell(attributeList));
-		//}
+		setInitialCurrentMatrix(new Cell(attributeMap));
 		setMatrix();
 	}
 	
@@ -56,21 +45,20 @@ public class CellManager {
 	}
 	
 	public void performUpdates() {
-		computeState();
-		//setState();
-		// TO DO 
+		computeAndSetState();
 	}
 	
 	/*
 	 * compute state by checking all neighbors
 	 */
-	private void computeState() {
+	private HashMap<String, String> computeAndSetState() {
 		for (int i = 0; i < GRID_SIZE; i++) {
 			for (int j = 0; j < GRID_SIZE; j++) {
 				ArrayList<Cell> neighbors = computeNeighbors(i, j);
 				// compute new state for each cell
 				// call Rules or specific Rules?
-				rules.applyRules(currentMatrix[i][j], neighbors);
+				HashMap<String, String> updatedVals = rules.applyRules(currentMatrix[i][j], neighbors);
+				setState(updatedVals, i, j);
 			}
 		}
 	}
@@ -140,11 +128,14 @@ public class CellManager {
 		return neighbors;
 	}
 	
-	private void setState() {
-		// TO DO
+	private void setState(HashMap<String, String> updatedVals, int i, int j) {
+		// update cell values based on map taken from Rules
+		for (String key : updatedVals.keySet()) {
+			currentMatrix[i][j].myParameterMap.put(key, updatedVals.get(key));
+		}
 	}
 	
-	public static void setInitialCurrentMatrix(Cell c) {
+	private void setInitialCurrentMatrix(Cell c) {
 		initializerList.add(c);
 	}
 }

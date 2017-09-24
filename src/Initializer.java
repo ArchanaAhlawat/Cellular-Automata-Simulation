@@ -65,13 +65,6 @@ public class Initializer {
 		return simName;
 	}
 	
-	/*  USE FOR DEBUGGING ONLY
-    public static void main(String[] args) {
-        parseXMLfile();
-        parseDocument();  
-    }
-    */
-	
 	public static void loadConfig(String configFileName) {
 		parseXMLFile(configFileName);
 		parseDocument();
