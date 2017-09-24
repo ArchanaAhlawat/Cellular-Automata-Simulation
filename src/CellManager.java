@@ -18,15 +18,7 @@ public class CellManager {
 	/*
 	 * use XML parsed data to create cells
 	 */
-	public void addInitialCells(String simName, Element el) {
-		NodeList attributes = el.getElementsByTagName("*"); // special value * matches all tags
-		HashMap<String, String> attributeMap = new HashMap<String, String>();
-		for (int i = 0; i < attributes.getLength(); i++) {
-			Element ele = (Element)attributes.item(i);
-			attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
-			System.out.println(ele.getFirstChild().getParentNode().getNodeName());
-			System.out.println(ele.getFirstChild().getNodeValue());
-		}
+	public void addInitialCells(HashMap<String, String> attributeMap) {
 		setInitialCurrentMatrix(new Cell(attributeMap));
 		setMatrix();
 	}
