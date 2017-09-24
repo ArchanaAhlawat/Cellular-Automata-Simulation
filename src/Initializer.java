@@ -19,6 +19,7 @@ public class Initializer {
 	*/
 	private static Document dom;
 	private static String simName;
+	private static CellManager cmanager = new CellManager();
 	
 	private static void parseXMLFile(String configFileName) { // handle exceptions 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -50,7 +51,7 @@ public class Initializer {
 		if (nl != null && nl.getLength() > 0) {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element el = (Element)nl.item(i);
-				CellManager.addInitialCells(simName, el);
+				cmanager.addInitialCells(simName, el);
 			}
 		}
 	}
@@ -75,6 +76,4 @@ public class Initializer {
 		parseXMLFile(configFileName);
 		parseDocument();
 	}
-	
-
 }

@@ -6,21 +6,13 @@ import java.util.HashMap;
 public class Cell {
 	private String attribute;
 	private String type;
-	
 	String currentState;
 	String nextState;
 	String nextMove;
 	HashMap<String, String> myParameterMap = new HashMap<String, String>();
-
-	// method only to to debug
-	public Cell(String attrib, String typee) {
-		attribute = attrib;
-		type = typee;
-	}
-	
 	
 	public Cell(HashMap<String, String> instanceVariables) {
-		//this.myParameterMap = instanceVariables.get(state);
+		this.myParameterMap = instanceVariables;
 	}
 	
 	public String getNextMove(String s) {
@@ -45,11 +37,5 @@ public class Cell {
 	
 	protected HashMap<String, String> getParameterMap() {
 		return this.myParameterMap;
-	}
-
-	
-	@Override
-	public String toString() {
-		return "attribute: " + attribute + " type: " + type;
 	}
 }
