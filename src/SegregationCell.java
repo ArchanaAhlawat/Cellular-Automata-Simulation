@@ -2,15 +2,9 @@ package src;
 
 import java.util.HashMap;
 
-public class SegregationCell extends CellSocietyCell{
-	
+public class SegregationCell extends Cell{
 
-	public SegregationCell(String state, HashMap<String, HashMap<String, String>> instanceVariables) {
-		super(state, instanceVariables);
-		setInstanceVariables();
-	}
-	
-	private void setInstanceVariables() {
-	}
-	
+	public SegregationCell(HashMap<String, String> instanceVariables) {
+		super(instanceVariables);
+	}	
 }
