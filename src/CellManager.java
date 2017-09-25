@@ -13,7 +13,8 @@ public class CellManager {
 	 */
 	private ArrayList<Cell> initializerList = new ArrayList<Cell>();
 	private Cell[][] currentMatrix = new Cell[GRID_SIZE][GRID_SIZE]; // SIZE ? 
-	private Rules rules = new Rules();
+	private Rules rules = new Rules(); // DEFAULT STATES!!!!! 
+	
 
 	/*
 	 * use XML parsed data to create cells
@@ -31,7 +32,7 @@ public class CellManager {
 		for (int i = 0; i < GRID_SIZE; i++){
 			for (int j = 0; j < GRID_SIZE; j++) {
 				currentMatrix[i][j] = initializerList.get(0);
-				initializerList.remove(0); // unsure if best method
+				initializerList.remove(0); // unsure if best method -- try iterator 
 			}
 		}
 	}
@@ -50,7 +51,7 @@ public class CellManager {
 				// compute new state for each cell
 				// call Rules or specific Rules?
 				HashMap<String, String> updatedVals = rules.applyRules(currentMatrix[i][j], neighbors);
-				setState(updatedVals, i, j);
+				setState(updatedVals, i, j); // change this. bc need to update 
 			}
 		}
 	}
@@ -123,6 +124,7 @@ public class CellManager {
 	private void setState(HashMap<String, String> updatedVals, int i, int j) {
 		// update cell values based on map taken from Rules
 		for (String key : updatedVals.keySet()) {
+			// NEED TO MAKE NEW MATRIX (NEXT MATRIX) . shark example.
 			currentMatrix[i][j].myParameterMap.put(key, updatedVals.get(key));
 		}
 	}
