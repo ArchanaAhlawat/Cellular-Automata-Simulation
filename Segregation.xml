@@ -1,8 +1,9 @@
 <Info>
 	<CellTypes>
-		<CellType simName="Segregation">
-			<threshhold>30</threshhold>
-		</CellType>
+		<CellInfo>
+		 	<simName>"Segregation"</simName>
+			<satisfaction_threshhold>30</satisfaction_threshhold>
+		</CellInfo>
 	</CellTypes>
 	<Cells>
 		<Cell>
