@@ -1,0 +1,18 @@
+<Info>
+	<CellTypes>
+		<CellType simName="Segregation">
+			<threshhold>30</threshhold>
+		</CellType>
+	</CellTypes>
+	<Cells>
+		<Cell>
+			<person>X</person>
+		</Cell>
+		<Cell>
+			<person>O</person>
+		</Cell>
+		<Cell>
+			<person>X</person>
+		</Cell>
+	</Cells>
+</Info> 

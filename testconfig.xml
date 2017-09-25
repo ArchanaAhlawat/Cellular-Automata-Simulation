@@ -1,0 +1,17 @@
+<Info>
+	<CellTypes>
+		<CellType simName="Game Of Life">
+		</CellType>
+	</CellTypes>
+	<Cells>
+		<Cell>
+			<state>alive</state>
+		</Cell>
+		<Cell>
+			<state>dead</state>
+		</Cell>
+		<Cell>
+			<state>alive</state>
+		</Cell>
+	</Cells>
+</Info>
