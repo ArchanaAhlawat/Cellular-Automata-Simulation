@@ -7,39 +7,35 @@ public class GameOfLifeNewCell extends GeneralCell{
 
 	public GameOfLifeNewCell(HashMap<String, String> cellParameters,HashMap<String, HashMap<String, String>> allDefaultParameters) {
 		super(cellParameters, allDefaultParameters);
+		super.cellSpecificBehavior.put("alive", new AliveGOL());
+		super.cellSpecificBehavior.put("dead", new Empty());
 	}
 
 	@Override
-	public void move(ArrayList<GeneralCell> neighbors) {
+	public void move() {
+		//Nothing
 	}
 
-	@Override
-	public void updateEverytime(ArrayList<GeneralCell> neighbors) {
-		int neighborsAliveCount = calcNeighborsOfState("alive",neighbors,"curr").size();
-		if (neighborsAliveCount<this.getUnderpopulationThreshold())  {
-			setNextParameterValues(getDefaults().get("dead"));
-		} else if (neighborsAliveCount>this.getOverpopulationThreshold()) {
-			setNextParameterValues(getDefaults().get("dead"));
-		} else if (neighborsAliveCount==this.getReproductionNumber() && getState().equals("dead")) {
-			setNextParameterValues(getDefaults().get("alive"));
-		} 
-	}
+//	@Override
+//	public void updateEverytime() {
+//		
+//	}
 
-	private int getUnderpopulationThreshold() {
+	protected int getUnderpopulationThreshold() {
 		return Integer.parseInt(getCurrentParametersValues().get("underpopulationthreshold"));
 	}
 	
-	private int getOverpopulationThreshold() {
+	protected int getOverpopulationThreshold() {
 		return Integer.parseInt(getCurrentParametersValues().get("overpopulationthreshold"));
 	}
 	
-	private int getReproductionNumber() {
+	protected int getReproductionNumber() {
 		return Integer.parseInt(getCurrentParametersValues().get("reproductionnumber"));
 	}
 	
-	@Override
-	public void updateBasedOnNextState(ArrayList<GeneralCell> neighbors) {
-		
-	}
+//	@Override
+//	public void updateBasedOnNextState() {
+//		
+//	}
 
 }

@@ -13,6 +13,8 @@ public abstract class GeneralCell {
 	Map<String, HashMap<String, String>> defaults = new HashMap<String, HashMap<String, String>>();
 	Map<String, String> currentParametersValues = new HashMap<String, String>();
 	Map<String, String> nextParameterValues = new HashMap<String, String>();
+	ArrayList<GeneralCell> myNeighbors;
+	HashMap<String, CellSpecificBehavior> cellSpecificBehavior = new HashMap<String, CellSpecificBehavior>();
 
 	public GeneralCell(HashMap<String, String> cellParameters,
 			HashMap<String, HashMap<String, String>> allDefaultParameters) {
@@ -23,10 +25,10 @@ public abstract class GeneralCell {
 	protected String getState() {
 		return getCurrentParametersValues().get("state");
 	}
-	
-//	protected void setNextState(String s) {
-//		getNextParameterValues().put("state", s);
-//	}
+
+	// protected void setNextState(String s) {
+	// getNextParameterValues().put("state", s);
+	// }
 
 	protected Map<String, String> getCurrentParametersValues() {
 		return currentParametersValues;
@@ -51,36 +53,58 @@ public abstract class GeneralCell {
 	private void setDefaults(HashMap<String, HashMap<String, String>> defaultParams) {
 		this.defaults = defaultParams;
 	}
-
-	public void computeState(ArrayList<GeneralCell> neighbors) {
-		updateEverytime(neighbors);
-		updateBasedOnNextState(neighbors);
+	
+	protected ArrayList<GeneralCell> getNeighbors() {
+		return myNeighbors;
+	}
+	
+	protected void setNeighbors(ArrayList<GeneralCell> neighbors) {
+		this.myNeighbors = neighbors;
 	}
 
-	public abstract void move(ArrayList<GeneralCell> neighbors);
+	public void computeState(ArrayList<GeneralCell> neighbors) {
+		setNeighbors(neighbors);
+		updateEverytime();
+		updateBasedOnNextState();
+	}
 
-	public void calcAndReplace(String state, Map<String, String> newParamValues, ArrayList<GeneralCell> neighbors) {
-		ArrayList<GeneralCell> stateNeighbors  = calcNeighborsOfState(state, neighbors, "next");
+	public abstract void move();
+
+	public void calcAndReplace(String state, Map<String, String> newParamValues) {
+		ArrayList<GeneralCell> stateNeighbors = calcUnmodifiedNeighborsOfState(state);
 		GeneralCell targetCell = chooseRandomCellFromList(stateNeighbors);
 		if (targetCell != null) {
 			targetCell.setNextParameterValues(newParamValues);
 		}
 	}
+	
+	public ArrayList<GeneralCell> calcUnmodifiedNeighborsOfState(String state) {
+		ArrayList<GeneralCell> currNeighbors = calcCurrNeighborsOfState(state);
+		ArrayList<GeneralCell> ret = new ArrayList<GeneralCell>();
+		for (GeneralCell cell: currNeighbors) {
+			if (cell.getNextParameterValues().size()==0) {
+				ret.add(cell);
+			}
+		}
+		return ret;
+	}
 
-	public ArrayList<GeneralCell> calcNeighborsOfState(String state, ArrayList<GeneralCell> neighbors,
-			String currOrNext) {
+	public ArrayList<GeneralCell> calcCurrNeighborsOfState(String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
-		for (GeneralCell cell : neighbors) {
-			if (currOrNext.equals("next")) {
-				if (cell.getNextParameterValues().size() == 0) {
-					if (cell.getCurrentParametersValues().get("state").equals(state)) {
-						stateNeighbors.add(cell);
-					}
-				}
-			} else {
-				if (cell.getCurrentParametersValues().get("state").equals(state)) {
-					stateNeighbors.add(cell);
-				}
+		for (GeneralCell cell : getNeighbors()) {
+			if (cell.getCurrentParametersValues().get("state").equals(state)) {
+				stateNeighbors.add(cell);
+			}
+		}
+
+		return stateNeighbors;
+	}
+	
+	public ArrayList<GeneralCell> calcNextNeighborsOfState(String state) {
+		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
+		for (GeneralCell cell : getNeighbors()) {
+			if (cell.getNextParameterValues().get("state").equals(state)) {
+				stateNeighbors.add(cell);
 			}
 		}
 
@@ -102,9 +126,13 @@ public abstract class GeneralCell {
 		this.setNextParameterValues(this.getDefaults().get(state));
 	}
 
-	public abstract void updateEverytime(ArrayList<GeneralCell> neighbors);
+	public void updateEverytime() {
+		cellSpecificBehavior.get(getState()).cellSpecificEveryTime(this);	
+	}
 
-	public abstract void updateBasedOnNextState(ArrayList<GeneralCell> neighbors);
+	public void updateBasedOnNextState() {
+		cellSpecificBehavior.get(getState()).cellSpecificBasedOnNextState(this);
+	}
 
 	public void becomeNextState() {
 		if (getNextParameterValues().size() != 0) {

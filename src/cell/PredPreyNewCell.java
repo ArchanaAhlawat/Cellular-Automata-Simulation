@@ -5,38 +5,37 @@ import java.util.HashMap;
 
 public abstract class PredPreyNewCell extends GeneralCell {
 
-	PredPreyNewCell(HashMap<String, String> cellParameters,
-			HashMap<String, HashMap<String, String>> allDefaultParameters) {
+	PredPreyNewCell(HashMap<String, String> cellParameters,HashMap<String, HashMap<String, String>> allDefaultParameters) {
 		super(cellParameters, allDefaultParameters);
+		super.cellSpecificBehavior.put("fish", new Fish());
+		super.cellSpecificBehavior.put("shark", new Shark());
+		super.cellSpecificBehavior.put("empty", new Empty());
 	}
 
 	@Override
-	public void move(ArrayList<GeneralCell> neighbors) {
-		calcAndReplace("empty", getCurrentParametersValues(), neighbors);
+	public void move() {
+		calcAndReplace("empty", getCurrentParametersValues());
 		changeToDefault("empty");
 	}
 
-	@Override
-	public void updateEverytime(ArrayList<GeneralCell> neighbors) {
-		updateSpawnCount();
-		if (readyToSpawn()) {
-			calcAndReplace("empty", getDefaults().get(getState()), neighbors);
-		}
-		cellSpecificEveryTime(neighbors);
-	}
-
-	protected abstract void cellSpecificEveryTime(ArrayList<GeneralCell> neighbors);
-
-	@Override
-	public void updateBasedOnNextState(ArrayList<GeneralCell> neighbors) {
-		if (getNextParameterValues().size() > 0) {
-			cellSpecificBasedOnNextState(neighbors);
-			move(neighbors);
-		}
-
-	}
-
-	protected abstract void cellSpecificBasedOnNextState(ArrayList<GeneralCell> neighbors);
+//	@Override
+//	public void updateEverytime() {
+//		updateSpawnCount();
+//		if (readyToSpawn()) {
+//			calcAndReplace("empty", getDefaults().get(getState()));
+//		}
+//		super.updateEverytime();
+//	}
+	
+//	@Override
+//	public void updateBasedOnNextState() {
+//		if (getNextParameterValues().size() <= 0) {
+//			cellSpecificBehavior.get(getState()).cellSpecificBasedOnNextState(this);
+////			cellSpecificBasedOnNextState(neighbors);
+//			move();
+//		}
+//
+//	}
 
 	public int getSpawnCount() {
 		return Integer.parseInt(getCurrentParametersValues().get("spawncount"));

@@ -47,7 +47,7 @@ public class FireRules extends Rules {
 	public void treeRules() {
 		if (calculateNeighborsOfState("fire").size() > 0) {
 			Random rand = new Random();
-			if (rand.next() <= getProbCatch()) {
+			if (rand.nextFloat() <= getProbCatch()) {
 				setCellNextState("fire");
 			} else {
 				setCellNextState("tree");

@@ -3,25 +3,25 @@ package cell;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Shark extends PredPreyNewCell{
-	
-	Shark(HashMap<String, String> cellParameters, HashMap<String, HashMap<String, String>> allDefaultParameters) {
-		super(cellParameters, allDefaultParameters);
-	}
+public class Shark extends Animal{
 
 	@Override
-	protected void cellSpecificEveryTime(ArrayList<GeneralCell> neighbors) {
-		eatFish(neighbors);
-	}
-	
-	private void eatFish(ArrayList<GeneralCell> neighbors){
-		calcAndReplace("fish", getDefaults().get("empty"), neighbors);
-	}
-
-	@Override
-	protected void cellSpecificBasedOnNextState(ArrayList<GeneralCell> neighbors) {
+	public void cellSpecificEveryTime(GeneralCell cell) {
+		super.cellSpecificEveryTime(cell);
+		eatFish(cell);
 		
 	}
+
+//	@Override
+//	public void cellSpecificBasedOnNextState(GeneralCell cell) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
+	private void eatFish(GeneralCell cell){
+		cell.calcAndReplace("fish", cell.getDefaults().get("empty"));
+	}
+	
 
 
 	

@@ -3,18 +3,15 @@ package cell;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Fish extends PredPreyNewCell{
+public class Fish extends Animal{
 
-	Fish(HashMap<String, String> cellParameters, HashMap<String, HashMap<String, String>> allDefaultParameters) {
-		super(cellParameters, allDefaultParameters);
-	}
+//	@Override
+//	public void cellSpecificEveryTime(GeneralCell cell) {
+//	}
+//
+//	@Override
+//	public void cellSpecificBasedOnNextState(GeneralCell cell) {		
+//	}
 
-	@Override
-	protected void cellSpecificEveryTime(ArrayList<GeneralCell> neighbors) {
-	}
-
-	@Override
-	protected void cellSpecificBasedOnNextState(ArrayList<GeneralCell> neighbors) {
-	}
 
 }
