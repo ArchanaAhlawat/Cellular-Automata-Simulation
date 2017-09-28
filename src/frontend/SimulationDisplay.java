@@ -53,6 +53,14 @@ public class SimulationDisplay {
 	public static final String FORWARD_BUTTON_IMAGE_URL = "forward.jpg";
 	public static final String DEFAULT_TILE_STYLE = "-fx-background-color: #336699;";
 	public static final Map<String, int[]> limitsMap;
+	static {
+		HashMap<String, int[]> myMap = new HashMap<>();
+		myMap.put("rows", new int[] { MIN_ROWS, MAX_ROWS });
+		myMap.put("cols", new int[] { MIN_COLS, MAX_COLS });
+		myMap.put("width", new int[] { MIN_WIDTH, MAX_WIDTH });
+		myMap.put("height", new int[] { MIN_HEIGHT, MAX_HEIGHT });
+		limitsMap = Collections.unmodifiableMap(myMap);
+	}
 
 	// Simulation names as referenced in code - NOTE : This is different from
 	// locale-specific display name loaded from ResourceBundle
@@ -77,15 +85,12 @@ public class SimulationDisplay {
 
 	// CONFIG folder
 	public static final String XML_CONFIG_FOLDER = "config/";
+	// Default config files
+	public static final String DEFAULT_SEGREGATION_CONFIG = "default_segregation.xml";
+	public static final String DEFAULT_PREDATOR_PREY_CONFIG = "default_predatory_prey.xml";
+	public static final String DEFAULT_FIRE_CONFIG = "default_fire.xml";
+	public static final String DEFAULT_GAME_OF_LIFE_CONFIG = "default_game_of_life.xml";
 
-	static {
-		HashMap<String, int[]> myMap = new HashMap<>();
-		myMap.put("rows", new int[] { MIN_ROWS, MAX_ROWS });
-		myMap.put("cols", new int[] { MIN_COLS, MAX_COLS });
-		myMap.put("width", new int[] { MIN_WIDTH, MAX_WIDTH });
-		myMap.put("height", new int[] { MIN_HEIGHT, MAX_HEIGHT });
-		limitsMap = Collections.unmodifiableMap(myMap);
-	}
 	// Is there a better way of encoding this? ResourceBundles are for
 	// locale-specific user-visible text, so this seems unsuitable for that
 
@@ -116,6 +121,7 @@ public class SimulationDisplay {
 
 	// Simulation state
 	private String currentSimulation;
+	private String chosenConfigFileName;
 	private boolean inProgress = false;
 
 	public SimulationDisplay(int width, int height) {
@@ -123,8 +129,8 @@ public class SimulationDisplay {
 		this.height = height;
 	}
 
-	// Boilerplate layout set-up code from Oracle docs for Layouts at
-	// http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm#CHDCJDBD
+	// TODO - Refactor to pass in a reference to UITextReader instead of extracting
+	// strings from reader beforehand?
 	public Scene getMenuScene(Stage primaryStage, String startString, String stopString, String uploadString,
 			String simulationChoiceString, String[] simulationStrings, String dialogHeaderText,
 			String dialogContentText, String errorDialogTitleText, String errorDialogHeaderText,
@@ -150,6 +156,30 @@ public class SimulationDisplay {
 		return true;
 	}
 
+	// Choose String instead of Enum for simulation to support arbitrary simulation
+	// names in future if necessary
+	public static String getDefaultXMLConfigFile(String simulation) {
+		String prefix = XML_CONFIG_FOLDER;
+		String fileName = "";
+		switch (simulation) {
+		case SEGREGATION:
+			fileName = DEFAULT_SEGREGATION_CONFIG;
+			break;
+		case PREDATOR_PREY:
+			fileName = DEFAULT_PREDATOR_PREY_CONFIG;
+			break;
+		case FIRE:
+			fileName = DEFAULT_FIRE_CONFIG;
+			break;
+		case GAME_OF_LIFE:
+			fileName = DEFAULT_GAME_OF_LIFE_CONFIG;
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		return prefix + fileName;
+	}
+
 	public boolean isInProgress() {
 		return inProgress;
 	}
@@ -167,35 +197,25 @@ public class SimulationDisplay {
 		}
 	}
 
-	/*
-	 * public void colorMatrix(Cell[][] matrix) { // Map state to ImageView -> get
-	 * image path for state through for (int row = 0; row < matrix.length; row ++) {
-	 * for (int col = 0; col < matrix[row].length; col ++) { grid[row][col] =
-	 * getImageViewForSimulationAndState(currentSimulation,
-	 * matrix[row][col].getState()) } }
-	 * 
-	 * 
-	 * }
-	 */
-
 	// To transition from menu page to actual simulation display page after telling
 	// initializer to read XML Config File and getting back starting matrix
 	// TODO - uncomment function signature to include Initializer as a parameter
 	// once it's ready
 	public Scene startSimulation() { // Initializer initializer) {
+		 if (chosenConfigFileName == null) {
+			 chosenConfigFileName = getDefaultXMLConfigFile(currentSimulation);
+		 }
 		// Tell Initializer which XMLConfig file to read
 		/*
-		 * Will be uncommented once middleware package (Archana's part with Initializer,
-		 * CellManager, etc. is ready)
-		 *
-		 * try { grid = initializer.loadConfig(chosenConfigFileName) } catch (Exception
-		 * e) { // TODO - Raise error dialog
-		 * System.out.println("Invalid config file loaded! Not starting."); return; } if
-		 * (grid == null || grid.length == 0 || grid[0].length == 0) { throw new
-		 * IllegalStateException(); } // Set cell dimensions appropriately
-		 * calculateCellDimensions(grid.length, grid[0].length, height, width);
-		 * 
+		 // Will be uncommented once middleware package (Archana's part with Initializer,
+		 // CellManager, etc. is ready
+		 grid = initializer.loadConfig(chosenConfigFileName); 
+		 if (grid == null || grid.length == 0 || grid[0].length == 0) { 
+		 	throw new IllegalStateException(); 
+		 } // Set cell dimensions appropriately
+		 calculateCellDimensions(grid.length, grid[0].length, height, width);
 		 */
+		 
 
 		return getSimulationScene();
 	}
