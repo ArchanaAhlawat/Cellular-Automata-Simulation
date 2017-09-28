@@ -1,3 +1,6 @@
 # cellsociety
 
-CompSci 308 Cell Society Project
+Interface between front-end and back-end.
+
+Main, CellManager, Cells, Initializer.
+
