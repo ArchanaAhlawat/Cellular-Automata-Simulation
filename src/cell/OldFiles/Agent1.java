@@ -1,4 +1,7 @@
-package cell;
+package cell.OldFiles;
+
+import cell.CellSpecificBehavior;
+import cell.GeneralCell;
 
 public class Agent1 implements CellSpecificBehavior {
 

@@ -5,22 +5,11 @@ import java.util.HashMap;
 
 public class GameOfLifeNewCell extends GeneralCell{
 
-	public GameOfLifeNewCell(HashMap<String, String> cellParameters,HashMap<String, HashMap<String, String>> allDefaultParameters) {
-		super(cellParameters, allDefaultParameters);
+	public GameOfLifeNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
+		super(cellParameters, mh, dvh);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
-		super.cellSpecificBehavior.put("dead", new Empty());
+		super.cellSpecificBehavior.put("empty", new Empty());
 	}
-
-	@Override
-	public void move() {
-		//Nothing
-	}
-
-//	@Override
-//	public void updateEverytime() {
-//		
-//	}
-
 	protected int getUnderpopulationThreshold() {
 		return Integer.parseInt(getCurrentParametersValues().get("underpopulationthreshold"));
 	}
@@ -32,10 +21,5 @@ public class GameOfLifeNewCell extends GeneralCell{
 	protected int getReproductionNumber() {
 		return Integer.parseInt(getCurrentParametersValues().get("reproductionnumber"));
 	}
-	
-//	@Override
-//	public void updateBasedOnNextState() {
-//		
-//	}
 
 }

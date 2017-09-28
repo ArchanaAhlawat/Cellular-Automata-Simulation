@@ -1,12 +1,9 @@
 package cell;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import middleware.Cell;
 
 public abstract class GeneralCell {
 
@@ -15,20 +12,23 @@ public abstract class GeneralCell {
 	Map<String, String> nextParameterValues = new HashMap<String, String>();
 	ArrayList<GeneralCell> myNeighbors;
 	HashMap<String, CellSpecificBehavior> cellSpecificBehavior = new HashMap<String, CellSpecificBehavior>();
+	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<String, cellMovement>();
+	MoveHelper moveHelper;
+	DefaultValuesHelper defaultValuesHelper;
 
-	public GeneralCell(HashMap<String, String> cellParameters,
-			HashMap<String, HashMap<String, String>> allDefaultParameters) {
+	// public GeneralCell(HashMap<String, String> cellParameters,
+	// HashMap<String, HashMap<String, String>> allDefaultParameters, MoveHelper
+	// mh, DefaultValuesHelper dvh) {
+	public GeneralCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
 		this.setCurrentParametersValues(cellParameters);
-		this.setDefaults(allDefaultParameters);
+		// this.setDefaults(allDefaultParameters);
+		this.moveHelper = mh;
+		this.defaultValuesHelper = dvh;
 	}
 
 	protected String getState() {
 		return getCurrentParametersValues().get("state");
 	}
-
-	// protected void setNextState(String s) {
-	// getNextParameterValues().put("state", s);
-	// }
 
 	protected Map<String, String> getCurrentParametersValues() {
 		return currentParametersValues;
@@ -46,18 +46,19 @@ public abstract class GeneralCell {
 		this.nextParameterValues = nextParameterValues;
 	}
 
-	protected Map<String, HashMap<String, String>> getDefaults() {
-		return this.defaults;
+	protected Map<String, Map<String, String>> getDefaults() {
+		return this.defaultValuesHelper.returnAllDefaults();
+//		return this.defaults;
 	}
 
-	private void setDefaults(HashMap<String, HashMap<String, String>> defaultParams) {
-		this.defaults = defaultParams;
-	}
-	
+//	private void setDefaults(HashMap<String, HashMap<String, String>> defaultParams) {
+//		this.defaults = defaultParams;
+//	}
+
 	protected ArrayList<GeneralCell> getNeighbors() {
 		return myNeighbors;
 	}
-	
+
 	protected void setNeighbors(ArrayList<GeneralCell> neighbors) {
 		this.myNeighbors = neighbors;
 	}
@@ -68,7 +69,10 @@ public abstract class GeneralCell {
 		updateBasedOnNextState();
 	}
 
-	public abstract void move();
+	public void move() {
+		this.moveHelper.moveCell(this);
+		changeToDefault("empty");
+	}
 
 	public void calcAndReplace(String state, Map<String, String> newParamValues) {
 		ArrayList<GeneralCell> stateNeighbors = calcUnmodifiedNeighborsOfState(state);
@@ -77,12 +81,12 @@ public abstract class GeneralCell {
 			targetCell.setNextParameterValues(newParamValues);
 		}
 	}
-	
+
 	public ArrayList<GeneralCell> calcUnmodifiedNeighborsOfState(String state) {
 		ArrayList<GeneralCell> currNeighbors = calcCurrNeighborsOfState(state);
 		ArrayList<GeneralCell> ret = new ArrayList<GeneralCell>();
-		for (GeneralCell cell: currNeighbors) {
-			if (cell.getNextParameterValues().size()==0) {
+		for (GeneralCell cell : currNeighbors) {
+			if (cell.getNextParameterValues().size() == 0) {
 				ret.add(cell);
 			}
 		}
@@ -99,7 +103,7 @@ public abstract class GeneralCell {
 
 		return stateNeighbors;
 	}
-	
+
 	public ArrayList<GeneralCell> calcNextNeighborsOfState(String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell cell : getNeighbors()) {
@@ -123,11 +127,11 @@ public abstract class GeneralCell {
 	}
 
 	public void changeToDefault(String state) {
-		this.setNextParameterValues(this.getDefaults().get(state));
+		this.setNextParameterValues(this.defaultValuesHelper.returnDefaultForState(state));
 	}
 
 	public void updateEverytime() {
-		cellSpecificBehavior.get(getState()).cellSpecificEveryTime(this);	
+		cellSpecificBehavior.get(getState()).cellSpecificEveryTime(this);
 	}
 
 	public void updateBasedOnNextState() {

@@ -1,9 +1,11 @@
-package src;
+package cell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import cell.OldFiles.Cell;
 
 public class CellManager {
 	private static final int GRID_SIZE = 50; // MUST BE 2500 CELLS in XML file

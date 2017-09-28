@@ -3,19 +3,13 @@ package cell;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class PredPreyNewCell extends GeneralCell {
+public class PredPreyNewCell extends GeneralCell {
 
-	PredPreyNewCell(HashMap<String, String> cellParameters,HashMap<String, HashMap<String, String>> allDefaultParameters) {
-		super(cellParameters, allDefaultParameters);
+	PredPreyNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
+		super(cellParameters, mh, dvh);
 		super.cellSpecificBehavior.put("fish", new Fish());
 		super.cellSpecificBehavior.put("shark", new Shark());
 		super.cellSpecificBehavior.put("empty", new Empty());
-	}
-
-	@Override
-	public void move() {
-		calcAndReplace("empty", getCurrentParametersValues());
-		changeToDefault("empty");
 	}
 
 //	@Override
