@@ -35,7 +35,7 @@ public class Initializer {
 		catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}
-	}
+	}// THROW ERRORS!! 
 	
 	private static void parseDocument() {
 		//get root element
@@ -79,9 +79,10 @@ public class Initializer {
 		return simName;
 	}
 	
-	public static void loadConfig(String configFileName) {
+	public static Cell[][] loadConfig(String configFileName) {
 		parseXMLFile(configFileName);
 		parseDocument();
+		return cmanager.getMatrix();
 	}
 	
 /*	DEBUGGING PURPOSES

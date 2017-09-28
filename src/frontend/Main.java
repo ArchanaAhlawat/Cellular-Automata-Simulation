@@ -31,11 +31,9 @@ public class Main extends Application {
 		display = new SimulationDisplay(reader.getWidth(), reader.getHeight());
 		stage.setTitle(reader.getTitleText());
 		registerAnimation();
-		updateStage(display.getMenuScene(stage, reader.getStartText(), reader.getStopText(), reader.getUploadText(),
-				reader.getSimulationChoiceText(), reader.getSimulationTexts(), reader.getDialogHeaderText(),
-				reader.getDialogContentText(), reader.getMissingFileErrorDialogTitleText(),
-				reader.getMissingFileErrorDialogHeaderText(), reader.getMissingFileErrorDialogContentText(),
-				e -> updateStage(display.startSimulation())));
+		// TODO - Refactor to pass in a reference to UITextReader instead of extracting
+		// strings from reader beforehand?
+		updateStage(display.getMenuScene(stage, reader, e -> updateStage(display.startSimulation())));
 	}
 
 	@Override
@@ -54,6 +52,7 @@ public class Main extends Application {
 		stage.show();
 	}
 
+	// TODO - Move these user-triggered methods to UserInterface
 	public void speedUp(double factor) {
 		animationRate *= factor;
 	}

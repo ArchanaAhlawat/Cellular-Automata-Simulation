@@ -58,65 +58,15 @@ public class CellManager {
 	
 	private ArrayList<Cell> computeNeighbors(int i, int j) {
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		// 1st 4 if statements deal with 4 corner cases. only 3 neighbors.
-		if (i == 0 && j == 0) { 
-			neighbors.add(currentMatrix[i][j+1]);
-			neighbors.add(currentMatrix[i+1][j]);
-			neighbors.add(currentMatrix[i+1][j+1]);
-		}
-		else if (i == 0 && j == GRID_SIZE - 1) {
-			neighbors.add(currentMatrix[i][j-1]);
-			neighbors.add(currentMatrix[i+1][j-1]);
-			neighbors.add(currentMatrix[i+1][j]);
-		}
-		else if (i == GRID_SIZE - 1 && j == 0) {
-			neighbors.add(currentMatrix[i-1][j]);
-			neighbors.add(currentMatrix[i-1][j+1]);
-			neighbors.add(currentMatrix[i][j+1]);
-		}
-		else if (i == GRID_SIZE - 1 && j == GRID_SIZE - 1) {
-			neighbors.add(currentMatrix[i-1][j]);
-			neighbors.add(currentMatrix[i-1][j-1]);
-			neighbors.add(currentMatrix[i][j-1]);
-		}
-		// next 4 if statements deal with edge cases (not including corners)
-		else if (i == 0) {
-			neighbors.add(currentMatrix[i][j-1]);
-			neighbors.add(currentMatrix[i+1][j-1]);
-			neighbors.add(currentMatrix[i+1][j]);
-			neighbors.add(currentMatrix[i+1][j+1]);
-			neighbors.add(currentMatrix[i][j+1]);
-		}
-		else if (i == GRID_SIZE - 1) {
-			neighbors.add(currentMatrix[i][j-1]);
-			neighbors.add(currentMatrix[i-1][j-1]);
-			neighbors.add(currentMatrix[i-1][j]);
-			neighbors.add(currentMatrix[i-1][j+1]);
-			neighbors.add(currentMatrix[i][j+1]);
-		}
-		else if (j == 0) {
-			neighbors.add(currentMatrix[i-1][j]);
-			neighbors.add(currentMatrix[i-1][j+1]);
-			neighbors.add(currentMatrix[i][j+1]);
-			neighbors.add(currentMatrix[i+1][j+1]);
-			neighbors.add(currentMatrix[i+1][j]);
-		}
-		else if (j == GRID_SIZE - 1) {
-			neighbors.add(currentMatrix[i-1][j]);
-			neighbors.add(currentMatrix[i-1][j-1]);
-			neighbors.add(currentMatrix[i][j-1]);
-			neighbors.add(currentMatrix[i+1][j-1]);
-			neighbors.add(currentMatrix[i+1][j]);
-		}
-		else { // middle cells
-			neighbors.add(currentMatrix[i-1][j-1]);
-			neighbors.add(currentMatrix[i-1][j]);
-			neighbors.add(currentMatrix[i-1][j+1]);
-			neighbors.add(currentMatrix[i][j+1]);
-			neighbors.add(currentMatrix[i+1][j+1]);
-			neighbors.add(currentMatrix[i+1][j]);
-			neighbors.add(currentMatrix[i+1][j-1]);
-			neighbors.add(currentMatrix[i][j-1]);
+		int[] indices = new int[]{-1,0,1};
+		for (int k: indices) {
+			for (int l: indices) {
+				if (! currentMatrix[i+k][j+l].equals(null)) {
+					if (! neighbors.contains(currentMatrix[i+k][j+l])) {
+						neighbors.add(currentMatrix[k][l]);
+					}
+				}
+			}
 		}
 		return neighbors;
 	}
