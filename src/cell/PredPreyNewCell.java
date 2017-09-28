@@ -5,31 +5,12 @@ import java.util.HashMap;
 
 public class PredPreyNewCell extends GeneralCell {
 
-	PredPreyNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
-		super(cellParameters, mh, dvh);
+	PredPreyNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh, UserOverrideValues uov) {
+		super(cellParameters, mh, dvh, uov);
 		super.cellSpecificBehavior.put("fish", new Fish());
 		super.cellSpecificBehavior.put("shark", new Shark());
 		super.cellSpecificBehavior.put("empty", new Empty());
 	}
-
-//	@Override
-//	public void updateEverytime() {
-//		updateSpawnCount();
-//		if (readyToSpawn()) {
-//			calcAndReplace("empty", getDefaults().get(getState()));
-//		}
-//		super.updateEverytime();
-//	}
-	
-//	@Override
-//	public void updateBasedOnNextState() {
-//		if (getNextParameterValues().size() <= 0) {
-//			cellSpecificBehavior.get(getState()).cellSpecificBasedOnNextState(this);
-////			cellSpecificBasedOnNextState(neighbors);
-//			move();
-//		}
-//
-//	}
 
 	public int getSpawnCount() {
 		return Integer.parseInt(getCurrentParametersValues().get("spawncount"));

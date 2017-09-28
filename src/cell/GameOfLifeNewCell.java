@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class GameOfLifeNewCell extends GeneralCell{
 
-	public GameOfLifeNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
-		super(cellParameters, mh, dvh);
+	public GameOfLifeNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh, UserOverrideValues uov) {
+		super(cellParameters, mh, dvh, uov);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
 		super.cellSpecificBehavior.put("empty", new Empty());
 	}

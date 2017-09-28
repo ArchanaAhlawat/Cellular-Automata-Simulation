@@ -7,23 +7,27 @@ import java.util.Random;
 
 public abstract class GeneralCell {
 
+	// Use getters for instance variables in subclass constructors
+
 	Map<String, HashMap<String, String>> defaults = new HashMap<String, HashMap<String, String>>();
-	Map<String, String> currentParametersValues = new HashMap<String, String>();
+	Map<String, String> currentParameterValues = new HashMap<String, String>();
 	Map<String, String> nextParameterValues = new HashMap<String, String>();
 	ArrayList<GeneralCell> myNeighbors;
 	HashMap<String, CellSpecificBehavior> cellSpecificBehavior = new HashMap<String, CellSpecificBehavior>();
 	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<String, cellMovement>();
 	MoveHelper moveHelper;
 	DefaultValuesHelper defaultValuesHelper;
+	UserOverrideValues userOverrideValue;
 
 	// public GeneralCell(HashMap<String, String> cellParameters,
 	// HashMap<String, HashMap<String, String>> allDefaultParameters, MoveHelper
 	// mh, DefaultValuesHelper dvh) {
-	public GeneralCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
+	public GeneralCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh, UserOverrideValues uov) {
 		this.setCurrentParametersValues(cellParameters);
 		// this.setDefaults(allDefaultParameters);
 		this.moveHelper = mh;
 		this.defaultValuesHelper = dvh;
+		this.userOverrideValue = uov;
 	}
 
 	protected String getState() {
@@ -31,11 +35,11 @@ public abstract class GeneralCell {
 	}
 
 	protected Map<String, String> getCurrentParametersValues() {
-		return currentParametersValues;
+		return currentParameterValues;
 	}
 
 	private void setCurrentParametersValues(Map<String, String> currentParametersValues) {
-		this.currentParametersValues = currentParametersValues;
+		this.currentParameterValues = currentParametersValues;
 	}
 
 	public Map<String, String> getNextParameterValues() {
@@ -48,12 +52,8 @@ public abstract class GeneralCell {
 
 	protected Map<String, Map<String, String>> getDefaults() {
 		return this.defaultValuesHelper.returnAllDefaults();
-//		return this.defaults;
+		// return this.defaults;
 	}
-
-//	private void setDefaults(HashMap<String, HashMap<String, String>> defaultParams) {
-//		this.defaults = defaultParams;
-//	}
 
 	protected ArrayList<GeneralCell> getNeighbors() {
 		return myNeighbors;
@@ -131,11 +131,26 @@ public abstract class GeneralCell {
 	}
 
 	public void updateEverytime() {
+		updateParamsBasedOnUserInput();
 		cellSpecificBehavior.get(getState()).cellSpecificEveryTime(this);
 	}
 
 	public void updateBasedOnNextState() {
 		cellSpecificBehavior.get(getState()).cellSpecificBasedOnNextState(this);
+	}
+
+	private void updateParamsBasedOnUserInput() {
+		if (userOverrideValue.hasUserUpdate()) {
+			Map<String, Map<String, String>> UOV_Map = userOverrideValue.getOverridenValues();
+			if (!UOV_Map.get(getState()).isEmpty()) {
+				for (String state_variable : UOV_Map.get(getState()).keySet()) {
+					String newValue = UOV_Map.get(getState()).get(state_variable);
+					this.getCurrentParametersValues().put(state_variable, newValue);
+				}
+
+			}
+		}
+
 	}
 
 	public void becomeNextState() {

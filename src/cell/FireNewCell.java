@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class FireNewCell extends GeneralCell{
 
-	public FireNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh) {
-		super(cellParameters,mh, dvh);
+	public FireNewCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh, UserOverrideValues uov) {
+		super(cellParameters,mh, dvh, uov);
 		super.cellSpecificBehavior.put("fire", new Fire());
 		super.cellSpecificBehavior.put("tree", new Tree());
 		super.cellSpecificBehavior.put("empty", new Empty());
