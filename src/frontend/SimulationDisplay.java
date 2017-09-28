@@ -89,12 +89,19 @@ public class SimulationDisplay {
 
 	// TODO - Refactor to pass in a reference to UITextReader instead of extracting
 	// strings from reader beforehand?
-	public Scene getMenuScene(Stage primaryStage, String startString, String stopString, String uploadString,
-			String simulationChoiceString, String[] simulationStrings, String dialogHeaderText,
-			String dialogContentText, String errorDialogTitleText, String errorDialogHeaderText,
-			String errorDialogContentText, EventHandler<ActionEvent> onStartButtonClicked) {
+	public Scene getMenuScene(Stage primaryStage, UITextReader reader, EventHandler<ActionEvent> onStartButtonClicked) {
 		// Use BorderPane, HBox, VBox, TilePane
 		// TilePane in center of BorderPane
+		String startString = reader.getStartText();
+		String uploadString = reader.getUploadText();
+		String simulationChoiceString = reader.getSimulationChoiceText();
+		String[] simulationStrings = reader.getSimulationTexts();
+		String dialogHeaderText = reader.getDialogHeaderText();
+		String dialogContentText = reader.getDialogContentText();
+		String errorDialogTitleText = reader.getMissingFileErrorDialogTitleText();
+		String errorDialogHeaderText = reader.getMissingFileErrorDialogHeaderText();
+		String errorDialogContentText = reader.getMissingFileErrorDialogContentText();
+
 		BorderPane border = new BorderPane();
 		border.setTop(PanelDisplay.initConfigBox(uploadString, simulationChoiceString, simulationStrings,
 				(observable, oldVal, newVal) -> {
@@ -259,7 +266,8 @@ public class SimulationDisplay {
 		return tiles;
 	}
 
-	// Will be called in startSimulation() once Initializer is ready - can ignore warning for now
+	// Will be called in startSimulation() once Initializer is ready - can ignore
+	// warning for now
 	private void calculateCellDimensions(int rows, int cols, int gridHeight, int gridWidth) {
 		cellWidth = gridWidth / rows;
 		cellHeight = gridHeight / rows;
