@@ -65,10 +65,10 @@ public class SimulationDisplay {
 	// Simulation names as referenced in code - NOTE : This is different from
 	// locale-specific display name loaded from ResourceBundle
 	// move to separate constants files?
-	public static final String SEGREGATION = "segregation";
-	public static final String PREDATOR_PREY = "predator_prey";
-	public static final String FIRE = "fire";
-	public static final String GAME_OF_LIFE = "game_of_life";
+	public static final String SEGREGATION = "Segregation";
+	public static final String PREDATOR_PREY = "Predator-prey";
+	public static final String FIRE = "Fire";
+	public static final String GAME_OF_LIFE = "Game of Life";
 
 	// Simulation-specific states TODO - Fill in states for other games based on
 	// info from Rules (From Sam)
@@ -327,13 +327,9 @@ public class SimulationDisplay {
 		try {
 			Scanner in = new Scanner(file);
 		} catch (FileNotFoundException e) {
-			// TEMP
-			System.out.println("Invalid file!");
-			// TODO - Present Warning Dialog
 			displayWarningDialog(errorDialogTitleText, errorDialogHeaderText, errorDialogContentText);
 			return;
 		}
-		System.out.println("File exists!");
 	}
 
 	private void displayWarningDialog(String errorDialogTitle, String errorDialogHeaderText,
