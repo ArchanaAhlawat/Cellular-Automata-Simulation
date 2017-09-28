@@ -10,14 +10,14 @@
 
 + Created new class to maintain the default values of all game-specific variables. Cells no longer contain all default info, but rather get the default info from this new class.
 
-+ 
-
-
 
 #### ARCHANA
 
++ Eliminated duplicated code from calculating neighbors in CellManager
 
++ Eliminate duplicated code from creating and using nodelists in Initializer
 
++ Create a new Neighbors class to deal with getting the neighbors for different types of Cell and Grid types. Centralize this.
 
 #### ADI
 + Extract all control-panel related display logic from SimulationDisplay into PanelDisplay for modularity and ease of reading
