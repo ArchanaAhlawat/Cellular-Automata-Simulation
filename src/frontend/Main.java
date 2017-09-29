@@ -14,7 +14,8 @@ public class Main extends Application {
 	public static final int FRAMES_PER_SECOND = 60;
 	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
 	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-	public static final double ANIMATION_SPEED_SCALING_FACTOR = 0.05;
+	public static final double ANIMATION_SPEED_SCALING_FACTOR = 20.0;
+	public static final double DEFAULT_SPEEDUP_FACTOR = 2.0;
 
 	public static final Locale DEFAULT_LOCALE = Locale.US;
 
@@ -22,18 +23,17 @@ public class Main extends Application {
 	private SimulationDisplay display;
 	private Stage stage;
 
-	private double animationRate = 1;
+	private Timeline animation;
 
 	@Override
 	public void start(Stage stage) {
 		this.stage = stage;
 		reader = new UITextReader(UITextReader.RESOURCE_PACKAGE, DEFAULT_LOCALE);
-		display = new SimulationDisplay(reader.getWidth(), reader.getHeight());
+		display = new SimulationDisplay(reader.getWidth(), reader.getHeight(), reader);
 		stage.setTitle(reader.getTitleText());
 		registerAnimation();
-		// TODO - Refactor to pass in a reference to UITextReader instead of extracting
-		// strings from reader beforehand?
-		updateStage(display.getMenuScene(stage, reader, e -> updateStage(display.startSimulation())));
+		updateStage(display.getMenuScene(stage, e -> updateStage(display
+				.startSimulation(e1 -> speedUp(DEFAULT_SPEEDUP_FACTOR), e2 -> slowDown(DEFAULT_SPEEDUP_FACTOR)))));
 	}
 
 	@Override
@@ -54,18 +54,17 @@ public class Main extends Application {
 
 	// TODO - Move these user-triggered methods to UserInterface
 	public void speedUp(double factor) {
-		animationRate *= factor;
+		animation.setRate(animation.getCurrentRate() * factor);
 	}
 
 	public void slowDown(double factor) {
-		animationRate /= factor;
+		animation.setRate(animation.getCurrentRate() / factor);
 	}
 
 	private void registerAnimation() {
-		KeyFrame frame = new KeyFrame(
-				Duration.millis((animationRate / ANIMATION_SPEED_SCALING_FACTOR) * MILLISECOND_DELAY),
+		animation = new Timeline();
+		KeyFrame frame = new KeyFrame(Duration.millis((ANIMATION_SPEED_SCALING_FACTOR) * MILLISECOND_DELAY),
 				e -> step(SECOND_DELAY));
-		Timeline animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
 		animation.play();

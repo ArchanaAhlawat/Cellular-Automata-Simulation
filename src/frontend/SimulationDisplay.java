@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -37,6 +38,8 @@ public class SimulationDisplay {
 	public static final String PLAY_BUTTON_IMAGE_URL = "play.png";
 	public static final String PAUSE_BUTTON_IMAGE_URL = "pause.jpg";
 	public static final String FORWARD_BUTTON_IMAGE_URL = "forward.jpg";
+	public static final String SPEEDUP_BUTTON_IMAGE_URL = "speedup.png";
+	public static final String SLOWDOWN_BUTTON_IMAGE_URL = "slowdown.jpg";
 	public static final String DEFAULT_TILE_STYLE = "-fx-background-color: #336699;";
 	public static final Map<String, int[]> limitsMap;
 	static {
@@ -68,12 +71,13 @@ public class SimulationDisplay {
 	private int height;
 	private int cellWidth;
 	private int cellHeight;
+	private UITextReader reader;
 	private PanelDisplay panelDisplay;
 	private Scene scene;
 	// Would ImageView[][] be more appropriate? Then will need to keep calling a
 	// helper function to convert from Cell[][] to ImageView[][], which is less
 	// memory-efficient
-	private Cell[][] grid;
+	private Cell[][] grid; // Will be used once integrated
 	private TilePane tiles;
 
 	// Simulation state
@@ -81,33 +85,19 @@ public class SimulationDisplay {
 	private String chosenConfigFileName;
 	private boolean inProgress = false;
 
-	public SimulationDisplay(int width, int height) {
+	public SimulationDisplay(int width, int height, UITextReader reader) {
 		this.width = width;
 		this.height = height;
+		this.reader = reader;
 		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT);
 	}
 
 	// TODO - Refactor to pass in a reference to UITextReader instead of extracting
 	// strings from reader beforehand?
-	public Scene getMenuScene(Stage primaryStage, UITextReader reader, EventHandler<ActionEvent> onStartButtonClicked) {
-		// Use BorderPane, HBox, VBox, TilePane
-		// TilePane in center of BorderPane
+	public Scene getMenuScene(Stage primaryStage, EventHandler<ActionEvent> onStartButtonClicked) {
 		String startString = reader.getStartText();
-		String uploadString = reader.getUploadText();
-		String simulationChoiceString = reader.getSimulationChoiceText();
-		String[] simulationStrings = reader.getSimulationTexts();
-		String dialogHeaderText = reader.getDialogHeaderText();
-		String dialogContentText = reader.getDialogContentText();
-		String errorDialogTitleText = reader.getMissingFileErrorDialogTitleText();
-		String errorDialogHeaderText = reader.getMissingFileErrorDialogHeaderText();
-		String errorDialogContentText = reader.getMissingFileErrorDialogContentText();
-
-		BorderPane border = new BorderPane();
-		border.setTop(PanelDisplay.initConfigBox(uploadString, simulationChoiceString, simulationStrings,
-				(observable, oldVal, newVal) -> {
-					currentSimulation = simulationStrings[(int) newVal];
-				}, dialogHeaderText, dialogContentText, errorDialogTitleText, errorDialogHeaderText,
-				errorDialogContentText));
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader,
+				getSimulationChangeListener());
 		border.setBottom(PanelDisplay.initStartPanel(startString, onStartButtonClicked));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
@@ -170,7 +160,8 @@ public class SimulationDisplay {
 	// initializer to read XML Config File and getting back starting matrix
 	// TODO - uncomment function signature to include Initializer as a parameter
 	// once it's ready
-	public Scene startSimulation() { // Initializer initializer) {
+	public Scene startSimulation(EventHandler<ActionEvent> onSpeedUpButtonClicked,
+			EventHandler<ActionEvent> onSlowDownButtonClicked) { // Initializer initializer) {
 		if (chosenConfigFileName == null) {
 			chosenConfigFileName = getDefaultXMLConfigFile(currentSimulation);
 		}
@@ -184,7 +175,7 @@ public class SimulationDisplay {
 		 * grid[0].length, height, width);
 		 */
 
-		return getSimulationScene();
+		return getSimulationScene(onSpeedUpButtonClicked, onSlowDownButtonClicked);
 	}
 
 	public void toggleSimulationPlayState() {
@@ -207,11 +198,13 @@ public class SimulationDisplay {
 		panelDisplay.setResumeButtonImage(PLAY_BUTTON_IMAGE_URL);
 	}
 
-	private Scene getSimulationScene() {
+	private Scene getSimulationScene(EventHandler<ActionEvent> onSpeedUpButtonClicked,
+			EventHandler<ActionEvent> onSlowDownButtonClicked) {
 		System.out.println("Getting simulation scene!");
-		BorderPane border = new BorderPane();
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader, getSimulationChangeListener());
 		border.setBottom(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
-				e -> toggleSimulationPlayState(), e -> advanceOneCycle()));
+				SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
+				e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
 		// border.setCenter(initTiles(grid));
 		// DUMMY FOR NOW, just for testing
 		border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
@@ -275,6 +268,12 @@ public class SimulationDisplay {
 
 	private int getIndex(int row, int col, int numColsPerRow) {
 		return row * numColsPerRow + col;
+	}
+
+	private ChangeListener<? super Number> getSimulationChangeListener() {
+		return (observable, oldVal, newVal) -> {
+			currentSimulation = reader.getSimulationTexts()[(int) newVal];
+		};
 	}
 
 }
