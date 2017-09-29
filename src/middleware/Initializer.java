@@ -1,6 +1,7 @@
-package src;
+package middleware;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -18,7 +19,12 @@ public class Initializer {
 	*/
 	private static Document dom;
 	private static String simName;
-	private static CellManager cmanager = new CellManager();
+	private static CellManager cmanager;
+	private static DefaultValues dfv;
+	private static CurrentParameters currentParameters;
+	private static ArrayList<HashMap<String, String>> defaults = new ArrayList<HashMap<String, String>>();
+	
+	// TODO many static methods
 	
 	private static void parseXMLFile(String configFileName) { // handle exceptions 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -66,9 +72,23 @@ public class Initializer {
 				for (String key : genInfo.keySet()) {
 					attributeMap.put(key, genInfo.get(key));
 				}
-				cmanager.addInitialCells(attributeMap);
+				cmanager.addInitialCells(attributeMap.get("state"));
+				addDefaultMap(attributeMap);
 			}
 		}
+		setDefaultsAndCurrentParameters();
+	}
+	
+	private static void addDefaultMap(HashMap<String, String>attributeMap) {
+		if (! defaults.contains(attributeMap)) {
+			defaults.add(attributeMap);
+		}
+	}
+	
+	private static void
+	private static void setDefaultsAndCurrentParameters() {
+		dfv = new DefaultValues(defaults);
+		currentParameters = new CurrentParameters(defaults);
 	}
 	
 	private static void setSimName(Element empEl) {

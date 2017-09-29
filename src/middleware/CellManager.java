@@ -1,4 +1,4 @@
-package src;
+package middleware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,30 +11,38 @@ public class CellManager {
 	 * 1st, matrix is initialized to default --> received from initializer
 	 * holds matrix of cell objects --> COMPUTE and SETSTATE.
 	 */
-	private ArrayList<Cell> initializerList = new ArrayList<Cell>();
-	private Cell[][] currentMatrix = new Cell[GRID_SIZE][GRID_SIZE]; // SIZE ? 
-	private Rules rules = new Rules(); // DEFAULT STATES!!!!! 
+	// TODO:
+	private ArrayList<String> initializerList = new ArrayList<String>();
+	private GeneralCell[][] currentMatrix = new GeneralCell[GRID_SIZE][GRID_SIZE]; // SIZE ? 
+	private Neighbors neighbors = new Neighbors();
+	private DefaultValues dvf;
+	private CurrentParameters currentParameters;
 	
-
 	/*
 	 * use XML parsed data to create cells
 	 */
-	public void addInitialCells(HashMap<String, String> attributeMap) {
-		setInitialCurrentMatrix(new Cell(attributeMap));
+	
+	public void addInitialCells(String state) {
+		setInitialCurrentMatrix(state); // before making cells make sure init is done.
 		setMatrix();
 	}
 	
-	public Cell[][] getMatrix() {
+	public Cell[][] getMatrix() { 
 		return currentMatrix;
 	}
 	
 	private void setMatrix() {
 		for (int i = 0; i < GRID_SIZE; i++){
 			for (int j = 0; j < GRID_SIZE; j++) {
-				currentMatrix[i][j] = initializerList.get(0);
+				currentMatrix[i][j] = createCell(initializerList.get(0));
 				initializerList.remove(0); // unsure if best method -- try iterator 
 			}
 		}
+	}
+	
+	private GeneralCell createCell(String state) { // TODO make dependent on simulation type
+		
+		return Cell();
 	}
 	
 	public void performUpdates() {
@@ -49,7 +57,8 @@ public class CellManager {
 			for (int j = 0; j < GRID_SIZE; j++) {
 				ArrayList<Cell> neighbors = computeNeighbors(i, j);
 				// compute new state for each cell
-				// call Rules or specific Rules?
+				// for each cell cell.computeState(). will automatically update next state automatically.
+				// then go thru all cells, cell.becomeNextState()
 				HashMap<String, String> updatedVals = rules.applyRules(currentMatrix[i][j], neighbors);
 				setState(updatedVals, i, j); // change this. bc need to update 
 			}
@@ -57,18 +66,13 @@ public class CellManager {
 	}
 	
 	private ArrayList<Cell> computeNeighbors(int i, int j) {
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		int[] indices = new int[]{-1,0,1};
-		for (int k: indices) {
-			for (int l: indices) {
-				if (! currentMatrix[i+k][j+l].equals(null)) {
-					if (! neighbors.contains(currentMatrix[i+k][j+l])) {
-						neighbors.add(currentMatrix[k][l]);
-					}
-				}
+		ArrayList<Cell> neighborList = new ArrayList<Cell>();
+		for (int[][] coor : neighbors.computeNeighbors(i, j)) {
+			if (! currentMatrix[coor[0][0]][coor[1][0]].equals(null)) { // check
+				neighborList.add(currentMatrix[coor[0][0]][coor[1][0]]);
 			}
 		}
-		return neighbors;
+		return neighborList;
 	}
 	
 	private void setState(HashMap<String, String> updatedVals, int i, int j) {
@@ -79,7 +83,7 @@ public class CellManager {
 		}
 	}
 	
-	private void setInitialCurrentMatrix(Cell c) {
-		initializerList.add(c);
+	private void setInitialCurrentMatrix(String state) {
+		initializerList.add(state);
 	}
 }
