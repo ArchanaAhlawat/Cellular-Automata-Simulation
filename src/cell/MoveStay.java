@@ -10,7 +10,8 @@ public class MoveStay extends cellMovement {
 	}
 
 	@Override
-	public void computeAndPerformMovement(GeneralCell cell) {
+	public boolean computeAndPerformMovement(GeneralCell cell) {
+		return false;
 	}
 
 }

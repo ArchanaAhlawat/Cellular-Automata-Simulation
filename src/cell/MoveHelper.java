@@ -18,6 +18,9 @@ public class MoveHelper {
 			case "random":
 				cellSpecificMovement.put(key, new MoveRandom(cm));
 				break;
+			case "stay":
+				cellSpecificMovement.put(key, new MoveStay(cm));
+				break;
 			default:
 				cellSpecificMovement.put(key, new MoveStay(cm));
 				break;
@@ -27,7 +30,9 @@ public class MoveHelper {
 	
 	
 	public void moveCell(GeneralCell cell) {
-		cellSpecificMovement.get(cell.getState()).computeAndPerformMovement(cell);
+		if (cellSpecificMovement.get(cell.getState()).computeAndPerformMovement(cell)) {
+			cell.changeToDefault("empty");
+		}
 	}
 	
 }

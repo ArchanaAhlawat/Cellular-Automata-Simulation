@@ -10,12 +10,14 @@ public class MoveAdjacent extends cellMovement {
 	}
 
 	@Override
-	public void computeAndPerformMovement(GeneralCell cell) {
+	public boolean computeAndPerformMovement(GeneralCell cell) {
 		ArrayList<GeneralCell> stateNeighbors = super.checkCellsNextThenDefaultCurrentParameters(cell, cell.getNeighbors(), "empty");
 		GeneralCell targetCell = super.chooseRandomCellFromList(stateNeighbors);
 		if (targetCell != null) {
-			targetCell.setNextParameterValues(cell.getCurrentParametersValues());
+			targetCell.setNextCellParameters(cell.getCurrentGameParameters());
+			return true;
 		}
+		return false;
 		
 	}
 

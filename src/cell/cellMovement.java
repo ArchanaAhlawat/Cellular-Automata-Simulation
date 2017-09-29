@@ -9,7 +9,7 @@ public abstract class cellMovement {
 
 	}
 
-	protected abstract void computeAndPerformMovement(GeneralCell cell);
+	protected abstract boolean computeAndPerformMovement(GeneralCell cell);
 	
 	protected ArrayList<GeneralCell> checkCellStatesCurrent(ArrayList<GeneralCell> allCells, String state) {
 		return allCells;
@@ -18,7 +18,7 @@ public abstract class cellMovement {
 	protected ArrayList<GeneralCell> checkNeighborsCurrentParameters(GeneralCell cell, String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell dummy_cell : cell.getNeighbors()) {
-			if (dummy_cell.getCurrentParametersValues().get("state").equals(state)) {
+			if (dummy_cell.getCurrentGameParameters().get("state").equals(state)) {
 				stateNeighbors.add(dummy_cell);
 			}
 		}
@@ -28,7 +28,7 @@ public abstract class cellMovement {
 	protected ArrayList<GeneralCell> checkNeighborsNextParameters(GeneralCell cell, String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell dummy_cell : cell.getNeighbors()) {
-			if (dummy_cell.getNextParameterValues().get("state").equals(state)) {
+			if (dummy_cell.getNextCellParameters().get("state").equals(state)) {
 				stateNeighbors.add(dummy_cell);
 			}
 		}
@@ -38,7 +38,7 @@ public abstract class cellMovement {
 	protected ArrayList<GeneralCell> checkNeighborsNoNextParameters(GeneralCell cell, String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell dummy_cell : cell.getNeighbors()) {
-			if (dummy_cell.getNextParameterValues().size()==0 && dummy_cell.getCurrentParametersValues().get("state").equals(state)) {
+			if (dummy_cell.getNextCellParameters().size()==0 && dummy_cell.getCurrentGameParameters().get("state").equals(state)) {
 				stateNeighbors.add(dummy_cell);
 			}
 		}
@@ -49,12 +49,12 @@ public abstract class cellMovement {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 //		for (GeneralCell dummy_cell : cell.getNeighbors()) {
 		for (GeneralCell dummy_cell : allCells) {
-			if (dummy_cell.getNextParameterValues().containsKey("state")) {
-				if (dummy_cell.getNextParameterValues().get("state").equals(state)) {
+			if (dummy_cell.getNextCellParameters().containsKey("state")) {
+				if (dummy_cell.getNextCellParameters().get("state").equals(state)) {
 					stateNeighbors.add(dummy_cell);
 				}
 			} else {
-				if (dummy_cell.getCurrentParametersValues().get("state").equals(state)) {
+				if (dummy_cell.getCurrentGameParameters().get("state").equals(state)) {
 					stateNeighbors.add(dummy_cell);
 				}
 			}

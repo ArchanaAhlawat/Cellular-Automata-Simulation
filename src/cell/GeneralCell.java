@@ -10,50 +10,65 @@ public abstract class GeneralCell {
 	// Use getters for instance variables in subclass constructors
 
 	Map<String, HashMap<String, String>> defaults = new HashMap<String, HashMap<String, String>>();
-	Map<String, String> currentParameterValues = new HashMap<String, String>();
-	Map<String, String> nextParameterValues = new HashMap<String, String>();
+	Map<String, String> currentCellParameters = new HashMap<String, String>();
+	Map<String, String> nextCellParameters = new HashMap<String, String>();
 	ArrayList<GeneralCell> myNeighbors;
 	HashMap<String, CellSpecificBehavior> cellSpecificBehavior = new HashMap<String, CellSpecificBehavior>();
 	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<String, cellMovement>();
 	MoveHelper moveHelper;
-	DefaultValuesHelper defaultValuesHelper;
-	UserOverrideValues userOverrideValue;
+	DefaultValues defaultValuesHelper;
+//	UserOverrideValues userOverrideValue;
+	CurrentParameters currentGameParameters;
+
 
 	// public GeneralCell(HashMap<String, String> cellParameters,
 	// HashMap<String, HashMap<String, String>> allDefaultParameters, MoveHelper
 	// mh, DefaultValuesHelper dvh) {
-	public GeneralCell(HashMap<String, String> cellParameters, MoveHelper mh, DefaultValuesHelper dvh, UserOverrideValues uov) {
-		this.setCurrentParametersValues(cellParameters);
+	public GeneralCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
+//		this.setCurrentParametersValues(cellParameters);
 		// this.setDefaults(allDefaultParameters);
+		currentCellParameters.put("state", myState);
+		currentGameParameters = cp;
 		this.moveHelper = mh;
 		this.defaultValuesHelper = dvh;
-		this.userOverrideValue = uov;
+//		this.userOverrideValue = uov;
 	}
 
 	protected String getState() {
-		return getCurrentParametersValues().get("state");
+//		return getCurrentParametersValues().get("state");
+		return getCurrentCellParameters().get("state");
+	}
+	
+	protected Map<String, String> getCurrentCellParameters() {
+		return currentCellParameters;
+	}
+	
+	protected void setCurrentCellParameters(Map<String, String> newParameterValues) {
+		this.currentCellParameters = newParameterValues;
+		
 	}
 
-	protected Map<String, String> getCurrentParametersValues() {
-		return currentParameterValues;
+	protected Map<String, String> getCurrentGameParameters() {
+//		return currentParameterValues;
+		return currentGameParameters.getCurrentParameters(getState());
 	}
 
-	private void setCurrentParametersValues(Map<String, String> currentParametersValues) {
-		this.currentParameterValues = currentParametersValues;
+//	private void setCurrentParametersValues(Map<String, String> currentParametersValues) {
+//		this.currentParameterValues = currentParametersValues;
+//	}
+
+	public Map<String, String> getNextCellParameters() {
+		return nextCellParameters;
 	}
 
-	public Map<String, String> getNextParameterValues() {
-		return nextParameterValues;
+	protected void setNextCellParameters(Map<String, String> nextParameterValues) {
+		this.nextCellParameters = nextParameterValues;
 	}
 
-	protected void setNextParameterValues(Map<String, String> nextParameterValues) {
-		this.nextParameterValues = nextParameterValues;
-	}
-
-	protected Map<String, Map<String, String>> getDefaults() {
-		return this.defaultValuesHelper.returnAllDefaults();
-		// return this.defaults;
-	}
+//	protected Map<String, Map<String, String>> getDefaults() {
+//		return this.defaultValuesHelper.returnAllDefaults();
+//		// return this.defaults;
+//	}
 
 	protected ArrayList<GeneralCell> getNeighbors() {
 		return myNeighbors;
@@ -78,7 +93,7 @@ public abstract class GeneralCell {
 		ArrayList<GeneralCell> stateNeighbors = calcUnmodifiedNeighborsOfState(state);
 		GeneralCell targetCell = chooseRandomCellFromList(stateNeighbors);
 		if (targetCell != null) {
-			targetCell.setNextParameterValues(newParamValues);
+			targetCell.setNextCellParameters(newParamValues);
 		}
 	}
 
@@ -86,7 +101,7 @@ public abstract class GeneralCell {
 		ArrayList<GeneralCell> currNeighbors = calcCurrNeighborsOfState(state);
 		ArrayList<GeneralCell> ret = new ArrayList<GeneralCell>();
 		for (GeneralCell cell : currNeighbors) {
-			if (cell.getNextParameterValues().size() == 0) {
+			if (cell.getNextCellParameters().size() == 0) {
 				ret.add(cell);
 			}
 		}
@@ -96,7 +111,7 @@ public abstract class GeneralCell {
 	public ArrayList<GeneralCell> calcCurrNeighborsOfState(String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell cell : getNeighbors()) {
-			if (cell.getCurrentParametersValues().get("state").equals(state)) {
+			if (cell.getCurrentCellParameters().get("state").equals(state)) {
 				stateNeighbors.add(cell);
 			}
 		}
@@ -107,7 +122,7 @@ public abstract class GeneralCell {
 	public ArrayList<GeneralCell> calcNextNeighborsOfState(String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell cell : getNeighbors()) {
-			if (cell.getNextParameterValues().get("state").equals(state)) {
+			if (cell.getNextCellParameters().get("state").equals(state)) {
 				stateNeighbors.add(cell);
 			}
 		}
@@ -127,11 +142,12 @@ public abstract class GeneralCell {
 	}
 
 	public void changeToDefault(String state) {
-		this.setNextParameterValues(this.defaultValuesHelper.returnDefaultForState(state));
+//		this.setNextCellParameters(this.defaultValuesHelper.getDefaultMap(state));
+		this.setNextCellParameters(cellSpecificBehavior.get(state).getDefaultState());
 	}
 
 	public void updateEverytime() {
-		updateParamsBasedOnUserInput();
+//		updateParamsBasedOnUserInput();
 		cellSpecificBehavior.get(getState()).cellSpecificEveryTime(this);
 	}
 
@@ -139,24 +155,25 @@ public abstract class GeneralCell {
 		cellSpecificBehavior.get(getState()).cellSpecificBasedOnNextState(this);
 	}
 
-	private void updateParamsBasedOnUserInput() {
-		if (userOverrideValue.hasUserUpdate()) {
-			Map<String, Map<String, String>> UOV_Map = userOverrideValue.getOverridenValues();
-			if (!UOV_Map.get(getState()).isEmpty()) {
-				for (String state_variable : UOV_Map.get(getState()).keySet()) {
-					String newValue = UOV_Map.get(getState()).get(state_variable);
-					this.getCurrentParametersValues().put(state_variable, newValue);
-				}
-
-			}
-		}
-
-	}
+//	private void updateParamsBasedOnUserInput() {
+//		if (currentGameParameters.hasUserUpdate()) {
+//			Map<String, Map<String, String>> UOV_Map = userOverrideValue.getOverridenValues();
+//			if (!UOV_Map.get(getState()).isEmpty()) {
+//				for (String state_variable : UOV_Map.get(getState()).keySet()) {
+//					String newValue = UOV_Map.get(getState()).get(state_variable);
+//					this.getCurrentParameters().put(state_variable, newValue);
+//				}
+//
+//			}
+//		}
+//
+//	}
 
 	public void becomeNextState() {
-		if (getNextParameterValues().size() != 0) {
-			this.setCurrentParametersValues(this.getNextParameterValues());
-			this.setNextParameterValues(new HashMap<String, String>());
+		if (getNextCellParameters().size() != 0) {
+			this.setCurrentCellParameters(this.getNextCellParameters());
+			this.setNextCellParameters(new HashMap<String, String>());
 		}
+		
 	}
 }

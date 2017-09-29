@@ -2,6 +2,7 @@ package cell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Shark extends Animal{
 
@@ -19,7 +20,16 @@ public class Shark extends Animal{
 //	}
 //	
 	private void eatFish(GeneralCell cell){
-		cell.calcAndReplace("fish", cell.getDefaults().get("empty"));
+		cell.calcAndReplace("fish", cell.getCurrentCellParameters());
+		cell.changeToDefault("empty");
+	}
+	
+	@Override
+	public Map<String, String> getDefaultState() {
+		Map<String, String> ret = new HashMap<String, String>();
+		ret.put("state", "shark");
+		ret.put("spawncount", "0");
+		return ret;
 	}
 	
 

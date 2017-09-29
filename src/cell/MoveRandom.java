@@ -12,12 +12,14 @@ public class MoveRandom extends cellMovement {
 	}
 
 	@Override
-	public void computeAndPerformMovement(GeneralCell cell) {
+	public boolean computeAndPerformMovement(GeneralCell cell) {
 		ArrayList<GeneralCell> stateCells = checkCellsNextThenDefaultCurrentParameters(cell, getAllCellsAsArrayList(), "empty");
 		GeneralCell targetCell = chooseRandomCellFromList(stateCells);
 		if (targetCell != null) {
-			targetCell.setNextParameterValues(cell.getCurrentParametersValues());
+			targetCell.setNextCellParameters(cell.getCurrentCellParameters());
+			return true;
 		}
+		return false;
 		
 	}
 	

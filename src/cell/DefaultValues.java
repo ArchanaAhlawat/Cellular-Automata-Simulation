@@ -3,11 +3,11 @@ package cell;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultValuesHelper {
+public class DefaultValues {
 
 	Map<String, Map<String, String>> cellDefaultValues;
 	
-	DefaultValuesHelper(Map<String, Map<String, String>> allDefaultParameters) {
+	DefaultValues(Map<String, Map<String, String>> allDefaultParameters) {
 		cellDefaultValues = allDefaultParameters;
 		}
 	
@@ -16,7 +16,7 @@ public class DefaultValuesHelper {
 	}
 	
 	
-	public Map<String, String> returnDefaultForState(String state) {
+	public Map<String, String> getDefaultForState(String state) {
 		return cellDefaultValues.get(state);
 	}
 	

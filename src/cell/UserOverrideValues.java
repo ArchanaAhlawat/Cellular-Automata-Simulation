@@ -6,9 +6,9 @@ public class UserOverrideValues {
 
 Map<String, Map<String, String>> userOverrideValues;
 boolean newUpdate = false;
-private static DefaultValuesHelper defaultValuesHelper;
+private static DefaultValues defaultValuesHelper;
 	
-	UserOverrideValues(DefaultValuesHelper dvh) {
+	UserOverrideValues(DefaultValues dvh) {
 		defaultValuesHelper = dvh;
 		}
 	

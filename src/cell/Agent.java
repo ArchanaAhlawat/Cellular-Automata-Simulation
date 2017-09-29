@@ -1,6 +1,9 @@
 package cell;
 
-public class Agent implements CellSpecificBehavior {
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class Agent implements CellSpecificBehavior {
 
 	@Override
 	public void cellSpecificEveryTime(GeneralCell cell) {
@@ -18,4 +21,9 @@ public class Agent implements CellSpecificBehavior {
 
 	}
 
+	@Override
+	public abstract Map<String, String> getDefaultState();
+
+
+	
 }
