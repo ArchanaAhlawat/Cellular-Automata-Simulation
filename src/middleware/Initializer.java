@@ -77,6 +77,7 @@ public class Initializer {
 			}
 		}
 		setDefaultsAndCurrentParameters();
+		cmanager.setDefaultsAndParameters(dfv, currentParameters);
 	}
 	
 	private static void addDefaultMap(HashMap<String, String>attributeMap) {
@@ -85,7 +86,6 @@ public class Initializer {
 		}
 	}
 	
-	private static void
 	private static void setDefaultsAndCurrentParameters() {
 		dfv = new DefaultValues(defaults);
 		currentParameters = new CurrentParameters(defaults);

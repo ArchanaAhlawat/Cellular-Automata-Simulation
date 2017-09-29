@@ -15,7 +15,7 @@ public class CellManager {
 	private ArrayList<String> initializerList = new ArrayList<String>();
 	private GeneralCell[][] currentMatrix = new GeneralCell[GRID_SIZE][GRID_SIZE]; // SIZE ? 
 	private Neighbors neighbors = new Neighbors();
-	private DefaultValues dvf;
+	private DefaultValues dfv;
 	private CurrentParameters currentParameters;
 	
 	/*
@@ -40,9 +40,13 @@ public class CellManager {
 		}
 	}
 	
+	public void setDefaultsAndParameters(DefaultValues df, CurrentParameters cp) {
+		dfv = df;
+		currentParameters = cp;
+	}
+	
 	private GeneralCell createCell(String state) { // TODO make dependent on simulation type
-		
-		return Cell();
+		return Cell(currentParameters, dfv, state);
 	}
 	
 	public void performUpdates() {
@@ -55,14 +59,11 @@ public class CellManager {
 	private HashMap<String, String> computeAndSetState() {
 		for (int i = 0; i < GRID_SIZE; i++) {
 			for (int j = 0; j < GRID_SIZE; j++) {
-				ArrayList<Cell> neighbors = computeNeighbors(i, j);
-				// compute new state for each cell
-				// for each cell cell.computeState(). will automatically update next state automatically.
-				// then go thru all cells, cell.becomeNextState()
-				HashMap<String, String> updatedVals = rules.applyRules(currentMatrix[i][j], neighbors);
-				setState(updatedVals, i, j); // change this. bc need to update 
+				ArrayList<GeneralCell> neighbors = computeNeighbors(i, j);
+				currentMatrix[i][j].computeState(neighbors);
 			}
 		}
+		setState();
 	}
 	
 	private ArrayList<Cell> computeNeighbors(int i, int j) {
@@ -75,11 +76,11 @@ public class CellManager {
 		return neighborList;
 	}
 	
-	private void setState(HashMap<String, String> updatedVals, int i, int j) {
-		// update cell values based on map taken from Rules
-		for (String key : updatedVals.keySet()) {
-			// NEED TO MAKE NEW MATRIX (NEXT MATRIX) . shark example.
-			currentMatrix[i][j].myParameterMap.put(key, updatedVals.get(key));
+	private void setState() {
+		for (int i = 0; i < GRID_SIZE; i++) {
+			for (int j = 0; j < GRID_SIZE; j++) {
+				currentMatrix[i][j].becomeNextState();
+			}
 		}
 	}
 	
