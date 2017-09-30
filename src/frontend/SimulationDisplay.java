@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import cell.GeneralCell;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,8 +17,8 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import middleware.Cell;
 import middleware.CellManager;
+import middleware.Initializer;
 
 public class SimulationDisplay {
 
@@ -78,10 +79,10 @@ public class SimulationDisplay {
 	// CONFIG folder
 	public static final String XML_CONFIG_FOLDER = "config/";
 	// Default config files
-	public static final String DEFAULT_SEGREGATION_CONFIG = "default_segregation.xml";
-	public static final String DEFAULT_PREDATOR_PREY_CONFIG = "default_predatory_prey.xml";
-	public static final String DEFAULT_FIRE_CONFIG = "default_fire.xml";
-	public static final String DEFAULT_GAME_OF_LIFE_CONFIG = "default_game_of_life.xml";
+	public static final String DEFAULT_SEGREGATION_CONFIG = "Segregation.xml";
+	public static final String DEFAULT_PREDATOR_PREY_CONFIG = "PredatorPrey.xml";
+	public static final String DEFAULT_FIRE_CONFIG = "Fire.xml";
+	public static final String DEFAULT_GAME_OF_LIFE_CONFIG = "GameOfLife.xml";
 
 	private int width;
 	private int height;
@@ -96,7 +97,7 @@ public class SimulationDisplay {
 	// Would ImageView[][] be more appropriate? Then will need to keep calling a
 	// helper function to convert from Cell[][] to ImageView[][], which is less
 	// memory-efficient
-	private Cell[][] grid; // Will be used once integrated
+	private GeneralCell[][] grid; // Will be used once integrated
 	private TilePane tiles;
 
 	// Simulation state
@@ -173,9 +174,9 @@ public class SimulationDisplay {
 	public void advanceOneCycle() {
 		System.out.println("Advancing one cycle");
 		// Uncomment when ready to integrate
-		// cellManager.performUpdates();
-		// updateTiles(cellManager.getGrid())
-		
+		cellManager.performUpdates();
+		updateTiles(cellManager.getGrid());
+
 	}
 
 	public void advance(int cycles) {
@@ -189,19 +190,18 @@ public class SimulationDisplay {
 	// TODO - uncomment function signature to include Initializer as a parameter
 	// once it's ready
 	public Scene startSimulation(EventHandler<ActionEvent> onSpeedUpButtonClicked,
-			EventHandler<ActionEvent> onSlowDownButtonClicked) { // Initializer initializer) {
+			EventHandler<ActionEvent> onSlowDownButtonClicked) {
 		if (chosenConfigFileName == null) {
 			chosenConfigFileName = getDefaultXMLConfigFile(currentSimulation);
 		}
 		// Tell Initializer which XMLConfig file to read
-		/*
-		 * // Will be uncommented once middleware package (Archana's part with
-		 * Initializer, // CellManager, etc. is ready cellManager =
-		 * initializer.loadConfig(chosenConfigFileName); grid = cellManager.getGrid();
-		 * if (grid == null || grid.length == 0 || grid[0].length == 0) { throw new
-		 * IllegalStateException(); } // Set cell dimensions appropriately
-		 * calculateCellDimensions(grid.length, grid[0].length, height, width);
-		 */
+		cellManager = Initializer.loadConfig(chosenConfigFileName);
+		grid = cellManager.getGrid();
+		if (grid == null || grid.length == 0 || grid[0].length == 0) {
+			throw new IllegalStateException();
+		} 
+		// Set cell dimensions appropriately
+		calculateCellDimensions(grid.length, grid[0].length, height, width);
 		inProgress = true;
 		resetCycles();
 		return getSimulationScene(onSpeedUpButtonClicked, onSlowDownButtonClicked);
@@ -277,7 +277,7 @@ public class SimulationDisplay {
 	}
 
 	// will be called once integration is ready
-	private TilePane updateTiles(Cell[][] matrix) throws IllegalArgumentException {
+	private TilePane updateTiles(GeneralCell[][] matrix) throws IllegalArgumentException {
 		if (matrix == null || matrix.length == 0) {
 			throw new IllegalArgumentException();
 		}

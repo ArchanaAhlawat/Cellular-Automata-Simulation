@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cell.GeneralCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.PieChart;
-import middleware.Cell;
 
 // For 1st extension of Visualization
 public class UIGraphUtils {
@@ -20,7 +20,7 @@ public class UIGraphUtils {
 		this.title = title;
 	}
 
-	public Chart getPopulationChart(Cell[][] matrix) {
+	public Chart getPopulationChart(GeneralCell[][] matrix) {
 		Map<String, Integer> statesToCounts = getCellStateCounts(matrix);
 		List<PieChart.Data> pieChartRawData = new ArrayList<>();
 		for (String state : statesToCounts.keySet()) {
@@ -32,7 +32,7 @@ public class UIGraphUtils {
 		return chart;
 	}
 
-	private Map<String, Integer> getCellStateCounts(Cell[][] matrix) {
+	private Map<String, Integer> getCellStateCounts(GeneralCell[][] matrix) {
 		if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -41,7 +41,7 @@ public class UIGraphUtils {
 		Map<String, Integer> statesToCounts = new HashMap<>();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-				Cell cell = matrix[row][col];
+				GeneralCell cell = matrix[row][col];
 				if (statesToCounts.containsKey(cell.getState())) {
 					statesToCounts.put(cell.getState(), statesToCounts.get(cell.getState()) + 1);
 				} else {
