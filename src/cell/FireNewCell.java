@@ -15,12 +15,12 @@ public class FireNewCell extends GeneralCell{
 	}
 	
 	protected double getProbCatch() {
-		return Double.parseDouble(getCurrentGameParameters().get("probcatch"));
+		return Double.parseDouble(getCurrentGameParameters().get("probCatch"));
 	}
 
 	
 	@Override
-	public GeneralCell clone(GeneralCell cell) {
+	public GeneralCell clone() {
 		return new FireNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 }

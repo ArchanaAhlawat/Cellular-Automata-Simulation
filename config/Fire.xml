@@ -1,0 +1,18 @@
+<Info>
+	<CellTypes>
+		<CellType simName="Fire">
+			<probCatch>50</probCatch>
+		</CellType>
+	</CellTypes>
+	<Cells>
+		<Cell>
+			<state>burning</state>
+		</Cell>
+		<Cell>
+			<state>empty</state>
+		</Cell>
+		<Cell>
+			<state>tree</state>
+		</Cell>
+	</Cells>
+</Info>

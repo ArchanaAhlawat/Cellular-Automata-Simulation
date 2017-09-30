@@ -13,19 +13,19 @@ public class GameOfLifeNewCell extends GeneralCell{
 		super.cellSpecificBehavior.put("empty", new Empty());
 	}
 	protected int getUnderpopulationThreshold() {
-		return Integer.parseInt(getCurrentGameParameters().get("underpopulationthreshold"));
+		return Integer.parseInt(getCurrentGameParameters().get("underpopulation_threshold"));
 	}
 	
 	protected int getOverpopulationThreshold() {
-		return Integer.parseInt(getCurrentGameParameters().get("overpopulationthreshold"));
+		return Integer.parseInt(getCurrentGameParameters().get("overpopulation_threshold"));
 	}
 	
 	protected int getReproductionNumber() {
-		return Integer.parseInt(getCurrentGameParameters().get("reproductionnumber"));
+		return Integer.parseInt(getCurrentGameParameters().get("reproduction_number"));
 	}
 	
 	@Override
-	public GeneralCell clone(GeneralCell cell) {
+	public GeneralCell clone() {
 		return new GameOfLifeNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 

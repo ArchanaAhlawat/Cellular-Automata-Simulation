@@ -10,7 +10,7 @@ public class AliveGOL implements CellSpecificBehavior {
 		int neighborsAliveCount = cell.calcCurrNeighborsOfState("alive").size();
 		if (neighborsAliveCount<((GameOfLifeNewCell) cell).getUnderpopulationThreshold())  {
 			cell.changeToDefault("empty");
-		} else if (neighborsAliveCount>((GameOfLifeNewCell) cell).getOverpopulationThreshold()) {
+		} else if (neighborsAliveCount>=((GameOfLifeNewCell) cell).getOverpopulationThreshold()) {
 			cell.changeToDefault("empty");
 		} else if (neighborsAliveCount==((GameOfLifeNewCell) cell).getReproductionNumber() && cell.getState().equals("empty")) {
 			//Nothing! It will stay alive!

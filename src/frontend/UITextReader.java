@@ -30,6 +30,7 @@ public class UITextReader {
 	public static final String GRID_HEIGHT_KEY = "Grid_Height_Text";
 	public static final String GRID_WIDTH_KEY = "Grid_Width_Text";
 	public static final String GRID_SIZE_UPDATE_KEY = "Grid_Size_Update_Text";
+	public static final String GRAPH_TITLE_KEY = "Graph_Title";
 	
 	// Optional ones
 	public static final String ROW_KEY = "rows";
@@ -140,6 +141,10 @@ public class UITextReader {
 		return myResources.getString(GRID_SIZE_UPDATE_KEY);
 	}
 
+	public String getGraphTitleText() {
+		return myResources.getString(GRAPH_TITLE_KEY);
+	}
+	
 	public int getRows() {
 		return displayConfig.get(ROW_KEY);
 	}
