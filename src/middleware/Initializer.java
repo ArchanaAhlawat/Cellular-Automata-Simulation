@@ -42,13 +42,12 @@ public class Initializer {
 		catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}
-	}// THROW ERRORS!! 
+	}
 	
 	private static void parseDocument() {
 		//get root element
 		Element docEle = dom.getDocumentElement();
 		// get a nodelist of elements
-		//NodeList nl_info = docEle.getElementsByTagName("CellType");
 		HashMap<String, String> attributeMap = new HashMap<String, String>();
 		NodeList nl_info_root = docEle.getElementsByTagName("CellInfo");
 		if (nl_info_root != null && nl_info_root.getLength() > 0) {
@@ -90,7 +89,7 @@ public class Initializer {
 	
 	private static void setDefaultsAndCurrentParameters() {
 		dfv = new DefaultValues(defaults);
-		currentParameters = new CurrentParameters(defaults);
+		currentParameters = new CurrentParameters(defaults, dfv);
 	}
 	
 	private static void setSimName(Element empEl) {
@@ -101,10 +100,10 @@ public class Initializer {
 		return simName;
 	}
 	
-	public static Cell[][] loadConfig(String configFileName) {
+	public static CellManager loadConfig(String configFileName) {
 		parseXMLFile(configFileName);
 		parseDocument();
-		return cmanager.getGrid();
+		return cmanager; 
 	}
 	
 /*	DEBUGGING PURPOSES

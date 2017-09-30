@@ -10,11 +10,13 @@ import java.util.HashMap;
 */
 public class CurrentParameters {
 	private HashMap<String, HashMap<String, String>> currentParams = new HashMap<String, HashMap<String, String>>();
+	private DefaultValues dfv;
 	
-	public CurrentParameters(ArrayList<HashMap<String, String>> currentMaps) {
+	public CurrentParameters(ArrayList<HashMap<String, String>> currentMaps, DefaultValues defaults) {
 		for (HashMap<String, String> df_map : currentMaps) {
 			currentParams.put(df_map.get("state"), df_map);
 		}
+		dfv = defaults;
 	}
 	
 	public HashMap<String, String> getCurrentParameterMap(String state) {
@@ -30,5 +32,11 @@ public class CurrentParameters {
 		HashMap<String, String> mapChange = currentParams.get(state);
 		mapChange.put(parameterToChangeOrAdd, newValue); // will either replace existing k,v pair or add a new one
 		currentParams.put(state, mapChange); 
+	}
+	
+	public void revertToDefaultValues() {
+		for (String state : currentParams.keySet()) {
+			currentParams.put(state, dfv.getDefaultMap(state));
+		}
 	}
 }
