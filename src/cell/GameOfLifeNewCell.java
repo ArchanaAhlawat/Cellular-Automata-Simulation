@@ -3,10 +3,12 @@ package cell;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import middleware.CurrentParameters;
+
 public class GameOfLifeNewCell extends GeneralCell{
 
-	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, UserOverrideValues uov, String myState) {
-		super(cp, mh, dvh, uov);
+	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
+		super(cp, mh, dvh, myState);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
 		super.cellSpecificBehavior.put("empty", new Empty());
 	}

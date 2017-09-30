@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import middleware.CurrentParameters;
+
 public abstract class GeneralCell {
 
 	// Use getters for instance variables in subclass constructors
@@ -17,7 +19,6 @@ public abstract class GeneralCell {
 	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<String, cellMovement>();
 	MoveHelper moveHelper;
 	DefaultValues defaultValuesHelper;
-//	UserOverrideValues userOverrideValue;
 	CurrentParameters currentGameParameters;
 
 

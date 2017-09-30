@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import middleware.CurrentParameters;
+
 public class PredPreyNewCell extends GeneralCell {
 
-	PredPreyNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, UserOverrideValues uov, String myState) {
-		super(cp, mh, dvh, uov);
+	PredPreyNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
+		super(cp, mh, dvh, myState);
 		super.cellSpecificBehavior.put("fish", new Fish());
 		super.cellSpecificBehavior.put("shark", new Shark());
 		super.cellSpecificBehavior.put("empty", new Empty());
