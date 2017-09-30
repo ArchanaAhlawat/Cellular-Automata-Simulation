@@ -21,7 +21,7 @@ public class CellManager {
 	private Grid gridManager;
 	private CurrentParameters currentParameters;
 	private MoveHelper mh;
-	private ArrayList<GeneralCell> allCellsPossible;
+	private ArrayList<GeneralCell> allCellsPossible = new ArrayList<>();
 	private String simName;
 	
 	/*
@@ -35,8 +35,7 @@ public class CellManager {
 	
 	private void setMatrix() {
 		for (int i = 0; i < initializerList.size(); i++) {
-				allCellsPossible.add(createCell(initializerList.get(0)));
-				initializerList.remove(0);
+				allCellsPossible.add(createCell(initializerList.get(i)));
 		}
 		gridManager = new Grid(allCellsPossible);
 		setCurrentGrid();
