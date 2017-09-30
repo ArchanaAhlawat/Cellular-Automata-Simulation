@@ -16,7 +16,8 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import middleware.Cell;;
+import middleware.Cell;
+import middleware.CellManager;
 
 public class SimulationDisplay {
 
@@ -88,6 +89,7 @@ public class SimulationDisplay {
 	private int gridHeight = DEFAULT_GRID_HEIGHT;
 	private int cellWidth;
 	private int cellHeight;
+	private CellManager cellManager;
 	private UITextReader reader;
 	private PanelDisplay panelDisplay;
 	private Scene scene;
@@ -172,7 +174,7 @@ public class SimulationDisplay {
 		System.out.println("Advancing one cycle");
 		// Uncomment when ready to integrate
 		// cellManager.performUpdates();
-		// updateTiles(cellManager.getMatrix())
+		// updateTiles(cellManager.getGrid())
 	}
 
 	public void advance(int cycles) {
@@ -193,11 +195,11 @@ public class SimulationDisplay {
 		// Tell Initializer which XMLConfig file to read
 		/*
 		 * // Will be uncommented once middleware package (Archana's part with
-		 * Initializer, // CellManager, etc. is ready grid =
-		 * initializer.loadConfig(chosenConfigFileName); if (grid == null || grid.length
-		 * == 0 || grid[0].length == 0) { throw new IllegalStateException(); } // Set
-		 * cell dimensions appropriately calculateCellDimensions(grid.length,
-		 * grid[0].length, height, width);
+		 * Initializer, // CellManager, etc. is ready cellManager =
+		 * initializer.loadConfig(chosenConfigFileName); grid = cellManager.getGrid();
+		 * if (grid == null || grid.length == 0 || grid[0].length == 0) { throw new
+		 * IllegalStateException(); } // Set cell dimensions appropriately
+		 * calculateCellDimensions(grid.length, grid[0].length, height, width);
 		 */
 		inProgress = true;
 		resetCycles();
@@ -288,7 +290,7 @@ public class SimulationDisplay {
 		tiles.setPrefColumns(matrix[0].length);
 		tiles.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
 		// TEMP - Make a dummy of texts with nums
-		// In future, need Cell[][] matrix from CellManager.getMatrix()
+		// In future, need Cell[][] matrix from CellManager.getGrid()
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				tiles.getChildren().add(UIImageUtils.getImageViewForSimulationAndState(currentSimulation,
@@ -304,7 +306,7 @@ public class SimulationDisplay {
 		tiles.setPrefColumns(cols);
 		tiles.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
 		// TEMP - Make a dummy of texts with nums
-		// In future, need Cell[][] matrix from CellManager.getMatrix()
+		// In future, need Cell[][] matrix from CellManager.getGrid()
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				HBox tile = new HBox();
@@ -341,7 +343,8 @@ public class SimulationDisplay {
 		};
 	}
 
-	// TODO - refactor by moving into Main and passing to SimulationDisplay as an 'onUpload' parameter
+	// TODO - refactor by moving into Main and passing to SimulationDisplay as an
+	// 'onUpload' parameter
 	private EventHandler<? super MouseEvent> updateChosenConfigFileName() {
 		return e -> {
 			String uploadedFileName = UIActionDispatcher.displayFileNameInputDialogAndGetResult(reader.getUploadText(),

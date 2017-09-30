@@ -61,7 +61,8 @@ public class PanelDisplay {
 		return container;
 	}
 
-	public Node initConfigBox(UITextReader reader, ChangeListener<? super Number> changeListener, EventHandler<? super MouseEvent> uploadHandler) {
+	public Node initConfigBox(UITextReader reader, ChangeListener<? super Number> changeListener,
+			EventHandler<? super MouseEvent> uploadHandler) {
 		HBox container = new HBox();
 		container.getChildren().add(initSimulationDropDownMenu(reader.getSimulationChoiceText(),
 				reader.getSimulationTexts(), changeListener));
