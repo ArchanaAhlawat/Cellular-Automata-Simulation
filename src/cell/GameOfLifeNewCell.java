@@ -7,8 +7,8 @@ import middleware.CurrentParameters;
 
 public class GameOfLifeNewCell extends GeneralCell{
 
-	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
-		super(cp, mh, dvh, myState);
+	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, String myState) {
+		super(cp, mh, myState);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
 		super.cellSpecificBehavior.put("empty", new Empty());
 	}
@@ -22,6 +22,11 @@ public class GameOfLifeNewCell extends GeneralCell{
 	
 	protected int getReproductionNumber() {
 		return Integer.parseInt(getCurrentGameParameters().get("reproductionnumber"));
+	}
+	
+	@Override
+	public GeneralCell clone(GeneralCell cell) {
+		return new GameOfLifeNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 
 }

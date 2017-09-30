@@ -8,8 +8,8 @@ import middleware.CurrentParameters;
 
 public class PredPreyNewCell extends GeneralCell {
 
-	PredPreyNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
-		super(cp, mh, dvh, myState);
+	PredPreyNewCell(CurrentParameters cp, MoveHelper mh, String myState) {
+		super(cp, mh, myState);
 		super.cellSpecificBehavior.put("fish", new Fish());
 		super.cellSpecificBehavior.put("shark", new Shark());
 		super.cellSpecificBehavior.put("empty", new Empty());
@@ -48,6 +48,11 @@ public class PredPreyNewCell extends GeneralCell {
 
 	protected boolean readyToSpawn() {
 		return getSpawnCount() >= getSpawnThreshold();
+	}
+
+	@Override
+	public GeneralCell clone(GeneralCell cell) {
+		return new PredPreyNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 
 }

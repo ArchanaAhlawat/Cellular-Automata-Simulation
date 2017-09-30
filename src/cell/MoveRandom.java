@@ -26,7 +26,7 @@ public class MoveRandom extends cellMovement {
 	}
 	
 	private ArrayList<GeneralCell> getAllCellsAsArrayList() {
-		GeneralCell[][] matrix = myCellManager.getMatrix();
+		GeneralCell[][] matrix = myCellManager.getGrid();
 		ArrayList<GeneralCell> ret = new ArrayList<GeneralCell>();
 		for (GeneralCell [] cell_row: matrix) {
 			for (GeneralCell cell : cell_row){
