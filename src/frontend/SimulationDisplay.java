@@ -16,7 +16,8 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import middleware.Cell;;
+import middleware.Cell;
+import middleware.CellManager;
 
 public class SimulationDisplay {
 
@@ -44,7 +45,7 @@ public class SimulationDisplay {
 	public static final int MIN_GRID_WIDTH = 50;
 	public static final int DEFAULT_GRID_HEIGHT = 500;
 	public static final int MAX_GRID_HEIGHT = 1600;
-	public static final int MIN_GRID_HEIGHT = 50;	
+	public static final int MIN_GRID_HEIGHT = 50;
 	public static final int DEFAULT_PADDING = 10;
 	public static final int DEFAULT_IMAGE_BUTTON_FIT_WIDTH = 20;
 	public static final int DEFAULT_IMAGE_BUTTON_FIT_HEIGHT = 20;
@@ -62,7 +63,7 @@ public class SimulationDisplay {
 		myMap.put(WIDTH, new int[] { MIN_WIDTH, MAX_WIDTH });
 		myMap.put(HEIGHT, new int[] { MIN_HEIGHT, MAX_HEIGHT });
 		myMap.put(GRID_WIDTH, new int[] { MIN_GRID_WIDTH, MAX_GRID_WIDTH });
-		myMap.put(GRID_HEIGHT, new int[] {MIN_GRID_HEIGHT, MAX_GRID_HEIGHT });
+		myMap.put(GRID_HEIGHT, new int[] { MIN_GRID_HEIGHT, MAX_GRID_HEIGHT });
 		limitsMap = Collections.unmodifiableMap(myMap);
 	}
 
@@ -88,6 +89,7 @@ public class SimulationDisplay {
 	private int gridHeight = DEFAULT_GRID_HEIGHT;
 	private int cellWidth;
 	private int cellHeight;
+	private CellManager cellManager;
 	private UITextReader reader;
 	private PanelDisplay panelDisplay;
 	private Scene scene;
@@ -108,15 +110,13 @@ public class SimulationDisplay {
 		this.width = width;
 		this.height = height;
 		this.reader = reader;
-		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT, this);
+		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT, reader, this);
 	}
 
-	// TODO - Refactor to pass in a reference to UITextReader instead of extracting
-	// strings from reader beforehand?
 	public Scene getMenuScene(Stage primaryStage, EventHandler<ActionEvent> onStartButtonClicked) {
 		String startString = reader.getStartText();
-		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader,
-				getSimulationChangeListener(), updateChosenConfigFileName());
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
+				updateChosenConfigFileName());
 		border.setBottom(PanelDisplay.initStartPanel(startString, onStartButtonClicked));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
@@ -160,11 +160,11 @@ public class SimulationDisplay {
 	public boolean isInProgress() {
 		return inProgress;
 	}
-	
+
 	public boolean hasNewConfig() {
 		return hasNewConfig;
 	}
-	
+
 	public void acknowledgeConfig() {
 		hasNewConfig = false;
 	}
@@ -174,7 +174,8 @@ public class SimulationDisplay {
 		System.out.println("Advancing one cycle");
 		// Uncomment when ready to integrate
 		// cellManager.performUpdates();
-		// updateTiles(cellManager.getMatrix())
+		// updateTiles(cellManager.getGrid())
+		
 	}
 
 	public void advance(int cycles) {
@@ -195,11 +196,11 @@ public class SimulationDisplay {
 		// Tell Initializer which XMLConfig file to read
 		/*
 		 * // Will be uncommented once middleware package (Archana's part with
-		 * Initializer, // CellManager, etc. is ready grid =
-		 * initializer.loadConfig(chosenConfigFileName); if (grid == null || grid.length
-		 * == 0 || grid[0].length == 0) { throw new IllegalStateException(); } // Set
-		 * cell dimensions appropriately calculateCellDimensions(grid.length,
-		 * grid[0].length, height, width);
+		 * Initializer, // CellManager, etc. is ready cellManager =
+		 * initializer.loadConfig(chosenConfigFileName); grid = cellManager.getGrid();
+		 * if (grid == null || grid.length == 0 || grid[0].length == 0) { throw new
+		 * IllegalStateException(); } // Set cell dimensions appropriately
+		 * calculateCellDimensions(grid.length, grid[0].length, height, width);
 		 */
 		inProgress = true;
 		resetCycles();
@@ -225,11 +226,11 @@ public class SimulationDisplay {
 		inProgress = false;
 		panelDisplay.setResumeButtonImage(PLAY_BUTTON_IMAGE_URL);
 	}
-	
+
 	public void resetCycles() {
 		cyclesElapsed = 0;
 	}
-	
+
 	public int getCyclesElapsed() {
 		return cyclesElapsed;
 	}
@@ -240,14 +241,14 @@ public class SimulationDisplay {
 		}
 		setGridDimension(gridWidth, true);
 	}
-	
+
 	public void setGridHeight(int gridHeight) {
 		if (!isValidConfig(GRID_HEIGHT, gridHeight)) {
 			throw new NumberFormatException();
 		}
 		setGridDimension(gridHeight, false);
 	}
-	
+
 	private void setGridDimension(int value, boolean isWidth) {
 		if (grid == null || grid.length == 0 || grid[0].length == 0) {
 			return;
@@ -259,11 +260,12 @@ public class SimulationDisplay {
 		}
 		calculateCellDimensions(grid.length, grid[0].length, gridHeight, gridWidth);
 	}
-	
+
 	private Scene getSimulationScene(EventHandler<ActionEvent> onSpeedUpButtonClicked,
 			EventHandler<ActionEvent> onSlowDownButtonClicked) {
 		System.out.println("Getting simulation scene!");
-		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader, getSimulationChangeListener(), updateChosenConfigFileName());
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
+				updateChosenConfigFileName());
 		border.setBottom(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
 				SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
 				e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
@@ -289,7 +291,7 @@ public class SimulationDisplay {
 		tiles.setPrefColumns(matrix[0].length);
 		tiles.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
 		// TEMP - Make a dummy of texts with nums
-		// In future, need Cell[][] matrix from CellManager.getMatrix()
+		// In future, need Cell[][] matrix from CellManager.getGrid()
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				tiles.getChildren().add(UIImageUtils.getImageViewForSimulationAndState(currentSimulation,
@@ -305,7 +307,7 @@ public class SimulationDisplay {
 		tiles.setPrefColumns(cols);
 		tiles.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
 		// TEMP - Make a dummy of texts with nums
-		// In future, need Cell[][] matrix from CellManager.getMatrix()
+		// In future, need Cell[][] matrix from CellManager.getGrid()
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				HBox tile = new HBox();
@@ -341,9 +343,11 @@ public class SimulationDisplay {
 			currentSimulation = reader.getSimulationTexts()[(int) newVal];
 		};
 	}
-	
+
+	// TODO - refactor by moving into Main and passing to SimulationDisplay as an
+	// 'onUpload' parameter
 	private EventHandler<? super MouseEvent> updateChosenConfigFileName() {
-		return e-> {
+		return e -> {
 			String uploadedFileName = UIActionDispatcher.displayFileNameInputDialogAndGetResult(reader.getUploadText(),
 					reader.getDialogHeaderText(), reader.getDialogContentText(),
 					reader.getMissingFileErrorDialogTitleText(), reader.getMissingFileErrorDialogHeaderText(),

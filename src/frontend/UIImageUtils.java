@@ -16,11 +16,34 @@ public class UIImageUtils {
 	public static final String OCCUPIED_CIRCLE = "circle";
 	public static final String VACANT = "vacant";
 
+	// PREDATOR-PREY
+	public static final String FISH = "fish";
+	public static final String SHARK = "shark";
+	public static final String EMPTY = "empty";
+
+	// FIRE
+	public static final String FIRE = "fire";
+	public static final String TREE = "tree";
+	// Empty same as above
+
+	// GAME OF LIFE
+	public static final String ALIVE = "alive";
+
 	// IMAGE_URLs corresponding to above states
 	public static final String STATES_IMAGES_FOLDER = "states/";
+	// SEGREGATION
 	public static final String OCCUPIED_CROSS_IMAGE_URL = "occupied_cross.png";
 	public static final String OCCUPIED_CIRCLE_IMAGE_URL = "occupied_circle.png";
 	public static final String VACANT_IMAGE_URL = "vacant.png";
+	// PREDATOR-PREY
+	public static final String FISH_IMAGE_URL = "fish.jpg";
+	public static final String SHARK_IMAGE_URL = "shark.png";
+	public static final String EMPTY_IMAGE_URL = "empty.png";
+	// FIRE
+	public static final String FIRE_IMAGE_URL = "fire.jpeg";
+	public static final String TREE_IMAGE_URL = "tree.jpeg";
+	// GAME OF LIFE
+	public static final String ALIVE_IMAGE_URL = "alive.jpeg";
 
 	// Is there a better way of encoding this? ResourceBundles are for
 	// locale-specific user-visible text, so this seems unsuitable for that
@@ -28,13 +51,30 @@ public class UIImageUtils {
 	public static final Map<String, Map<String, String>> STATE_TO_IMAGE_URL;
 	static {
 		HashMap<String, Map<String, String>> myMap = new HashMap<>();
+
 		HashMap<String, String> mySegregationMap = new HashMap<>();
 		mySegregationMap.put(OCCUPIED_CROSS, OCCUPIED_CROSS_IMAGE_URL);
 		mySegregationMap.put(OCCUPIED_CIRCLE, OCCUPIED_CIRCLE_IMAGE_URL);
 		mySegregationMap.put(VACANT, VACANT_IMAGE_URL);
-		// TODO - fill in for other simulations
-
 		myMap.put(SimulationDisplay.SEGREGATION, mySegregationMap);
+
+		HashMap<String, String> myPredatorPreyMap = new HashMap<>();
+		myPredatorPreyMap.put(FISH, FISH_IMAGE_URL);
+		myPredatorPreyMap.put(SHARK, SHARK_IMAGE_URL);
+		myPredatorPreyMap.put(EMPTY, EMPTY_IMAGE_URL);
+		myMap.put(SimulationDisplay.PREDATOR_PREY, myPredatorPreyMap);
+
+		HashMap<String, String> myFireMap = new HashMap<>();
+		myFireMap.put(FIRE, FIRE_IMAGE_URL);
+		myFireMap.put(TREE, TREE_IMAGE_URL);
+		myFireMap.put(EMPTY, EMPTY_IMAGE_URL);
+		myMap.put(SimulationDisplay.FIRE, myFireMap);
+
+		HashMap<String, String> myGameOfLifeMap = new HashMap<>();
+		myGameOfLifeMap.put(ALIVE, ALIVE_IMAGE_URL);
+		myGameOfLifeMap.put(EMPTY, EMPTY_IMAGE_URL);
+		myMap.put(SimulationDisplay.GAME_OF_LIFE, myGameOfLifeMap);
+
 		STATE_TO_IMAGE_URL = Collections.unmodifiableMap(myMap);
 	}
 
