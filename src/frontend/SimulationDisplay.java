@@ -199,7 +199,7 @@ public class SimulationDisplay {
 		grid = cellManager.getGrid();
 		if (grid == null || grid.length == 0 || grid[0].length == 0) {
 			throw new IllegalStateException();
-		} 
+		}
 		// Set cell dimensions appropriately
 		calculateCellDimensions(grid.length, grid[0].length, height, width);
 		inProgress = true;
@@ -269,9 +269,9 @@ public class SimulationDisplay {
 		border.setBottom(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
 				SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
 				e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
-		// border.setCenter(updateTiles(grid));
+		border.setCenter(updateTiles(grid));
 		// DUMMY FOR NOW, just for testing
-		border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
+		// border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
 	}
