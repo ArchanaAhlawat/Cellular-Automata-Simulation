@@ -24,6 +24,7 @@ public abstract class GeneralCell {
 	// public GeneralCell(HashMap<String, String> cellParameters,
 	// HashMap<String, HashMap<String, String>> allDefaultParameters, MoveHelper
 	// mh, DefaultValuesHelper dvh) {
+	
 	public GeneralCell(CurrentParameters cp, MoveHelper mh, String myState) {
 //		this.setCurrentParametersValues(cellParameters);
 		// this.setDefaults(allDefaultParameters);
@@ -168,6 +169,8 @@ public abstract class GeneralCell {
 //		}
 //
 //	}
+	
+	public abstract GeneralCell clone(GeneralCell cell);
 
 	public void becomeNextState() {
 		if (getNextCellParameters().size() != 0) {
