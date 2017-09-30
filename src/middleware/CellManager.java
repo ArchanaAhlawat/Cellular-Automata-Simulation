@@ -14,7 +14,6 @@ public class CellManager {
 	private ArrayList<String> initializerList = new ArrayList<String>();
 	private GeneralCell[][] currentGrid;
 	private Grid gridManager;
-	private DefaultValues dfv;
 	private CurrentParameters currentParameters;
 	private HashMap<String, String> moveMap;
 	private MoveHelper mh;
@@ -46,8 +45,7 @@ public class CellManager {
 		return allCellsPossible;
 	}
 	
-	public void setDefaultsAndParametersAndMove(DefaultValues df, CurrentParameters cp, MoveHelper move) {
-		dfv = df;
+	public void setDefaultsAndParametersAndMove(CurrentParameters cp, MoveHelper move) {
 		currentParameters = cp;
 		mh = move;
 		setMatrix();
