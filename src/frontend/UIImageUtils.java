@@ -12,9 +12,9 @@ public class UIImageUtils {
 	// Simulation-specific states TODO - Fill in states for other games based on
 	// info from Rules (From Sam)
 	// SEGREGATION
-	public static final String OCCUPIED_CROSS = "cross.png";
-	public static final String OCCUPIED_CIRCLE = "circle.png";
-	public static final String VACANT = "vacant.png";
+	public static final String OCCUPIED_CROSS = "cross";
+	public static final String OCCUPIED_CIRCLE = "circle";
+	public static final String VACANT = "vacant";
 
 	// IMAGE_URLs corresponding to above states
 	public static final String STATES_IMAGES_FOLDER = "states/";
