@@ -18,20 +18,19 @@ public abstract class GeneralCell {
 	HashMap<String, CellSpecificBehavior> cellSpecificBehavior = new HashMap<String, CellSpecificBehavior>();
 	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<String, cellMovement>();
 	MoveHelper moveHelper;
-	DefaultValues defaultValuesHelper;
 	CurrentParameters currentGameParameters;
 
 
 	// public GeneralCell(HashMap<String, String> cellParameters,
 	// HashMap<String, HashMap<String, String>> allDefaultParameters, MoveHelper
 	// mh, DefaultValuesHelper dvh) {
-	public GeneralCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
+	public GeneralCell(CurrentParameters cp, MoveHelper mh, String myState) {
 //		this.setCurrentParametersValues(cellParameters);
 		// this.setDefaults(allDefaultParameters);
 		currentCellParameters.put("state", myState);
 		currentGameParameters = cp;
 		this.moveHelper = mh;
-		this.defaultValuesHelper = dvh;
+//		this.defaultValuesHelper = dvh;
 //		this.userOverrideValue = uov;
 	}
 
