@@ -11,12 +11,13 @@ public class CellManager {
 	 * 1st, matrix is initialized to default --> received from initializer
 	 * holds matrix of cell objects --> COMPUTE and SETSTATE.
 	 */
-	// TODO:
 	private ArrayList<String> initializerList = new ArrayList<String>();
 	private GeneralCell[][] currentMatrix = new GeneralCell[GRID_SIZE][GRID_SIZE]; // SIZE ? 
 	private Neighbors neighbors = new Neighbors();
 	private DefaultValues dfv;
 	private CurrentParameters currentParameters;
+	private HashMap<String, String> moveMap;
+	private MoveHelper mh;
 	
 	/*
 	 * use XML parsed data to create cells
@@ -40,13 +41,14 @@ public class CellManager {
 		}
 	}
 	
-	public void setDefaultsAndParameters(DefaultValues df, CurrentParameters cp) {
+	public void setDefaultsAndParametersAndMove(DefaultValues df, CurrentParameters cp, MoveHelper move) {
 		dfv = df;
 		currentParameters = cp;
+		mh = move;
 	}
 	
 	private GeneralCell createCell(String state) { // TODO make dependent on simulation type
-		return Cell(currentParameters, dfv, state);
+		return Cell(currentParameters, dfv, mh, state);
 	}
 	
 	public void performUpdates() {

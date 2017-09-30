@@ -23,6 +23,7 @@ public class Initializer {
 	private static DefaultValues dfv;
 	private static CurrentParameters currentParameters;
 	private static ArrayList<HashMap<String, String>> defaults = new ArrayList<HashMap<String, String>>();
+	private static HashMap<String, String> moveMap = new HashMap<String, String>();
 	
 	// TODO many static methods
 	
@@ -73,15 +74,20 @@ public class Initializer {
 					attributeMap.put(key, genInfo.get(key));
 				}
 				cmanager.addInitialCells(attributeMap.get("state"));
-				addDefaultMap(attributeMap);
+				addDefaultMapAndMoveMap(attributeMap);
 			}
 		}
 		setDefaultsAndCurrentParameters();
-		cmanager.setDefaultsAndParameters(dfv, currentParameters);
+		cmanager.setDefaultsAndParametersAndMove(dfv, currentParameters, createMoveHelper());
 	}
 	
-	private static void addDefaultMap(HashMap<String, String>attributeMap) {
-		if (! defaults.contains(attributeMap)) {
+	private static MoveHelper createMoveHelper() {
+		return new MoveHelper(cmanager, moveMap);
+	}
+	
+	private static void addDefaultMapAndMoveMap(HashMap<String, String>attributeMap) {
+		if (! defaults.contains(attributeMap)) { // unique states
+			moveMap.put(attributeMap.get("state"), attributeMap.get("move"));
 			defaults.add(attributeMap);
 		}
 	}
