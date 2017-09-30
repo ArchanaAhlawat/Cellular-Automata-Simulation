@@ -50,4 +50,9 @@ public class PredPreyNewCell extends GeneralCell {
 		return getSpawnCount() >= getSpawnThreshold();
 	}
 
+	@Override
+	public GeneralCell clone(GeneralCell cell) {
+		return new PredPreyNewCell(this.currentGameParameters, this.moveHelper, this.getState());
+	}
+
 }

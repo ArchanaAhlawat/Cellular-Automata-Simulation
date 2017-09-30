@@ -18,4 +18,9 @@ public class FireNewCell extends GeneralCell{
 		return Double.parseDouble(getCurrentGameParameters().get("probcatch"));
 	}
 
+	
+	@Override
+	public GeneralCell clone(GeneralCell cell) {
+		return new FireNewCell(this.currentGameParameters, this.moveHelper, this.getState());
+	}
 }

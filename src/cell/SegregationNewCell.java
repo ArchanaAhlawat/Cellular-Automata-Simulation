@@ -18,6 +18,11 @@ public class SegregationNewCell extends GeneralCell{
 	protected double getSatisfactionThreshold() {
 		return Double.parseDouble(getCurrentGameParameters().get("satisfactionthreshold"));
 	}
+	
+	@Override
+	public GeneralCell clone(GeneralCell cell) {
+		return new SegregationNewCell(this.currentGameParameters, this.moveHelper, this.getState());
+	}
 
 	
 }

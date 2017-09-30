@@ -23,5 +23,10 @@ public class GameOfLifeNewCell extends GeneralCell{
 	protected int getReproductionNumber() {
 		return Integer.parseInt(getCurrentGameParameters().get("reproductionnumber"));
 	}
+	
+	@Override
+	public GeneralCell clone(GeneralCell cell) {
+		return new GameOfLifeNewCell(this.currentGameParameters, this.moveHelper, this.getState());
+	}
 
 }
