@@ -1,12 +1,13 @@
 <Info>
 	<CellTypes>
-		<CellType simName="Fire">
-			<probCatch>50</probCatch>
-		</CellType>
+		<CellInfo>
+		 	<simName>"Fire"</simName>
+		 	<move>adjacent</move>
+		</CellInfo>
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<state>burning</state>
+			<state>fire</state>
 		</Cell>
 		<Cell>
 			<state>empty</state>
