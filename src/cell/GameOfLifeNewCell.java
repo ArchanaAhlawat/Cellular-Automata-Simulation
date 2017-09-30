@@ -25,7 +25,7 @@ public class GameOfLifeNewCell extends GeneralCell{
 	}
 	
 	@Override
-	public GeneralCell clone(GeneralCell cell) {
+	public GeneralCell clone() {
 		return new GameOfLifeNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 

@@ -1,7 +1,9 @@
 package cell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -14,11 +16,13 @@ public abstract class GeneralCell {
 	Map<String, HashMap<String, String>> defaults = new HashMap<String, HashMap<String, String>>();
 	Map<String, String> currentCellParameters = new HashMap<String, String>();
 	Map<String, String> nextCellParameters = new HashMap<String, String>();
+	Map<String, String> overrideCellParameters = new HashMap<String, String>();
 	ArrayList<GeneralCell> myNeighbors;
 	HashMap<String, CellSpecificBehavior> cellSpecificBehavior = new HashMap<String, CellSpecificBehavior>();
 	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<String, cellMovement>();
 	MoveHelper moveHelper;
 	CurrentParameters currentGameParameters;
+	protected ArrayList<String> possibleStates = new ArrayList<String>();
 
 
 	// public GeneralCell(HashMap<String, String> cellParameters,
@@ -146,6 +150,19 @@ public abstract class GeneralCell {
 //		this.setNextCellParameters(this.defaultValuesHelper.getDefaultMap(state));
 		this.setNextCellParameters(cellSpecificBehavior.get(state).getDefaultState());
 	}
+	
+	protected void setOverriddenCellParameters(Map<String, String> nextOverriddenValues) {
+		this.overrideCellParameters = nextOverriddenValues;
+	}
+	
+	public void changeOverriddenState(String state) {
+//		this.setNextCellParameters(this.defaultValuesHelper.getDefaultMap(state));
+		this.setOverriddenCellParameters(cellSpecificBehavior.get(state).getDefaultState());
+		if (this.getNextCellParameters().size()==0){
+			this.setNextCellParameters(this.getOverrideCellParameters());
+			this.setOverriddenCellParameters(new HashMap<String, String>());
+		}
+	}
 
 	public void updateEverytime() {
 //		updateParamsBasedOnUserInput();
@@ -170,13 +187,34 @@ public abstract class GeneralCell {
 //
 //	}
 	
-	public abstract GeneralCell clone(GeneralCell cell);
+	
+	public List<String> getPossibleNewStates() {
+		List<String> ret = new ArrayList<String>();
+		for (String s: possibleStates){
+			if (!s.equals(this.getState())){
+				ret.add(s);
+			}
+		}
+		return ret;
+	}
+	
+	public void setOverridenState(String newstate) {
+		this.changeOverriddenState(newstate);
+	}
+	
+	public Map<String,String >getOverrideCellParameters() {
+		return this.overrideCellParameters;
+	}
+	
+	public abstract GeneralCell clone();
 
 	public void becomeNextState() {
 		if (getNextCellParameters().size() != 0) {
 			this.setCurrentCellParameters(this.getNextCellParameters());
-			this.setNextCellParameters(new HashMap<String, String>());
 		}
+		this.setNextCellParameters(this.getOverrideCellParameters());
+		this.setOverriddenCellParameters(new HashMap<String, String>());
+
 		
 	}
 }

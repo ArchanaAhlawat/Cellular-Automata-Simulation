@@ -20,7 +20,7 @@ public class FireNewCell extends GeneralCell{
 
 	
 	@Override
-	public GeneralCell clone(GeneralCell cell) {
+	public GeneralCell clone() {
 		return new FireNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 }

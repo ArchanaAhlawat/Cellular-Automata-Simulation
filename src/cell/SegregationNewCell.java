@@ -20,7 +20,7 @@ public class SegregationNewCell extends GeneralCell{
 	}
 	
 	@Override
-	public GeneralCell clone(GeneralCell cell) {
+	public GeneralCell clone() {
 		return new SegregationNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 
