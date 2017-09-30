@@ -73,7 +73,7 @@ public class Initializer {
 			}
 		}
 		setDefaultsAndCurrentParameters();
-		cmanager.setDefaultsAndParametersAndMove(dfv, currentParameters, createMoveHelper());
+		cmanager.setDefaultsAndParametersAndMove(currentParameters, createMoveHelper());
 	}
 	
 	private static MoveHelper createMoveHelper() {
