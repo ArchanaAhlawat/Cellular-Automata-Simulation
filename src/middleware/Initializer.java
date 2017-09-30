@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cell.MoveHelper;
+import frontend.SimulationDisplay;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,19 +21,19 @@ public class Initializer {
 	*/
 	private static Document dom;
 	private static String simName;
-	private static CellManager cmanager;
+	private static CellManager cmanager = new CellManager();
 	private static DefaultValues dfv;
 	private static CurrentParameters currentParameters;
 	private static ArrayList<HashMap<String, String>> defaults = new ArrayList<HashMap<String, String>>();
 	private static HashMap<String, String> moveMap = new HashMap<String, String>();
-	
+		
 	// TODO many static methods
 	
 	private static void parseXMLFile(String configFileName) { // handle exceptions 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			dom = db.parse(configFileName);
+			dom = db.parse(SimulationDisplay.XML_CONFIG_FOLDER + configFileName);
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
