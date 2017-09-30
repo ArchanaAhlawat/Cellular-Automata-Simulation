@@ -1,20 +1,27 @@
 package cell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import middleware.CurrentParameters;
 
 public class PredPreyNewCell extends GeneralCell {
+	
+
 
 	public PredPreyNewCell(CurrentParameters cp, MoveHelper mh, String myState) {
 		super(cp, mh, myState);
 		super.cellSpecificBehavior.put("fish", new Fish());
 		super.cellSpecificBehavior.put("shark", new Shark());
 		super.cellSpecificBehavior.put("empty", new Empty());
+		possibleStates = new ArrayList<String>(Arrays.asList("fish", "shark", "empty"));
 		randomlySetSpawnCount();
 	}
+	
+
 	
 	/*
 	 * @author Sam Slack (sls97)
@@ -51,7 +58,7 @@ public class PredPreyNewCell extends GeneralCell {
 	}
 
 	@Override
-	public GeneralCell clone(GeneralCell cell) {
+	public GeneralCell clone() {
 		return new PredPreyNewCell(this.currentGameParameters, this.moveHelper, this.getState());
 	}
 
