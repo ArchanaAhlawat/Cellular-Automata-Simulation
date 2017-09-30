@@ -12,14 +12,13 @@ public class UIImageUtils {
 	// Simulation-specific states TODO - Fill in states for other games based on
 	// info from Rules (From Sam)
 	// SEGREGATION
-	public static final String OCCUPIED_CROSS = "cross";
-	public static final String OCCUPIED_CIRCLE = "circle";
-	public static final String VACANT = "vacant";
-
+	public static final String AGENT1 = "agent1";
+	public static final String AGENT2 = "agent2";
+	public static final String EMPTY = "empty";
+	
 	// PREDATOR-PREY
 	public static final String FISH = "fish";
 	public static final String SHARK = "shark";
-	public static final String EMPTY = "empty";
 
 	// FIRE
 	public static final String FIRE = "fire";
@@ -32,9 +31,9 @@ public class UIImageUtils {
 	// IMAGE_URLs corresponding to above states
 	public static final String STATES_IMAGES_FOLDER = "states/";
 	// SEGREGATION
-	public static final String OCCUPIED_CROSS_IMAGE_URL = "occupied_cross.png";
-	public static final String OCCUPIED_CIRCLE_IMAGE_URL = "occupied_circle.png";
-	public static final String VACANT_IMAGE_URL = "vacant.png";
+	public static final String AGENT1_IMAGE_URL = "agent1.png";
+	public static final String AGENT2_IMAGE_URL = "agent2.png";
+
 	// PREDATOR-PREY
 	public static final String FISH_IMAGE_URL = "fish.jpg";
 	public static final String SHARK_IMAGE_URL = "shark.png";
@@ -53,9 +52,9 @@ public class UIImageUtils {
 		HashMap<String, Map<String, String>> myMap = new HashMap<>();
 
 		HashMap<String, String> mySegregationMap = new HashMap<>();
-		mySegregationMap.put(OCCUPIED_CROSS, OCCUPIED_CROSS_IMAGE_URL);
-		mySegregationMap.put(OCCUPIED_CIRCLE, OCCUPIED_CIRCLE_IMAGE_URL);
-		mySegregationMap.put(VACANT, VACANT_IMAGE_URL);
+		mySegregationMap.put(AGENT1, AGENT1_IMAGE_URL);
+		mySegregationMap.put(AGENT2, AGENT2_IMAGE_URL);
+		mySegregationMap.put(EMPTY, EMPTY_IMAGE_URL);
 		myMap.put(SimulationDisplay.SEGREGATION, mySegregationMap);
 
 		HashMap<String, String> myPredatorPreyMap = new HashMap<>();
