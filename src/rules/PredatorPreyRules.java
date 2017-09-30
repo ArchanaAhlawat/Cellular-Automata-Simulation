@@ -1,4 +1,4 @@
-package src;
+package rules;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +50,7 @@ public class PredatorPreyRules extends Rules {
 	}
 
 	public void checkAndImplementSpawn() {
-		if (getCurrentCell().spawnNow()) {
+		if (Integer.parseInt(getCellParameterMap().get("reproductioncount")) >= Integer.parseInt(getCellParameterMap().get("reproductionthreshold"))) {
 			spawnNew();
 		}
 	}
@@ -77,8 +77,8 @@ public class PredatorPreyRules extends Rules {
 		ArrayList<PredatorPreyCell> emptyNeighbors = calculateEmptyNeighbors();
 		PredatorPreyCell targetSpawnCell = (PredatorPreyCell) chooseRandomCellFromList(emptyNeighbors);
 		if (targetSpawnCell != null) {
-			targetSpawnCell.setNextState("new" + s);
-			targetSpawnCell.setNextMove("stay");
+			targetSpawnCell.getParameterMap().put("nextState", s);
+			targetSpawnCell.getParameterMap().put("nextMove", "stay");
 		}
 	}
 

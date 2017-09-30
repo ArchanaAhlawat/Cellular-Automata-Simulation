@@ -1,6 +1,7 @@
-package src;
+package middleware;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,6 +12,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import cell.CellManager;
+
 public class Initializer {
 	/* 
 	 * reads XML file based on choice from Main
@@ -18,7 +21,13 @@ public class Initializer {
 	*/
 	private static Document dom;
 	private static String simName;
-	private static CellManager cmanager = new CellManager();
+	private static CellManager cmanager;
+	private static DefaultValues dfv;
+	private static CurrentParameters currentParameters;
+	private static ArrayList<HashMap<String, String>> defaults = new ArrayList<HashMap<String, String>>();
+	private static HashMap<String, String> moveMap = new HashMap<String, String>();
+	
+	// TODO many static methods
 	
 	private static void parseXMLFile(String configFileName) { // handle exceptions 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -35,14 +44,13 @@ public class Initializer {
 		catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}
-	}// THROW ERRORS!! 
+	}
 	
 	private static void parseDocument() {
 		//get root element
 		Element docEle = dom.getDocumentElement();
 		// get a nodelist of elements
-		//NodeList nl_info = docEle.getElementsByTagName("CellType");
-		HashMap<String, String> genInfo = new HashMap<String, String>();
+		HashMap<String, String> attributeMap = new HashMap<String, String>();
 		NodeList nl_info_root = docEle.getElementsByTagName("CellInfo");
 		if (nl_info_root != null && nl_info_root.getLength() > 0) {
 			Element el = (Element)nl_info_root.item(0);
@@ -50,7 +58,7 @@ public class Initializer {
 			setSimName((Element) nl_info.item(0));
 			for (int i = 1; i < nl_info.getLength(); i++) { // set at 1 bc we are skipping simName
 				Element ele = (Element) nl_info.item(i);
-				genInfo.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
+				attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
 			}
 		}
 		NodeList nl = docEle.getElementsByTagName("Cell");
@@ -58,17 +66,32 @@ public class Initializer {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element el = (Element)nl.item(i);
 				NodeList attributes = el.getElementsByTagName("*");
-				HashMap<String, String> attributeMap = new HashMap<String, String>();
 				for (int j = 0; j < attributes.getLength(); j++) {
 					Element ele = (Element) attributes.item(j);
 					attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
 				}
-				for (String key : genInfo.keySet()) {
-					attributeMap.put(key, genInfo.get(key));
-				}
-				cmanager.addInitialCells(attributeMap);
+				cmanager.addInitialCells(attributeMap.get("state"));
+				addDefaultMapAndMoveMap(attributeMap);
 			}
 		}
+		setDefaultsAndCurrentParameters();
+		cmanager.setDefaultsAndParametersAndMove(dfv, currentParameters, createMoveHelper());
+	}
+	
+	private static MoveHelper createMoveHelper() {
+		return new MoveHelper(cmanager, moveMap);
+	}
+	
+	private static void addDefaultMapAndMoveMap(HashMap<String, String>attributeMap) {
+		if (! defaults.contains(attributeMap)) { // unique states. this provides a check for XML files.
+			moveMap.put(attributeMap.get("state"), attributeMap.get("move"));
+			defaults.add(attributeMap);
+		}
+	}
+	
+	private static void setDefaultsAndCurrentParameters() {
+		dfv = new DefaultValues(defaults);
+		currentParameters = new CurrentParameters(defaults, dfv);
 	}
 	
 	private static void setSimName(Element empEl) {
@@ -79,10 +102,10 @@ public class Initializer {
 		return simName;
 	}
 	
-	public static Cell[][] loadConfig(String configFileName) {
+	public static CellManager loadConfig(String configFileName) {
 		parseXMLFile(configFileName);
 		parseDocument();
-		return cmanager.getMatrix();
+		return cmanager; 
 	}
 	
 /*	DEBUGGING PURPOSES

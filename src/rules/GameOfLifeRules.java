@@ -13,9 +13,9 @@ public class GameOfLifeRules extends Rules{
 	}
 	
 	protected void setInstanceVariables() {
-		this.myUnderpopulationThreshold = Integer.parseInt(this.getParameterMap().get("underpopulationthreshold"));
-		this.myOverpopulationThreshold = Integer.parseInt(this.getParameterMap().get("overpopulationthreshold"));
-		this.myReproductionCriticalNumber = Integer.parseInt(this.getParameterMap().get("reproductionnumber"));
+		this.myUnderpopulationThreshold = Integer.parseInt(this.getMyParameterMap().get("underpopulationthreshold"));
+		this.myOverpopulationThreshold = Integer.parseInt(this.getMyParameterMap().get("overpopulationthreshold"));
+		this.myReproductionCriticalNumber = Integer.parseInt(this.getMyParameterMap().get("reproductionnumber"));
 	}
 
 	@Override

@@ -1,17 +1,19 @@
-package src;
+package rules;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
-import javafx.scene.control.Cell;
+import middleware.Cell;
 
 public abstract class Rules {
 
 	HashMap<String, String> myParameterMap;
-	Collection<? extends CellSocietyCell> myNeighbors;
-	CellSocietyCell myCell; 
+	HashMap<String, String> cellParameterMap;
+	HashMap<String, String> myUpdatedValuesMap = new HashMap<String, String>();
+	Collection<? extends Cell> myNeighbors;
+	Cell myCell; 
 
 	public Rules(HashMap<String, String> map) {
 		this.myParameterMap = map;
@@ -24,7 +26,7 @@ public abstract class Rules {
 	 *         values
 	 * 
 	 */
-	protected HashMap<String, String> getParameterMap() {
+	protected HashMap<String, String> getMyParameterMap() {
 		return this.myParameterMap;
 	}
 
@@ -48,43 +50,51 @@ public abstract class Rules {
 	 *            collection of primary Cell's neighbor Cells
 	 * @return Object newCellState
 	 */
-	public <T extends CellSocietyCell> void applyRules(T cell, Collection<T> cellNeighbors) {
+	public <T extends Cell> void applyRules(T cell, Collection<T> cellNeighbors) {
 		setNeighbors(cellNeighbors);
 		setCurrentCell(cell);
 		performRules();
 	}
 	
+	protected HashMap<String, String> getCellParameterMap() {
+		return this.cellParameterMap;
+	}
+	
+	protected setCellParameterMap(Cell cell) {
+		this.cellParameterMap = cell.getParameterMap();
+	}
+	
 	protected abstract void performRules();
 
-	protected Collection<? extends CellSocietyCell> getNeighbors() {
+	protected Collection<? extends Cell> getNeighbors() {
 		return this.myNeighbors;
 	}
 	
-	protected <T extends CellSocietyCell> void setNeighbors(Collection<T> neighbors) {
+	protected <T extends Cell> void setNeighbors(Collection<T> neighbors) {
 		this.myNeighbors = neighbors;
 	}
 	
-	protected CellSocietyCell getCurrentCell() {
+	protected Cell getCurrentCell() {
 		return this.myCell;
 	}
 	
-	public <T extends CellSocietyCell> void setCurrentCell(T cell) {
+	public <T extends Cell> void setCurrentCell(T cell) {
 		this.myCell = cell;
 	}
 	
 	protected String getCellState() {
-		return getCurrentCell().getState();
+		return getCellParameterMap().get("state");
 	}
 
 	protected void setCellNextState(String s) {
-		getCurrentCell().setNextState(s);
+		getUpdatedValuesMap().put("state", s);
 	}
 	
-	public <T extends CellSocietyCell> ArrayList<T> calculateNeighborsOfState(String state) {
+	public <T extends Cell> ArrayList<T> calculateNeighborsOfState(String state) {
 		Collection<T> cellNeighbors = (Collection<T>) this.getNeighbors();
 		ArrayList<T> stateNeighbors = new ArrayList<>();
 		for (T cell : cellNeighbors) {
-			if (cell.getState().equals(state)) {
+			if (cell.getParameterMap().get("state").equals(state)) {
 				stateNeighbors.add(cell);
 			}
 		}
@@ -92,8 +102,12 @@ public abstract class Rules {
 
 	}
 	
+	protected HashMap<String, String> getUpdatedValuesMap() {
+		return this.myUpdatedValuesMap;
+	}
+	
 	protected void setNextMove(String s) {
-		getCurrentCell().setNextMove(s);
+		getUpdatedValuesMap().put("move", s);
 	}
 	
 	protected void setMoveAdjacent() {
@@ -110,7 +124,7 @@ public abstract class Rules {
 
 
 
-	protected <T extends CellSocietyCell> T chooseRandomCellFromList(ArrayList<T> cellList) {
+	protected <T extends Cell> T chooseRandomCellFromList(ArrayList<T> cellList) {
 		int num_cells = cellList.size();
 		if (num_cells > 0) {
 			Random rand = new Random();
