@@ -50,7 +50,7 @@ public abstract class GeneralCell {
 
 	protected Map<String, String> getCurrentGameParameters() {
 //		return currentParameterValues;
-		return currentGameParameters.getCurrentParameters(getState());
+		return currentGameParameters.getCurrentParameterMap(getState());
 	}
 
 //	private void setCurrentParametersValues(Map<String, String> currentParametersValues) {
