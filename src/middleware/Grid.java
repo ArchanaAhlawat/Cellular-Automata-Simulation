@@ -2,13 +2,13 @@ package middleware;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+import cell.GeneralCell;
 public class Grid {
 	private static final int GRID_SIZE = 50;
 	private ArrayList<GeneralCell> allCellsPossible;
 	private GeneralCell[][] grid;
 	
-	public Grid(ArrayList<GeneralCells> all) {
+	public Grid(ArrayList<GeneralCell> all) {
 		allCellsPossible = all;
 		setGrid();
 	}
@@ -18,7 +18,7 @@ public class Grid {
 			for (int j = 0; j < GRID_SIZE; j++) {
 				Random rand = new Random();
 				int num = rand.nextInt(allCellsPossible.size()) + 1;
-				grid[i][j] = new Cell(allCellsPossible.get(num));
+				grid[i][j] = new GeneralCell(allCellsPossible.get(num));
 			}
 		}
 	}

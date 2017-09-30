@@ -9,7 +9,7 @@ public class MoveHelper {
 
 	CellManager cm; 
 	HashMap<String, cellMovement> cellSpecificMovement;
-	MoveHelper(CellManager cellman, Map<String, String> defaultMotion) {
+	public MoveHelper(CellManager cellman, Map<String, String> defaultMotion) {
 		cm = cellman;
 		for (String key: defaultMotion.keySet()) {
 			// Can add in new types of motion

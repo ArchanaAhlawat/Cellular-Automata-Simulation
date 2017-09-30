@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
+import cell.MoveHelper;
+import cell.GeneralCell;
 public class CellManager {
 	/*
 	 * 1st, matrix is initialized to default --> received from initializer
@@ -53,7 +54,7 @@ public class CellManager {
 	}
 	
 	private GeneralCell createCell(String state) { // TODO make dependent on simulation type
-		return Cell(currentParameters, dfv, mh, state);
+		return new GeneralCell(currentParameters, mh, dfv, state);
 	}
 	
 	public void performUpdates() {
@@ -63,7 +64,7 @@ public class CellManager {
 	/*
 	 * compute state by checking all neighbors
 	 */
-	private HashMap<String, String> computeAndSetState() {
+	private void computeAndSetState() {
 		for (int i = 0; i < currentGrid[0].length; i++) {
 			for (int j = 0; j < currentGrid[0].length; j++) {
 				ArrayList<GeneralCell> neighbors = computeNeighbors(i, j);
@@ -74,7 +75,7 @@ public class CellManager {
 	}
 	
 	private ArrayList<GeneralCell> computeNeighbors(int i, int j) {
-		ArrayList<GeneralCell> neighborList = new ArrayList<Cell>();
+		ArrayList<GeneralCell> neighborList = new ArrayList<GeneralCell>();
 		for (int[] coor : gridManager.computeNeighbors(i, j)) {
 			if (! currentGrid[coor[0]][coor[1]].equals(null)) { // check
 				neighborList.add(currentGrid[coor[0]][coor[1]]);
