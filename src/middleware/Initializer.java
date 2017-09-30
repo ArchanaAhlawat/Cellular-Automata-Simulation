@@ -73,7 +73,7 @@ public class Initializer {
 			}
 		}
 		setDefaultsAndCurrentParameters();
-		cmanager.setDefaultsAndParametersAndMove(dfv, currentParameters, createMoveHelper());
+		cmanager.setSimAndParametersAndMove(simName, currentParameters, createMoveHelper());
 	}
 	
 	private static MoveHelper createMoveHelper() {
@@ -94,10 +94,6 @@ public class Initializer {
 	
 	private static void setSimName(Element empEl) {
 		simName = empEl.getFirstChild().getNodeValue();
-	}
-	
-	public String getSimName() {
-		return simName;
 	}
 	
 	public static CellManager loadConfig(String configFileName) {
