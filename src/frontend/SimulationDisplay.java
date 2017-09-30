@@ -110,12 +110,12 @@ public class SimulationDisplay {
 		this.width = width;
 		this.height = height;
 		this.reader = reader;
-		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT, this);
+		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT, reader, this);
 	}
 
 	public Scene getMenuScene(Stage primaryStage, EventHandler<ActionEvent> onStartButtonClicked) {
 		String startString = reader.getStartText();
-		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader, getSimulationChangeListener(),
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
 				updateChosenConfigFileName());
 		border.setBottom(PanelDisplay.initStartPanel(startString, onStartButtonClicked));
 		this.scene = new Scene(border, width, height);
@@ -175,6 +175,7 @@ public class SimulationDisplay {
 		// Uncomment when ready to integrate
 		// cellManager.performUpdates();
 		// updateTiles(cellManager.getGrid())
+		
 	}
 
 	public void advance(int cycles) {
@@ -263,7 +264,7 @@ public class SimulationDisplay {
 	private Scene getSimulationScene(EventHandler<ActionEvent> onSpeedUpButtonClicked,
 			EventHandler<ActionEvent> onSlowDownButtonClicked) {
 		System.out.println("Getting simulation scene!");
-		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader, getSimulationChangeListener(),
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
 				updateChosenConfigFileName());
 		border.setBottom(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
 				SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),

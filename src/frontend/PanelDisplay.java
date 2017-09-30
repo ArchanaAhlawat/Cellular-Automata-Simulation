@@ -22,11 +22,13 @@ public class PanelDisplay {
 	private Button toggleButton;
 	private int buttonImageFitWidth;
 	private int buttonImageFitHeight;
+	private UITextReader reader;
 	private SimulationDisplay sim;
 
-	public PanelDisplay(int buttonWidth, int buttonHeight, SimulationDisplay sim) {
+	public PanelDisplay(int buttonWidth, int buttonHeight, UITextReader reader, SimulationDisplay sim) {
 		this.buttonImageFitWidth = buttonWidth;
 		this.buttonImageFitHeight = buttonHeight;
+		this.reader = reader;
 		this.sim = sim;
 	}
 
@@ -61,13 +63,13 @@ public class PanelDisplay {
 		return container;
 	}
 
-	public Node initConfigBox(UITextReader reader, ChangeListener<? super Number> changeListener,
+	public Node initConfigBox(ChangeListener<? super Number> changeListener,
 			EventHandler<? super MouseEvent> uploadHandler) {
 		HBox container = new HBox();
 		container.getChildren().add(initSimulationDropDownMenu(reader.getSimulationChoiceText(),
 				reader.getSimulationTexts(), changeListener));
-		container.getChildren().add(initUploadButton(reader, uploadHandler));
-		container.getChildren().add(initGridSizeControlBox(reader));
+		container.getChildren().add(initUploadButton(uploadHandler));
+		container.getChildren().add(initGridSizeControlBox());
 		container.setAlignment(Pos.CENTER);
 		container.setSpacing(DEFAULT_PANEL_SPACING);
 		return container;
@@ -89,10 +91,10 @@ public class PanelDisplay {
 		return button;
 	}
 
-	public BorderPane initializeBorderPaneWithTopControlPanel(UITextReader reader,
-			ChangeListener<? super Number> changeListener, EventHandler<? super MouseEvent> uploadHandler) {
+	public BorderPane initializeBorderPaneWithTopControlPanel(ChangeListener<? super Number> changeListener,
+			EventHandler<? super MouseEvent> uploadHandler) {
 		BorderPane border = new BorderPane();
-		border.setTop(initConfigBox(reader, changeListener, uploadHandler));
+		border.setTop(initConfigBox(changeListener, uploadHandler));
 		return border;
 	}
 
@@ -110,7 +112,7 @@ public class PanelDisplay {
 		return container;
 	}
 
-	private static Node initUploadButton(UITextReader reader, EventHandler<? super MouseEvent> uploadHandler) {
+	private Node initUploadButton(EventHandler<? super MouseEvent> uploadHandler) {
 		HBox container = new HBox();
 		Button uploadButton = new Button(reader.getUploadText());
 		uploadButton.setOnMouseClicked(uploadHandler);
@@ -119,7 +121,7 @@ public class PanelDisplay {
 		return container;
 	}
 
-	private Node initGridSizeControlBox(UITextReader reader) {
+	private Node initGridSizeControlBox() {
 		HBox hbox = new HBox();
 		Label heightLabel = new Label(reader.getGridHeightText());
 		TextField heightInput = new TextField();
