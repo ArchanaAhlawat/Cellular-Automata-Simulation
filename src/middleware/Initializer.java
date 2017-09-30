@@ -49,7 +49,7 @@ public class Initializer {
 		Element docEle = dom.getDocumentElement();
 		// get a nodelist of elements
 		//NodeList nl_info = docEle.getElementsByTagName("CellType");
-		HashMap<String, String> genInfo = new HashMap<String, String>();
+		HashMap<String, String> attributeMap = new HashMap<String, String>();
 		NodeList nl_info_root = docEle.getElementsByTagName("CellInfo");
 		if (nl_info_root != null && nl_info_root.getLength() > 0) {
 			Element el = (Element)nl_info_root.item(0);
@@ -57,7 +57,7 @@ public class Initializer {
 			setSimName((Element) nl_info.item(0));
 			for (int i = 1; i < nl_info.getLength(); i++) { // set at 1 bc we are skipping simName
 				Element ele = (Element) nl_info.item(i);
-				genInfo.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
+				attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
 			}
 		}
 		NodeList nl = docEle.getElementsByTagName("Cell");
@@ -65,13 +65,9 @@ public class Initializer {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element el = (Element)nl.item(i);
 				NodeList attributes = el.getElementsByTagName("*");
-				HashMap<String, String> attributeMap = new HashMap<String, String>();
 				for (int j = 0; j < attributes.getLength(); j++) {
 					Element ele = (Element) attributes.item(j);
 					attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
-				}
-				for (String key : genInfo.keySet()) {
-					attributeMap.put(key, genInfo.get(key));
 				}
 				cmanager.addInitialCells(attributeMap.get("state"));
 				addDefaultMapAndMoveMap(attributeMap);
@@ -86,7 +82,7 @@ public class Initializer {
 	}
 	
 	private static void addDefaultMapAndMoveMap(HashMap<String, String>attributeMap) {
-		if (! defaults.contains(attributeMap)) { // unique states
+		if (! defaults.contains(attributeMap)) { // unique states. this provides a check for XML files.
 			moveMap.put(attributeMap.get("state"), attributeMap.get("move"));
 			defaults.add(attributeMap);
 		}
@@ -108,7 +104,7 @@ public class Initializer {
 	public static Cell[][] loadConfig(String configFileName) {
 		parseXMLFile(configFileName);
 		parseDocument();
-		return cmanager.getMatrix();
+		return cmanager.getGrid();
 	}
 	
 /*	DEBUGGING PURPOSES

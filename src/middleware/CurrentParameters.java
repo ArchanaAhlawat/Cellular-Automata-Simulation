@@ -19,7 +19,7 @@ public class CurrentParameters {
 	
 	public HashMap<String, String> getCurrentParameterMap(String state) {
 		return currentParams.get(state);
-	} // front end uses or cell manager?
+	}
 	
 	/*
 	 * @param state: cell state that should be affected
