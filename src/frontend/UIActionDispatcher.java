@@ -13,26 +13,29 @@ public class UIActionDispatcher {
 	// Call methods of Initializer, CellManager & Rules
 	// Can mock until Archana & Sam push their respective parts
 
-	public static void displayFileNameInputDialog(String uploadText, String headerText, String contentText,
-			String errorDialogTitleText, String errorDialogHeaderText, String errorDialogContentText) {
+	public static String displayFileNameInputDialogAndGetResult(String uploadText, String headerText,
+			String contentText, String errorDialogTitleText, String errorDialogHeaderText,
+			String errorDialogContentText) {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle(uploadText);
 		dialog.setHeaderText(headerText);
 		dialog.setContentText(contentText);
 		Optional<String> result = dialog.showAndWait();
-		result.ifPresent(fileName -> validateFileAndWarnIfNotValid(fileName, errorDialogTitleText,
-				errorDialogHeaderText, errorDialogContentText));
+		Optional<String> processedResult = result.map(fileName -> validateFileAndWarnIfNotValid(fileName, errorDialogTitleText, errorDialogHeaderText, errorDialogContentText) ? fileName : "");
+		return processedResult.isPresent() ? processedResult.get() : "";
 	}
 
-	public static void validateFileAndWarnIfNotValid(String fileName, String errorDialogTitleText,
+	public static boolean validateFileAndWarnIfNotValid(String fileName, String errorDialogTitleText,
 			String errorDialogHeaderText, String errorDialogContentText) {
 		File file = new File(SimulationDisplay.XML_CONFIG_FOLDER + fileName);
 		try {
-			// TODO - better way of verifying if file exists than creating a dummy scanner like this
+			// TODO - better way of verifying if file exists than creating a dummy scanner
+			// like this
 			Scanner in = new Scanner(file);
+			return true;
 		} catch (FileNotFoundException e) {
 			displayWarningDialog(errorDialogTitleText, errorDialogHeaderText, errorDialogContentText);
-			return;
+			return false;
 		}
 	}
 
@@ -43,6 +46,12 @@ public class UIActionDispatcher {
 		alert.setHeaderText(errorDialogHeaderText);
 		alert.setContentText(errorDialogContentText);
 		alert.showAndWait();
+	}
+
+	// TODO - check rows and cols with SimulationDisplay.isValidConfig() and return
+	// warning dialog if false
+	public static void validateGridSizeInputAndWarnIfNotValid(int rows, int cols) {
+
 	}
 
 }

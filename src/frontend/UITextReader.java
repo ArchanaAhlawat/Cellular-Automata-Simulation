@@ -24,6 +24,12 @@ public class UITextReader {
 	public static final String MISSING_FILE_ERROR_DIALOG_TITLE_KEY = "Missing_File_Error_Dialog_Title";
 	public static final String MISSING_FILE_ERROR_DIALOG_HEADER_KEY = "Missing_File_Error_Dialog_Header";
 	public static final String MISSING_FILE_ERROR_DIALOG_CONTENT_KEY = "Missing_File_Error_Dialog_Content";
+	public static final String INVALID_GRID_SIZE_DIALOG_TITLE_KEY = "Invalid_Grid_Size_Dialog_Title";
+	public static final String INVALID_GRID_SIZE_DIALOG_HEADER_KEY = "Invalid_Grid_Size_Dialog_Header";
+	public static final String INVALID_GRID_SIZE_DIALOG_CONTENT_KEY = "Invalid_Grid_Size_Dialog_Content";
+	public static final String GRID_HEIGHT_KEY = "Grid_Height_Text";
+	public static final String GRID_WIDTH_KEY = "Grid_Width_Text";
+	public static final String GRID_SIZE_UPDATE_KEY = "Grid_Size_Update_Text";
 	
 	// Optional ones
 	public static final String ROW_KEY = "rows";
@@ -108,6 +114,30 @@ public class UITextReader {
 	
 	public String getMissingFileErrorDialogContentText() {
 		return myResources.getString(MISSING_FILE_ERROR_DIALOG_CONTENT_KEY);
+	}
+	
+	public String getInvalidGridSizeDialogTitleText() {
+		return myResources.getString(INVALID_GRID_SIZE_DIALOG_TITLE_KEY);
+	}
+	
+	public String getInvalidGridSizeDialogHeaderText() {
+		return myResources.getString(INVALID_GRID_SIZE_DIALOG_HEADER_KEY);
+	}
+	
+	public String getInvalidGridSizeDialogContentText() {
+		return myResources.getString(INVALID_GRID_SIZE_DIALOG_CONTENT_KEY);
+	}
+	
+	public String getGridHeightText() {
+		return myResources.getString(GRID_HEIGHT_KEY);
+	}
+	
+	public String getGridWidthText() {
+		return myResources.getString(GRID_WIDTH_KEY);
+	}
+	
+	public String getGridSizeUpdateText() {
+		return myResources.getString(GRID_SIZE_UPDATE_KEY);
 	}
 
 	public int getRows() {

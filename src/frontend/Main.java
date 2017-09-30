@@ -74,6 +74,12 @@ public class Main extends Application {
 		if (display.isInProgress()) {
 			display.advanceOneCycle();
 		}
+		if (display.hasNewConfig()) {
+			display.acknowledgeConfig();
+			System.out.println("Updating stage for new config!");
+			updateStage(display.startSimulation(e1 -> speedUp(DEFAULT_SPEEDUP_FACTOR),
+					e2 -> slowDown(DEFAULT_SPEEDUP_FACTOR)));
+		}
 	}
 
 	public static void main(String[] args) {

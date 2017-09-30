@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -20,6 +21,12 @@ import middleware.Cell;;
 public class SimulationDisplay {
 
 	// Display-related defaults and limits
+	public static final String ROWS = "rows";
+	public static final String COLS = "cols";
+	public static final String WIDTH = "width";
+	public static final String HEIGHT = "height";
+	public static final String GRID_WIDTH = "grid_width";
+	public static final String GRID_HEIGHT = "grid_height";
 	public static final int MIN_ROWS = 5;
 	public static final int DEFAULT_ROWS = 10;
 	public static final int MAX_ROWS = 50;
@@ -27,11 +34,17 @@ public class SimulationDisplay {
 	public static final int DEFAULT_COLS = 10;
 	public static final int MAX_COLS = 50;
 	public static final int MIN_WIDTH = 100;
-	public static final int DEFAULT_WIDTH = 500;
-	public static final int MAX_WIDTH = 1000;
+	public static final int DEFAULT_WIDTH = 1200;
+	public static final int MAX_WIDTH = 2000;
 	public static final int MIN_HEIGHT = 100;
-	public static final int DEFAULT_HEIGHT = 500;
-	public static final int MAX_HEIGHT = 1000;
+	public static final int DEFAULT_HEIGHT = 600;
+	public static final int MAX_HEIGHT = 2000;
+	public static final int DEFAULT_GRID_WIDTH = 500;
+	public static final int MAX_GRID_WIDTH = 1600;
+	public static final int MIN_GRID_WIDTH = 50;
+	public static final int DEFAULT_GRID_HEIGHT = 500;
+	public static final int MAX_GRID_HEIGHT = 1600;
+	public static final int MIN_GRID_HEIGHT = 50;	
 	public static final int DEFAULT_PADDING = 10;
 	public static final int DEFAULT_IMAGE_BUTTON_FIT_WIDTH = 20;
 	public static final int DEFAULT_IMAGE_BUTTON_FIT_HEIGHT = 20;
@@ -44,10 +57,12 @@ public class SimulationDisplay {
 	public static final Map<String, int[]> limitsMap;
 	static {
 		HashMap<String, int[]> myMap = new HashMap<>();
-		myMap.put("rows", new int[] { MIN_ROWS, MAX_ROWS });
-		myMap.put("cols", new int[] { MIN_COLS, MAX_COLS });
-		myMap.put("width", new int[] { MIN_WIDTH, MAX_WIDTH });
-		myMap.put("height", new int[] { MIN_HEIGHT, MAX_HEIGHT });
+		myMap.put(ROWS, new int[] { MIN_ROWS, MAX_ROWS });
+		myMap.put(COLS, new int[] { MIN_COLS, MAX_COLS });
+		myMap.put(WIDTH, new int[] { MIN_WIDTH, MAX_WIDTH });
+		myMap.put(HEIGHT, new int[] { MIN_HEIGHT, MAX_HEIGHT });
+		myMap.put(GRID_WIDTH, new int[] { MIN_GRID_WIDTH, MAX_GRID_WIDTH });
+		myMap.put(GRID_HEIGHT, new int[] {MIN_GRID_HEIGHT, MAX_GRID_HEIGHT });
 		limitsMap = Collections.unmodifiableMap(myMap);
 	}
 
@@ -69,6 +84,8 @@ public class SimulationDisplay {
 
 	private int width;
 	private int height;
+	private int gridWidth = DEFAULT_GRID_WIDTH;
+	private int gridHeight = DEFAULT_GRID_HEIGHT;
 	private int cellWidth;
 	private int cellHeight;
 	private UITextReader reader;
@@ -84,12 +101,14 @@ public class SimulationDisplay {
 	private String currentSimulation = SEGREGATION;
 	private String chosenConfigFileName;
 	private boolean inProgress = false;
+	private boolean hasNewConfig = false;
+	private int cyclesElapsed = 0;
 
 	public SimulationDisplay(int width, int height, UITextReader reader) {
 		this.width = width;
 		this.height = height;
 		this.reader = reader;
-		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT);
+		panelDisplay = new PanelDisplay(DEFAULT_IMAGE_BUTTON_FIT_WIDTH, DEFAULT_IMAGE_BUTTON_FIT_HEIGHT, this);
 	}
 
 	// TODO - Refactor to pass in a reference to UITextReader instead of extracting
@@ -97,7 +116,7 @@ public class SimulationDisplay {
 	public Scene getMenuScene(Stage primaryStage, EventHandler<ActionEvent> onStartButtonClicked) {
 		String startString = reader.getStartText();
 		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader,
-				getSimulationChangeListener());
+				getSimulationChangeListener(), updateChosenConfigFileName());
 		border.setBottom(PanelDisplay.initStartPanel(startString, onStartButtonClicked));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
@@ -141,6 +160,14 @@ public class SimulationDisplay {
 	public boolean isInProgress() {
 		return inProgress;
 	}
+	
+	public boolean hasNewConfig() {
+		return hasNewConfig;
+	}
+	
+	public void acknowledgeConfig() {
+		hasNewConfig = false;
+	}
 
 	// TODO - Uncomment calls to backend methods when ready
 	public void advanceOneCycle() {
@@ -174,7 +201,8 @@ public class SimulationDisplay {
 		 * cell dimensions appropriately calculateCellDimensions(grid.length,
 		 * grid[0].length, height, width);
 		 */
-
+		inProgress = true;
+		resetCycles();
 		return getSimulationScene(onSpeedUpButtonClicked, onSlowDownButtonClicked);
 	}
 
@@ -197,15 +225,49 @@ public class SimulationDisplay {
 		inProgress = false;
 		panelDisplay.setResumeButtonImage(PLAY_BUTTON_IMAGE_URL);
 	}
+	
+	public void resetCycles() {
+		cyclesElapsed = 0;
+	}
+	
+	public int getCyclesElapsed() {
+		return cyclesElapsed;
+	}
 
+	public void setGridWidth(int gridWidth) {
+		if (!isValidConfig(GRID_WIDTH, gridWidth)) {
+			throw new NumberFormatException();
+		}
+		setGridDimension(gridWidth, true);
+	}
+	
+	public void setGridHeight(int gridHeight) {
+		if (!isValidConfig(GRID_HEIGHT, gridHeight)) {
+			throw new NumberFormatException();
+		}
+		setGridDimension(gridHeight, false);
+	}
+	
+	private void setGridDimension(int value, boolean isWidth) {
+		if (grid == null || grid.length == 0 || grid[0].length == 0) {
+			return;
+		}
+		if (isWidth) {
+			this.gridWidth = value;
+		} else {
+			this.gridHeight = value;
+		}
+		calculateCellDimensions(grid.length, grid[0].length, gridHeight, gridWidth);
+	}
+	
 	private Scene getSimulationScene(EventHandler<ActionEvent> onSpeedUpButtonClicked,
 			EventHandler<ActionEvent> onSlowDownButtonClicked) {
 		System.out.println("Getting simulation scene!");
-		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader, getSimulationChangeListener());
+		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(reader, getSimulationChangeListener(), updateChosenConfigFileName());
 		border.setBottom(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
 				SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
 				e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
-		// border.setCenter(initTiles(grid));
+		// border.setCenter(updateTiles(grid));
 		// DUMMY FOR NOW, just for testing
 		border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
 		this.scene = new Scene(border, width, height);
@@ -262,7 +324,11 @@ public class SimulationDisplay {
 	// Will be called in startSimulation() once Initializer is ready - can ignore
 	// warning for now
 	private void calculateCellDimensions(int rows, int cols, int gridHeight, int gridWidth) {
-		cellWidth = gridWidth / rows;
+		if (rows == 0 || cols == 0) {
+			System.out.println("Grid is empty");
+			throw new IllegalArgumentException();
+		}
+		cellWidth = gridWidth / cols;
 		cellHeight = gridHeight / rows;
 	}
 
@@ -273,6 +339,21 @@ public class SimulationDisplay {
 	private ChangeListener<? super Number> getSimulationChangeListener() {
 		return (observable, oldVal, newVal) -> {
 			currentSimulation = reader.getSimulationTexts()[(int) newVal];
+		};
+	}
+	
+	private EventHandler<? super MouseEvent> updateChosenConfigFileName() {
+		return e-> {
+			String uploadedFileName = UIActionDispatcher.displayFileNameInputDialogAndGetResult(reader.getUploadText(),
+					reader.getDialogHeaderText(), reader.getDialogContentText(),
+					reader.getMissingFileErrorDialogTitleText(), reader.getMissingFileErrorDialogHeaderText(),
+					reader.getMissingFileErrorDialogContentText());
+			if (uploadedFileName.length() > 0) {
+				chosenConfigFileName = uploadedFileName;
+				System.out.println("Updated chosen config file name to " + chosenConfigFileName);
+				// Call startSimulation() to restart a new simulation
+				hasNewConfig = true;
+			}
 		};
 	}
 
