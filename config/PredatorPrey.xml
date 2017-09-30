@@ -1,20 +1,21 @@
 <Info>
 	<CellTypes>
-		<CellType simName="Predator Prey">
-		</CellType>
+		<CellInfo>
+		 	<simName>"Predator Prey"</simName>
+			<overpopulation_threshhold>4</overpopulation_threshhold>
+			<reproduction_threshhold>3</reproduction_threshhold>
+			<underpopulation_threshhold>2</underpopulation_threshhold>
+			<move>adjacent</move>
+		</CellInfo>
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<type>fish</type>
+			<state>fish</state>
 			<reproductionTime>3</reproductionTime>
 		</Cell>
 		<Cell>
-			<type>shark</type>
+			<state>shark</state>
 			<reproductionTime>8</reproductionTime>
-		</Cell>
-		<Cell>
-			<type>fish</type>
-			<reproductionTime>3</reproductionTime>
 		</Cell>
 	</Cells>
 </Info>
