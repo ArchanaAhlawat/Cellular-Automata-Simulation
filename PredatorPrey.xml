@@ -1,20 +1,17 @@
 <Info>
 	<CellTypes>
-		<CellType simName="Predator Prey">
-		</CellType>
+		<CellInfo>
+		 	<simName>"Predator Prey"</simName>
+		</CellInfo>
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<type>fish</type>
+			<state>fish</state>
 			<reproductionTime>3</reproductionTime>
 		</Cell>
 		<Cell>
-			<type>shark</type>
+			<state>shark</state>
 			<reproductionTime>8</reproductionTime>
-		</Cell>
-		<Cell>
-			<type>fish</type>
-			<reproductionTime>3</reproductionTime>
 		</Cell>
 	</Cells>
 </Info>
