@@ -34,7 +34,7 @@ public abstract class GeneralCell {
 //		this.userOverrideValue = uov;
 	}
 
-	protected String getState() {
+	public String getState() {
 //		return getCurrentParametersValues().get("state");
 		return getCurrentCellParameters().get("state");
 	}
