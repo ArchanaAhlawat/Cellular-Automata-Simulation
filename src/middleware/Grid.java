@@ -5,7 +5,7 @@ import java.util.Random;
 import cell.GeneralCell;
 public class Grid {
 	private static final int GRID_SIZE = 50;
-	private ArrayList<GeneralCell> allCellsPossible;
+	private ArrayList<GeneralCell> allCellsPossible = new ArrayList<>();
 	private GeneralCell[][] grid;
 	
 	public Grid(ArrayList<GeneralCell> all) {
@@ -17,7 +17,7 @@ public class Grid {
 		for (int i = 0; i < GRID_SIZE; i++){
 			for (int j = 0; j < GRID_SIZE; j++) {
 				Random rand = new Random();
-				int num = rand.nextInt(allCellsPossible.size()) + 1;
+				int num = rand.nextInt(allCellsPossible.size());
 				grid[i][j] = (allCellsPossible.get(num)).clone();
 			}
 		}
