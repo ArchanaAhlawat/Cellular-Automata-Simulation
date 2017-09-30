@@ -6,6 +6,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import cell.MoveHelper;
 import cell.GeneralCell;
+import cell.SegregationNewCell;
+import cell.PredPreyNewCell;
+import cell.GameOfLifeNewCell;
+import cell.FireNewCell;
+
 public class CellManager {
 	/*
 	 * 1st, matrix is initialized to default --> received from initializer
@@ -15,9 +20,9 @@ public class CellManager {
 	private GeneralCell[][] currentGrid;
 	private Grid gridManager;
 	private CurrentParameters currentParameters;
-	private HashMap<String, String> moveMap;
 	private MoveHelper mh;
 	private ArrayList<GeneralCell> allCellsPossible;
+	private String simName;
 	
 	/*
 	 * use XML parsed data to create cells
@@ -45,14 +50,19 @@ public class CellManager {
 		return allCellsPossible;
 	}
 	
-	public void setDefaultsAndParametersAndMove(CurrentParameters cp, MoveHelper move) {
+	public void setSimAndParametersAndMove(String sim, CurrentParameters cp, MoveHelper move) {
 		currentParameters = cp;
 		mh = move;
+		simName = sim;
 		setMatrix();
 	}
 	
-	private GeneralCell createCell(String state) { // TODO make dependent on simulation type
-		return new GeneralCell(currentParameters, mh, dfv, state);
+	private GeneralCell createCell(String state) {
+		if (simName.equals("Segregation")) return new SegregationNewCell(currentParameters, mh, state);
+		if (simName.equals("Game of Life")) return new GameOfLifeNewCell(currentParameters, mh, state);
+		if (simName.equals("Predator Prey")) return new PredPreyNewCell(currentParameters, mh, state);
+		if (simName.equals("Fire")) return new FireNewCell(currentParameters, mh, state);
+		return new SegregationNewCell(currentParameters, mh, state);
 	}
 	
 	public void performUpdates() {

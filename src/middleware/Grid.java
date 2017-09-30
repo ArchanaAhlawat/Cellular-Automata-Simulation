@@ -18,7 +18,7 @@ public class Grid {
 			for (int j = 0; j < GRID_SIZE; j++) {
 				Random rand = new Random();
 				int num = rand.nextInt(allCellsPossible.size()) + 1;
-				grid[i][j] = new GeneralCell(allCellsPossible.get(num));
+				grid[i][j] = (allCellsPossible.get(num)).clone();
 			}
 		}
 	}
