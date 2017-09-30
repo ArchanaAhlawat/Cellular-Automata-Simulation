@@ -3,6 +3,8 @@ package cell;
 import java.util.ArrayList;
 import java.util.Random;
 
+import middleware.CellManager;
+
 public abstract class cellMovement {
 
 	cellMovement(CellManager cm) {

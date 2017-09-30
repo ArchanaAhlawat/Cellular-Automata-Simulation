@@ -3,6 +3,8 @@ package cell;
 import java.util.HashMap;
 import java.util.Map;
 
+import middleware.CellManager;
+
 public class MoveHelper {
 
 	CellManager cm; 

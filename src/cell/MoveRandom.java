@@ -2,6 +2,8 @@ package cell;
 
 import java.util.ArrayList;
 
+import middleware.CellManager;
+
 public class MoveRandom extends cellMovement {
 
 	CellManager myCellManager;

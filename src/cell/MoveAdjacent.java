@@ -3,6 +3,8 @@ package cell;
 import java.util.ArrayList;
 import java.util.Map;
 
+import middleware.CellManager;
+
 public class MoveAdjacent extends cellMovement {
 
 	MoveAdjacent(CellManager cm) {
