@@ -6,7 +6,7 @@
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<state>burning</state>
+			<state>fire</state>
 		</Cell>
 		<Cell>
 			<state>empty</state>

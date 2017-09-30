@@ -7,13 +7,10 @@
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<person>X</person>
+			<state>agent1</state>
 		</Cell>
 		<Cell>
-			<person>O</person>
-		</Cell>
-		<Cell>
-			<person>X</person>
+			<state>agent2</state>
 		</Cell>
 	</Cells>
 </Info> 

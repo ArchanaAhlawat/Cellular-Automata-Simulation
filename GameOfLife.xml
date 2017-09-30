@@ -1,17 +1,18 @@
 <Info>
 	<CellTypes>
-		<CellType simName="Game Of Life">
-		</CellType>
+		<CellInfo>
+		 	<simName>"Game of Life"</simName>
+		 	<underpopulation_threshhold>2</underpopulation_threshhold>
+		 	<overpopulation_threshhold>4</overpopulation_threshhold>
+		 	<reproduction_number>3</reproduction_number>
+		</CellInfo>
 	</CellTypes>
 	<Cells>
 		<Cell>
 			<state>alive</state>
 		</Cell>
 		<Cell>
-			<state>dead</state>
-		</Cell>
-		<Cell>
-			<state>alive</state>
+			<state>empty</state>
 		</Cell>
 	</Cells>
 </Info>  
