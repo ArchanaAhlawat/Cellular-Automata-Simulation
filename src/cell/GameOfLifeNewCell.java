@@ -7,8 +7,8 @@ import middleware.CurrentParameters;
 
 public class GameOfLifeNewCell extends GeneralCell{
 
-	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
-		super(cp, mh, dvh, myState);
+	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, String myState) {
+		super(cp, mh, myState);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
 		super.cellSpecificBehavior.put("empty", new Empty());
 	}

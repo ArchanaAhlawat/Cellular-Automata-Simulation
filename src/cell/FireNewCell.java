@@ -7,8 +7,8 @@ import middleware.CurrentParameters;
 
 public class FireNewCell extends GeneralCell{
 
-	public FireNewCell(CurrentParameters cp, MoveHelper mh, DefaultValues dvh, String myState) {
-		super(cp,mh, dvh, myState);
+	public FireNewCell(CurrentParameters cp, MoveHelper mh, String myState) {
+		super(cp,mh, myState);
 		super.cellSpecificBehavior.put("fire", new Fire());
 		super.cellSpecificBehavior.put("tree", new Tree());
 		super.cellSpecificBehavior.put("empty", new Empty());
