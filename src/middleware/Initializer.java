@@ -11,6 +11,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import cell.CellManager;
+
 public class Initializer {
 	/* 
 	 * reads XML file based on choice from Main
