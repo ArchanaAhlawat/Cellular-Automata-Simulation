@@ -1,6 +1,7 @@
 package cell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import middleware.CurrentParameters;
@@ -12,6 +13,7 @@ public class SegregationNewCell extends GeneralCell {
 		super.cellSpecificBehavior.put("agent1", new Agent1());
 		super.cellSpecificBehavior.put("agent2", new Agent2());
 		super.cellSpecificBehavior.put("empty", new Empty());
+		possibleStates = new ArrayList<String>(Arrays.asList("agent1", "agent2", "empty"));
 	}
 
 	protected double getSatisfactionThreshold() {
