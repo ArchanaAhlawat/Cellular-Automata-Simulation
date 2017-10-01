@@ -33,7 +33,7 @@ public class Initializer {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			dom = db.parse(SimulationDisplay.XML_CONFIG_FOLDER + configFileName);
+			dom = db.parse(configFileName);
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();

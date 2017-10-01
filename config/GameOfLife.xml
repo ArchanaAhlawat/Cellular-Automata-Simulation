@@ -1,8 +1,10 @@
 <Info>
 	<CellTypes>
 		<CellInfo>
-		 	<simName>"Game of Life"</simName>
-			<satisfaction_threshhold>30</satisfaction_threshhold>
+		 	<simName>Game of Life</simName>
+			<overpopulation_threshhold>5</overpopulation_threshhold>
+			<underpopulation_threshhold>1</underpopulation_threshhold>
+			<reproduction_number>3</reproduction_number>>	
 			<move>adjacent</move>
 		</CellInfo>
 	</CellTypes>

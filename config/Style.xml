@@ -1,0 +1,8 @@
+ <Style>
+	<Specs>
+		<Info>
+		 	<gridShape>square</gridShape>
+		 	<move>adjacent</move>
+		</Info>
+	</Specs>
+</Style>

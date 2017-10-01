@@ -1,7 +1,7 @@
 <Info>
 	<CellTypes>
 		<CellInfo>
-		 	<simName>"Predator Prey"</simName>
+		 	<simName>Predator Prey</simName>
 			<overpopulation_threshhold>4</overpopulation_threshhold>
 			<reproduction_threshhold>3</reproduction_threshhold>
 			<underpopulation_threshhold>2</underpopulation_threshhold>

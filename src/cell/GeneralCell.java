@@ -94,12 +94,14 @@ public abstract class GeneralCell {
 		changeToDefault("empty");
 	}
 
-	public void calcAndReplace(String state, Map<String, String> newParamValues) {
+	public boolean calcAndReplace(String state, Map<String, String> newParamValues) {
 		ArrayList<GeneralCell> stateNeighbors = calcUnmodifiedNeighborsOfState(state);
 		GeneralCell targetCell = chooseRandomCellFromList(stateNeighbors);
 		if (targetCell != null) {
 			targetCell.setNextCellParameters(newParamValues);
+			return true;
 		}
+		return false;
 	}
 
 	public ArrayList<GeneralCell> calcUnmodifiedNeighborsOfState(String state) {

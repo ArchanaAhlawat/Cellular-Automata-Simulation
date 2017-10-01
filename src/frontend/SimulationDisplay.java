@@ -9,12 +9,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.geometry.Insets;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import middleware.CellManager;
@@ -99,6 +99,9 @@ public class SimulationDisplay {
 	// memory-efficient
 	private GeneralCell[][] grid; // Will be used once integrated
 	private TilePane tiles;
+	private UIGraphUtils grapher;
+	private HBox belowSimulation;
+	private Chart graph;
 
 	// Simulation state
 	private String currentSimulation = SEGREGATION;
@@ -172,11 +175,10 @@ public class SimulationDisplay {
 
 	// TODO - Uncomment calls to backend methods when ready
 	public void advanceOneCycle() {
-		System.out.println("Advancing one cycle");
-		// Uncomment when ready to integrate
 		cellManager.performUpdates();
-		updateTiles(cellManager.getGrid());
-
+		grid = cellManager.getGrid();
+		updateTiles(grid);
+		updateGraph(grid);
 	}
 
 	public void advance(int cycles) {
@@ -203,6 +205,7 @@ public class SimulationDisplay {
 		// Set cell dimensions appropriately
 		calculateCellDimensions(grid.length, grid[0].length, height, width);
 		inProgress = true;
+		grapher = new UIGraphUtils(reader.getGraphTitleText());
 		resetCycles();
 		return getSimulationScene(onSpeedUpButtonClicked, onSlowDownButtonClicked);
 	}
@@ -266,9 +269,15 @@ public class SimulationDisplay {
 		System.out.println("Getting simulation scene!");
 		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
 				updateChosenConfigFileName());
-		border.setBottom(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
-				SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
-				e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
+		belowSimulation = new HBox();
+		graph = grapher.getPopulationChart(grid);
+		resizeChart(graph);
+		belowSimulation.getChildren().add(graph);
+		belowSimulation.getChildren()
+				.add(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
+						SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
+						e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
+		border.setBottom(belowSimulation);
 		border.setCenter(updateTiles(grid));
 		// DUMMY FOR NOW, just for testing
 		// border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
@@ -301,26 +310,15 @@ public class SimulationDisplay {
 		return tiles;
 	}
 
-	// TEMP - ONLY FOR TESTING WHILE BACKEND IS NOT READY
-	private TilePane initTilesDummy(int rows, int cols) {
-		tiles = new TilePane();
-		tiles.setPrefColumns(cols);
-		tiles.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
-		// TEMP - Make a dummy of texts with nums
-		// In future, need Cell[][] matrix from CellManager.getGrid()
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				HBox tile = new HBox();
-				tile.setPadding(new Insets(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING));
-				Text tileText = new Text();
-				String tileString = Integer.toString(getIndex(row, col, cols));
-				tileText.setText(tileString);
-				tile.getChildren().add(tileText);
-				tile.setStyle(DEFAULT_TILE_STYLE);
-				tiles.getChildren().add(tile);
-			}
-		}
-		return tiles;
+	private void updateGraph(GeneralCell[][] matrix) {
+		belowSimulation.getChildren().remove(graph);
+		graph = grapher.getPopulationChart(matrix);
+		belowSimulation.getChildren().add(0, graph);
+		resizeChart(graph);
+	}
+
+	private void resizeChart(Chart chart) {
+		chart.setMaxHeight(height - gridHeight);
 	}
 
 	// Will be called in startSimulation() once Initializer is ready - can ignore

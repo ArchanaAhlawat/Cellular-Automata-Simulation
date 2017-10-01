@@ -13,9 +13,9 @@ import javafx.scene.chart.PieChart;
 
 // For 1st extension of Visualization
 public class UIGraphUtils {
-	
+
 	String title;
-	
+
 	public UIGraphUtils(String title) {
 		this.title = title;
 	}
