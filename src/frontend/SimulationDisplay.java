@@ -351,7 +351,7 @@ public class SimulationDisplay {
 					reader.getMissingFileErrorDialogTitleText(), reader.getMissingFileErrorDialogHeaderText(),
 					reader.getMissingFileErrorDialogContentText());
 			if (uploadedFileName.length() > 0) {
-				chosenConfigFileName = uploadedFileName;
+				chosenConfigFileName = XML_CONFIG_FOLDER + uploadedFileName;
 				System.out.println("Updated chosen config file name to " + chosenConfigFileName);
 				// Call startSimulation() to restart a new simulation
 				hasNewConfig = true;
