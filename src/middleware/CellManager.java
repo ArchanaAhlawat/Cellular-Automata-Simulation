@@ -84,7 +84,7 @@ public class CellManager {
 	private ArrayList<GeneralCell> computeNeighbors(int i, int j) {
 		ArrayList<GeneralCell> neighborList = new ArrayList<GeneralCell>();
 		for (int[] coor : gridManager.computeNeighbors(i, j)) {
-			if (! currentGrid[coor[0]][coor[1]].equals(null)) { // check
+			if (currentGrid[coor[0]][coor[1]] != null) { // check
 				neighborList.add(currentGrid[coor[0]][coor[1]]);
 			}
 		}
