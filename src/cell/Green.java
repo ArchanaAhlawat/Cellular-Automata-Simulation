@@ -1,8 +1,9 @@
 package cell;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class Green implements CellSpecificBehavior {
+public class Green extends RPSColor {
 
 	@Override
 	public void cellSpecificEveryTime(GeneralCell cell) {
@@ -18,8 +19,10 @@ public class Green implements CellSpecificBehavior {
 
 	@Override
 	public Map<String, String> getDefaultState() {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, String> ret = new HashMap<String, String>();
+		ret.put("state", "green");
+		ret.put("hitcount", "0");
+		return ret;
 	}
 
 }
