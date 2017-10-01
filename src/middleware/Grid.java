@@ -32,7 +32,7 @@ public class Grid {
 				int[] temp = new int[2];
 				temp[0] = k + i;
 				temp[1] = l + j;
-				if (!neighborIndices.contains(temp) && !(temp[0] == i && temp[1] == j) && temp[0]>=0 && temp[1]>=0) {
+				if (!neighborIndices.contains(temp) && !(temp[0] == i && temp[1] == j) && temp[0]>=0 && temp[0] < GRID_SIZE && temp[1]>=0 && temp[1] < GRID_SIZE) {
 					neighborIndices.add(temp);
 				}
 			}
