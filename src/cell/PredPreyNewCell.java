@@ -19,6 +19,7 @@ public class PredPreyNewCell extends GeneralCell {
 		super.cellSpecificBehavior.put("empty", new Empty());
 		possibleStates = new ArrayList<String>(Arrays.asList("fish", "shark", "empty"));
 		randomlySetSpawnCount();
+		getCurrentCellParameters().put("deathcount", "0");
 	}
 	
 
@@ -48,13 +49,33 @@ public class PredPreyNewCell extends GeneralCell {
 	protected void setSpawnCount(int num) {
 		getCurrentCellParameters().put("spawncount", Integer.toString(num));
 	}
+	
+	public int getDeathCount() {
+		return Integer.parseInt(getCurrentCellParameters().get("deathcount"));
+	}
+
+	protected void updateDeathCount() {
+		setDeathCount(getDeathCount() + 1);
+	}
+
+	protected void setDeathCount(int num) {
+		getCurrentCellParameters().put("deathcount", Integer.toString(num));
+	}
 
 	protected int getSpawnThreshold() {
 		return Integer.parseInt(getCurrentGameParameters().get("reproductionTime"));
 	}
+	
+	protected int getDeathThreshold() {
+		return Integer.parseInt(getCurrentGameParameters().get("deathThresh"));
+	}
 
 	protected boolean readyToSpawn() {
 		return getSpawnCount() >= getSpawnThreshold();
+	}
+	
+	protected boolean readyToDie() {
+		return getDeathCount() >= getDeathThreshold();
 	}
 
 	@Override
