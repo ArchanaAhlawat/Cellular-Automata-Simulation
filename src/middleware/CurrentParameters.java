@@ -2,6 +2,7 @@ package middleware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /* so that the cell does not have to keep track of all these game-wide values
  * initialized in Initializer
@@ -11,17 +12,34 @@ import java.util.HashMap;
 public class CurrentParameters {
 	private HashMap<String, HashMap<String, String>> currentParams = new HashMap<String, HashMap<String, String>>();
 	private DefaultValues dfv;
+	private Map<String, String> gameLevelParams;
 
-	public CurrentParameters(ArrayList<HashMap<String, String>> currentMaps, DefaultValues defaults) {
+	public CurrentParameters(ArrayList<HashMap<String, String>> currentMaps, DefaultValues defaults, Map<String, String> gameLevelParams) {
 		for (HashMap<String, String> df_map : currentMaps) {
 			currentParams.put(df_map.get("state"), df_map);
 		}
+		System.out.println("keyset of currentParams: ");
+		for (String key : currentParams.keySet()) {
+			System.out.println("Key: " + key + "; " + currentParams.get(key));
+		}
 		dfv = defaults;
+		this.gameLevelParams = gameLevelParams;
 	}
 
-	public HashMap<String, String> getCurrentParameterMap(String state) {
+	public Map<String, String> getGameLevelParameterMap() {
+		return gameLevelParams;
+	}
+	
+	public Map<String, String> getCurrentParameterMap(String state) {
 		HashMap<String, String> val = currentParams.get(state);
 		return val;
+	}
+	
+	public void setGameLevelParameter(String param, String value) throws IllegalArgumentException {
+		if (!gameLevelParams.containsKey(param)) {
+			throw new IllegalArgumentException();
+		}
+		gameLevelParams.put(param, value);
 	}
 
 	/*
