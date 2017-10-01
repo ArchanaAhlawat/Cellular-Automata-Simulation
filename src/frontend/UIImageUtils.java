@@ -15,7 +15,7 @@ public class UIImageUtils {
 	public static final String AGENT1 = "agent1";
 	public static final String AGENT2 = "agent2";
 	public static final String EMPTY = "empty";
-	
+
 	// PREDATOR-PREY
 	public static final String FISH = "fish";
 	public static final String SHARK = "shark";
@@ -77,6 +77,8 @@ public class UIImageUtils {
 		STATE_TO_IMAGE_URL = Collections.unmodifiableMap(myMap);
 	}
 
+	public static Map<String, Image> imageCache = new HashMap<String, Image>();
+
 	public static ImageView getImageViewForSimulationAndState(String currentSimulation, String state, int imageFitWidth,
 			int imageFitHeight) {
 		return getGraphicFromImageURL(STATES_IMAGES_FOLDER + STATE_TO_IMAGE_URL.get(currentSimulation).get(state),
@@ -84,8 +86,15 @@ public class UIImageUtils {
 	}
 
 	public static ImageView getGraphicFromImageURL(String imageURL, int imageFitWidth, int imageFitHeight) {
-		return resizeImage(new Image(UIImageUtils.class.getClassLoader().getResourceAsStream(imageURL)), imageFitWidth,
-				imageFitHeight);
+		// check if imageView already exists for this URL
+		if (imageCache.containsKey(imageURL)) {
+			Image cachedImage = imageCache.get(imageURL);
+			return resizeImage(cachedImage,imageFitWidth, imageFitHeight);
+		} else {
+			Image newImage = new Image(UIImageUtils.class.getClassLoader().getResourceAsStream(imageURL));
+			imageCache.put(imageURL, newImage);
+			return resizeImage(newImage, imageFitWidth, imageFitHeight);
+		}
 	}
 
 	public static ImageView resizeImage(Image buttonImage, double imageFitWidth, double imageFitHeight) {

@@ -56,7 +56,7 @@ public abstract class cellMovement {
 					stateNeighbors.add(dummy_cell);
 				}
 			} else {
-				if (dummy_cell.getCurrentGameParameters().get("state").equals(state)) {
+				if (dummy_cell.getCurrentCellParameters().get("state").equals(state)) {
 					stateNeighbors.add(dummy_cell);
 				}
 			}

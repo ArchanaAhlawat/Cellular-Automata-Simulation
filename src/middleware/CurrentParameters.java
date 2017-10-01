@@ -20,11 +20,7 @@ public class CurrentParameters {
 	}
 
 	public HashMap<String, String> getCurrentParameterMap(String state) {
-		System.out.println("Getting param map for " + state);
-		System.out.println("Length of state key: " + state.length());
 		HashMap<String, String> val = currentParams.get(state);
-		System.out.println("Keys of map: ");
-		System.out.println(val.keySet());
 		return val;
 	}
 

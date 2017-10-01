@@ -16,7 +16,6 @@ public class SegregationNewCell extends GeneralCell {
 
 	protected double getSatisfactionThreshold() {
 		String val = getCurrentGameParameters().get("satisfaction_threshhold");
-		System.out.println(val);
 		return ((double) Integer.parseInt(val)) / 100;
 	}
 
