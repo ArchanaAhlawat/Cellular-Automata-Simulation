@@ -3,13 +3,13 @@ package cell;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Green extends RPSColor {
+public class Green extends Color {
 
-	@Override
-	public void cellSpecificEveryTime(GeneralCell cell) {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void cellSpecificEveryTime(GeneralCell cell) {
+//		super.cellSpecificEveryTime(cell);
+//
+//	}
 
 	@Override
 	public void cellSpecificBasedOnNextState(GeneralCell cell) {
@@ -21,8 +21,9 @@ public class Green extends RPSColor {
 	public Map<String, String> getDefaultState() {
 		Map<String, String> ret = new HashMap<String, String>();
 		ret.put("state", "green");
-		ret.put("hitcount", "0");
+		ret.put("hitcount", "10");
 		return ret;
 	}
+
 
 }

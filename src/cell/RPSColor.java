@@ -18,7 +18,7 @@ public abstract class RPSColor implements CellSpecificBehavior{
 
 	@Override
 	public void cellSpecificBasedOnNextState(GeneralCell cell) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
