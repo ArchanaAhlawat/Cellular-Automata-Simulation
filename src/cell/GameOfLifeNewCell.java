@@ -10,10 +10,13 @@ public class GameOfLifeNewCell extends GeneralCell{
 	public GameOfLifeNewCell(CurrentParameters cp, MoveHelper mh, String myState) {
 		super(cp, mh, myState);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
-		super.cellSpecificBehavior.put("empty", new Empty());
+		super.cellSpecificBehavior.put("empty", new DeadGOL());
 	}
 	protected int getUnderpopulationThreshold() {
-		return Integer.parseInt(getCurrentGameParameters().get("underpopulation_threshhold"));
+		int ret = Integer.parseInt(getCurrentGameParameters().get("underpopulation_threshhold"));
+		System.out.println("Underpop thresh: " + ret);
+		return ret;
+
 	}
 	
 	protected int getOverpopulationThreshold() {
