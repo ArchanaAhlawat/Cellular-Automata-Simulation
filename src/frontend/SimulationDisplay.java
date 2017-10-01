@@ -172,8 +172,7 @@ public class SimulationDisplay {
 
 	// TODO - Uncomment calls to backend methods when ready
 	public void advanceOneCycle() {
-		System.out.println("Advancing one cycle");
-		// Uncomment when ready to integrate
+		//System.out.println("Advancing one cycle");
 		cellManager.performUpdates();
 		updateTiles(cellManager.getGrid());
 

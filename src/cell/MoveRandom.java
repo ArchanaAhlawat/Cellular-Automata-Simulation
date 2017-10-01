@@ -11,6 +11,7 @@ public class MoveRandom extends cellMovement {
 	MoveRandom(CellManager cm) {
 		super(cm);
 		// TODO Auto-generated constructor stub
+		myCellManager = cm;
 	}
 
 	@Override

@@ -1,8 +1,5 @@
 package cell;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import middleware.CurrentParameters;
 
 public class FireNewCell extends GeneralCell{
@@ -15,7 +12,7 @@ public class FireNewCell extends GeneralCell{
 	}
 	
 	protected double getProbCatch() {
-		return Double.parseDouble(getCurrentGameParameters().get("probCatch"));
+		return (double)Integer.parseInt(getCurrentGameParameters().get("probCatch")) / 100;
 	}
 
 	

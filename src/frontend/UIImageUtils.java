@@ -87,14 +87,14 @@ public class UIImageUtils {
 
 	public static ImageView getGraphicFromImageURL(String imageURL, int imageFitWidth, int imageFitHeight) {
 		// check if imageView already exists for this URL
+		Image backingImage;
 		if (imageCache.containsKey(imageURL)) {
-			Image cachedImage = imageCache.get(imageURL);
-			return resizeImage(cachedImage,imageFitWidth, imageFitHeight);
+			backingImage = imageCache.get(imageURL);
 		} else {
-			Image newImage = new Image(UIImageUtils.class.getClassLoader().getResourceAsStream(imageURL));
-			imageCache.put(imageURL, newImage);
-			return resizeImage(newImage, imageFitWidth, imageFitHeight);
+			backingImage = new Image(UIImageUtils.class.getClassLoader().getResourceAsStream(imageURL));
+			imageCache.put(imageURL, backingImage);
 		}
+		return resizeImage(backingImage, imageFitWidth, imageFitHeight);
 	}
 
 	public static ImageView resizeImage(Image buttonImage, double imageFitWidth, double imageFitHeight) {

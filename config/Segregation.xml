@@ -1,7 +1,7 @@
 <Info>
 	<CellTypes>
 		<CellInfo>
-		 	<simName>"Segregation"</simName>
+		 	<simName>Segregation</simName>
 			<satisfaction_threshhold>30</satisfaction_threshhold>
 			<move>adjacent</move>
 		</CellInfo>

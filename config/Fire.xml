@@ -1,8 +1,9 @@
 <Info>
 	<CellTypes>
 		<CellInfo>
-		 	<simName>"Fire"</simName>
+		 	<simName>Fire</simName>
 		 	<move>adjacent</move>
+		 	<probCatch>50</probCatch>
 		</CellInfo>
 	</CellTypes>
 	<Cells>

@@ -16,7 +16,7 @@ public class MoveAdjacent extends cellMovement {
 		ArrayList<GeneralCell> stateNeighbors = super.checkCellsNextThenDefaultCurrentParameters(cell, cell.getNeighbors(), "empty");
 		GeneralCell targetCell = super.chooseRandomCellFromList(stateNeighbors);
 		if (targetCell != null) {
-			targetCell.setNextCellParameters(cell.getCurrentGameParameters());
+			targetCell.setNextCellParameters(cell.getCurrentCellParameters());
 			return true;
 		}
 		return false;
