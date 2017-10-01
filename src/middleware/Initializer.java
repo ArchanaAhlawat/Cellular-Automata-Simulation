@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cell.MoveHelper;
+import frontend.SimulationDisplay;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,19 +21,19 @@ public class Initializer {
 	*/
 	private static Document dom;
 	private static String simName;
-	private static CellManager cmanager;
+	private static CellManager cmanager = new CellManager();
 	private static DefaultValues dfv;
 	private static CurrentParameters currentParameters;
 	private static ArrayList<HashMap<String, String>> defaults = new ArrayList<HashMap<String, String>>();
 	private static HashMap<String, String> moveMap = new HashMap<String, String>();
-	
+		
 	// TODO many static methods
 	
 	private static void parseXMLFile(String configFileName) { // handle exceptions 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			dom = db.parse(configFileName);
+			dom = db.parse(SimulationDisplay.XML_CONFIG_FOLDER + configFileName);
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -48,7 +50,7 @@ public class Initializer {
 		//get root element
 		Element docEle = dom.getDocumentElement();
 		// get a nodelist of elements
-		HashMap<String, String> attributeMap = new HashMap<String, String>();
+		HashMap<String, String> genInfo = new HashMap<String, String>();
 		NodeList nl_info_root = docEle.getElementsByTagName("CellInfo");
 		if (nl_info_root != null && nl_info_root.getLength() > 0) {
 			Element el = (Element)nl_info_root.item(0);
@@ -56,17 +58,21 @@ public class Initializer {
 			setSimName((Element) nl_info.item(0));
 			for (int i = 1; i < nl_info.getLength(); i++) { // set at 1 bc we are skipping simName
 				Element ele = (Element) nl_info.item(i);
-				attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
+				genInfo.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
 			}
 		}
 		NodeList nl = docEle.getElementsByTagName("Cell");
 		if (nl != null && nl.getLength() > 0) {
-			for (int i = 0; i < nl.getLength(); i++) {
+			for (int i = 0; i < nl.getLength(); i++) { // go through every cell
+				HashMap<String, String> attributeMap = new HashMap<String, String>();
 				Element el = (Element)nl.item(i);
 				NodeList attributes = el.getElementsByTagName("*");
 				for (int j = 0; j < attributes.getLength(); j++) {
 					Element ele = (Element) attributes.item(j);
 					attributeMap.put(ele.getFirstChild().getParentNode().getNodeName(), ele.getFirstChild().getNodeValue());
+				}
+				for (String k : genInfo.keySet()) {
+					attributeMap.put(k, genInfo.get(k));
 				}
 				cmanager.addInitialCells(attributeMap.get("state"));
 				addDefaultMapAndMoveMap(attributeMap);

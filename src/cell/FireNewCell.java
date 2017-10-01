@@ -17,7 +17,7 @@ public class FireNewCell extends GeneralCell{
 	}
 	
 	protected double getProbCatch() {
-		return Double.parseDouble(getCurrentGameParameters().get("probcatch"));
+		return Double.parseDouble(getCurrentGameParameters().get("probCatch"));
 	}
 
 	

@@ -8,7 +8,7 @@ import middleware.CellManager;
 public class MoveHelper {
 
 	CellManager cm; 
-	HashMap<String, cellMovement> cellSpecificMovement;
+	HashMap<String, cellMovement> cellSpecificMovement = new HashMap<>();
 	public MoveHelper(CellManager cellman, Map<String, String> defaultMotion) {
 		cm = cellman;
 		for (String key: defaultMotion.keySet()) {
