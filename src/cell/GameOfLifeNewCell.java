@@ -12,6 +12,7 @@ public class GameOfLifeNewCell extends GeneralCell{
 		super(cp, mh, myState);
 		super.cellSpecificBehavior.put("alive", new AliveGOL());
 		super.cellSpecificBehavior.put("empty", new DeadGOL());
+		possibleStates = new ArrayList<String>(Arrays.asList("alive","empty"));
 	}
 	protected int getUnderpopulationThreshold() {
 		int ret = Integer.parseInt(getCurrentGameParameters().get("underpopulation_threshhold"));

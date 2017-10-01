@@ -10,6 +10,7 @@ public class Shark extends Animal{
 	public void cellSpecificEveryTime(GeneralCell cell) {
 		super.cellSpecificEveryTime(cell);
 		if (((PredPreyNewCell) cell).readyToSpawn()) {
+			((PredPreyNewCell) cell).revertSpawnCount();
 			cell.calcAndReplace("empty", cell.cellSpecificBehavior.get(cell.getState()).getDefaultState());
 		}
 		((PredPreyNewCell) cell).updateDeathCount();

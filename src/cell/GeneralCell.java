@@ -70,11 +70,6 @@ public abstract class GeneralCell {
 		this.nextCellParameters = nextParameterValues;
 	}
 
-//	protected Map<String, Map<String, String>> getDefaults() {
-//		return this.defaultValuesHelper.returnAllDefaults();
-//		// return this.defaults;
-//	}
-
 	protected ArrayList<GeneralCell> getNeighbors() {
 		return myNeighbors;
 	}
@@ -83,12 +78,23 @@ public abstract class GeneralCell {
 		this.myNeighbors = neighbors;
 	}
 
+	/***
+	 * @author Sam Slack (sls97)
+	 * @param neighbors - ArrayList<GeneralCell> containing all neighbors of current cell 
+	 * 
+	 * Cell uses internal states and rules to determine its next state.
+	 */
 	public void computeState(ArrayList<GeneralCell> neighbors) {
 		setNeighbors(neighbors);
 		updateEverytime();
 		updateBasedOnNextState();
 	}
 
+	/***
+	 * @author Sam Slack (sls97)
+	 * 
+	 * Current cell will use this method and a helper class to detemrine where it should move to on any given iteration
+	 */
 	public void move() {
 		this.moveHelper.moveCell(this);
 		changeToDefault("empty");
@@ -166,30 +172,31 @@ public abstract class GeneralCell {
 		}
 	}
 
+	/***
+	 * @author Sam Slack (sls97)
+	 * 
+	 * Current cell will apply these rules every iteration of the simulation - they are independent of the cell's future state
+	 */
 	public void updateEverytime() {
 //		updateParamsBasedOnUserInput();
 		cellSpecificBehavior.get(getState()).cellSpecificEveryTime(this);
 	}
-
+/***
+ * @author Sam Slack (sls97)
+ * 
+ * Current cell will only apply these rules if some condition about their next state is true
+ */
 	public void updateBasedOnNextState() {
 		cellSpecificBehavior.get(getState()).cellSpecificBasedOnNextState(this);
 	}
-
-//	private void updateParamsBasedOnUserInput() {
-//		if (currentGameParameters.hasUserUpdate()) {
-//			Map<String, Map<String, String>> UOV_Map = userOverrideValue.getOverridenValues();
-//			if (!UOV_Map.get(getState()).isEmpty()) {
-//				for (String state_variable : UOV_Map.get(getState()).keySet()) {
-//					String newValue = UOV_Map.get(getState()).get(state_variable);
-//					this.getCurrentParameters().put(state_variable, newValue);
-//				}
-//
-//			}
-//		}
-//
-//	}
 	
-	
+	/***
+	 * @author Sam Slack (sls97)
+	 * @return List<String> - contains all possible states that the current cell can become - i.e., all of the simulation's states
+	 * 							except the cell's current state
+	 * 
+	 * Used primarily to allow the FrontEnd to give user control over the states of individual cells as the game is progressing in real time
+	 */
 	public List<String> getPossibleNewStates() {
 		List<String> ret = new ArrayList<String>();
 		for (String s: possibleStates){
@@ -200,16 +207,34 @@ public abstract class GeneralCell {
 		return ret;
 	}
 	
+	/***
+	 * @author Sam Slack (sls97)
+	 * 
+	 * Allows for changes to cell state from user to be documented without interrupting current iteration
+	 */
 	public void setOverridenState(String newstate) {
 		this.changeOverriddenState(newstate);
 	}
 	
+	/*** 
+	 * @author Sam Slack (sls97)
+	 * @return Map<String,String> - returns map of current parameters that the user has overridden
+	 */
 	public Map<String,String >getOverrideCellParameters() {
 		return this.overrideCellParameters;
 	}
 	
+	/***
+	 * @author Sam Slack (sls97)
+	 * 
+	 * Allows CellManager to quickly create copies of cell objects by cloning new objects. 
+	 */
 	public abstract GeneralCell clone();
 
+	/***
+	 * @author Sam Slack (sls97)
+	 * CellManager calls this method to change a cell from its current state into its next state. This method also controls the logic to ensure that user overridden parameters will be applied in the next iteration if they conflicted with the current iteration.
+	 */
 	public void becomeNextState() {
 		if (getNextCellParameters().size() != 0) {
 			this.setCurrentCellParameters(this.getNextCellParameters());
