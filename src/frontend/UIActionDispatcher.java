@@ -48,10 +48,4 @@ public class UIActionDispatcher {
 		alert.showAndWait();
 	}
 
-	// TODO - check rows and cols with SimulationDisplay.isValidConfig() and return
-	// warning dialog if false
-	public static void validateGridSizeInputAndWarnIfNotValid(int rows, int cols) {
-
-	}
-
 }

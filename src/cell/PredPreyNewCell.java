@@ -50,7 +50,7 @@ public class PredPreyNewCell extends GeneralCell {
 	}
 
 	protected int getSpawnThreshold() {
-		return Integer.parseInt(getCurrentGameParameters().get("spawnthreshold"));
+		return Integer.parseInt(getCurrentGameParameters().get("reproductionTime"));
 	}
 
 	protected boolean readyToSpawn() {

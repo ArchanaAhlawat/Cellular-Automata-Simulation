@@ -1,19 +1,17 @@
 <Info>
 	<CellTypes>
 		<CellInfo>
-		 	<simName>"Segregation"</simName>
+		 	<simName>"Game of Life"</simName>
 			<satisfaction_threshhold>30</satisfaction_threshhold>
+			<move>adjacent</move>
 		</CellInfo>
 	</CellTypes>
 	<Cells>
 		<Cell>
-			<person>X</person>
+			<state>alive</state>
 		</Cell>
 		<Cell>
-			<person>O</person>
-		</Cell>
-		<Cell>
-			<person>X</person>
+			<state>empty</state>
 		</Cell>
 	</Cells>
-</Info> 
+</Info>  
