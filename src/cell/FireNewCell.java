@@ -1,5 +1,8 @@
 package cell;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import middleware.CurrentParameters;
 
 public class FireNewCell extends GeneralCell{

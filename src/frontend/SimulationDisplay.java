@@ -120,7 +120,7 @@ public class SimulationDisplay {
 	public Scene getMenuScene(Stage primaryStage, EventHandler<ActionEvent> onStartButtonClicked) {
 		String startString = reader.getStartText();
 		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
-				updateChosenConfigFileName());
+				updateChosenConfigFileName(), currentSimulation);
 		border.setBottom(PanelDisplay.initStartPanel(startString, onStartButtonClicked));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
@@ -193,18 +193,21 @@ public class SimulationDisplay {
 	// once it's ready
 	public Scene startSimulation(EventHandler<ActionEvent> onSpeedUpButtonClicked,
 			EventHandler<ActionEvent> onSlowDownButtonClicked) {
+		inProgress = false;
 		if (chosenConfigFileName == null) {
 			chosenConfigFileName = getDefaultXMLConfigFile(currentSimulation);
 		}
 		// Tell Initializer which XMLConfig file to read
 		cellManager = Initializer.loadConfig(chosenConfigFileName);
+		currentSimulation = Initializer.getSimulationName();
+		System.out.println("Simulation name: " + currentSimulation);
 		grid = cellManager.getGrid();
 		if (grid == null || grid.length == 0 || grid[0].length == 0) {
 			throw new IllegalStateException();
 		}
+				
 		// Set cell dimensions appropriately
 		calculateCellDimensions(grid.length, grid[0].length, height, width);
-		inProgress = true;
 		grapher = new UIGraphUtils(reader.getGraphTitleText());
 		resetCycles();
 		return getSimulationScene(onSpeedUpButtonClicked, onSlowDownButtonClicked);
@@ -268,7 +271,7 @@ public class SimulationDisplay {
 			EventHandler<ActionEvent> onSlowDownButtonClicked) {
 		System.out.println("Getting simulation scene!");
 		BorderPane border = panelDisplay.initializeBorderPaneWithTopControlPanel(getSimulationChangeListener(),
-				updateChosenConfigFileName());
+				updateChosenConfigFileName(), currentSimulation);
 		belowSimulation = new HBox();
 		graph = grapher.getPopulationChart(grid);
 		resizeChart(graph);
@@ -279,8 +282,6 @@ public class SimulationDisplay {
 						e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
 		border.setBottom(belowSimulation);
 		border.setCenter(updateTiles(grid));
-		// DUMMY FOR NOW, just for testing
-		// border.setCenter(initTilesDummy(DEFAULT_ROWS, DEFAULT_COLS));
 		this.scene = new Scene(border, width, height);
 		return this.scene;
 	}
@@ -303,6 +304,9 @@ public class SimulationDisplay {
 		// In future, need Cell[][] matrix from CellManager.getGrid()
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
+				if (matrix[row][col].getState() == null) {
+					throw new IllegalStateException();
+				}
 				tiles.getChildren().add(UIImageUtils.getImageViewForSimulationAndState(currentSimulation,
 						matrix[row][col].getState(), cellWidth, cellHeight));
 			}
@@ -339,6 +343,8 @@ public class SimulationDisplay {
 	private ChangeListener<? super Number> getSimulationChangeListener() {
 		return (observable, oldVal, newVal) -> {
 			currentSimulation = reader.getSimulationTexts()[(int) newVal];
+			chosenConfigFileName = getDefaultXMLConfigFile(currentSimulation);
+			hasNewConfig = true;
 		};
 	}
 

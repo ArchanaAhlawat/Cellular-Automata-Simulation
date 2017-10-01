@@ -23,11 +23,11 @@ public class Initializer {
 	*/
 	private static Document dom;
 	private static String simName;
-	private static CellManager cmanager = new CellManager();
+	private static CellManager cmanager;
 	private static DefaultValues dfv;
 	private static CurrentParameters currentParameters;
-	private static ArrayList<HashMap<String, String>> defaults = new ArrayList<HashMap<String, String>>();
-	private static HashMap<String, String> moveMap = new HashMap<String, String>();
+	private static ArrayList<HashMap<String, String>> defaults;
+	private static HashMap<String, String> moveMap;
 		
 	public static final String MOVE = "move";
 	
@@ -51,6 +51,7 @@ public class Initializer {
 	}
 	
 	private static void parseDocument() {
+		clearData();
 		//get root element
 		Element docEle = dom.getDocumentElement();
 		// get a nodelist of elements
@@ -105,6 +106,17 @@ public class Initializer {
 	
 	private static void setSimName(Element empEl) {
 		simName = empEl.getFirstChild().getNodeValue();
+	}
+	
+	// To facilitate re-initialization
+	private static void clearData() {
+		cmanager = new CellManager();
+		defaults = new ArrayList<HashMap<String, String>>();
+		moveMap = new HashMap<String, String>();
+	}
+	
+	public static String getSimulationName() {
+		return simName;
 	}
 	
 	public static CurrentParameters getCurrentParameters() {
