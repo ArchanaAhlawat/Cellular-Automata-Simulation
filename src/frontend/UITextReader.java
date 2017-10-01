@@ -27,10 +27,15 @@ public class UITextReader {
 	public static final String INVALID_GRID_SIZE_DIALOG_TITLE_KEY = "Invalid_Grid_Size_Dialog_Title";
 	public static final String INVALID_GRID_SIZE_DIALOG_HEADER_KEY = "Invalid_Grid_Size_Dialog_Header";
 	public static final String INVALID_GRID_SIZE_DIALOG_CONTENT_KEY = "Invalid_Grid_Size_Dialog_Content";
+	public static final String NON_NUMERICAL_INPUT_DIALOG_TITLE_KEY = "Non_Numerical_Input_Dialog_Title";
+	public static final String NON_NUMERICAL_INPUT_DIALOG_HEADER_KEY = "Non_Numerical_Input_Dialog_Header";
+	public static final String NON_NUMERICAL_INPUT_DIALOG_CONTENT_KEY = "Non_Numerical_Input_Dialog_Content";
 	public static final String GRID_HEIGHT_KEY = "Grid_Height_Text";
 	public static final String GRID_WIDTH_KEY = "Grid_Width_Text";
 	public static final String GRID_SIZE_UPDATE_KEY = "Grid_Size_Update_Text";
 	public static final String GRAPH_TITLE_KEY = "Graph_Title";
+	public static final String CONFIG_CHANGE_PANEL_TITLE_KEY = "Config_Change_Panel_Title";
+	public static final String CONFIG_CHANGE_KEY = "Config_Change_Text";
 	
 	// Optional ones
 	public static final String ROW_KEY = "rows";
@@ -129,6 +134,19 @@ public class UITextReader {
 		return myResources.getString(INVALID_GRID_SIZE_DIALOG_CONTENT_KEY);
 	}
 	
+	public String getNonNumericalInputDialogTitleText() {
+		return myResources.getString(NON_NUMERICAL_INPUT_DIALOG_TITLE_KEY);
+	}
+
+	public String getNonNumericalInputDialogHeaderText() {
+		return myResources.getString(NON_NUMERICAL_INPUT_DIALOG_HEADER_KEY);
+	}
+
+	public String getNonNumericalInputDialogContentText() {
+		return myResources.getString(NON_NUMERICAL_INPUT_DIALOG_CONTENT_KEY);
+	}
+
+	
 	public String getGridHeightText() {
 		return myResources.getString(GRID_HEIGHT_KEY);
 	}
@@ -143,6 +161,14 @@ public class UITextReader {
 
 	public String getGraphTitleText() {
 		return myResources.getString(GRAPH_TITLE_KEY);
+	}
+	
+	public String getConfigChangePanelTitleText() {
+		return myResources.getString(CONFIG_CHANGE_PANEL_TITLE_KEY);
+	}
+	
+	public String getConfigChangeText() {
+		return myResources.getString(CONFIG_CHANGE_KEY);
 	}
 	
 	public int getRows() {

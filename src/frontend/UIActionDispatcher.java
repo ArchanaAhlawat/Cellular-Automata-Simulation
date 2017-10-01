@@ -10,8 +10,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 
 public class UIActionDispatcher {
-	// Call methods of Initializer, CellManager & Rules
-	// Can mock until Archana & Sam push their respective parts
 
 	public static String displayFileNameInputDialogAndGetResult(String uploadText, String headerText,
 			String contentText, String errorDialogTitleText, String errorDialogHeaderText,
@@ -21,7 +19,8 @@ public class UIActionDispatcher {
 		dialog.setHeaderText(headerText);
 		dialog.setContentText(contentText);
 		Optional<String> result = dialog.showAndWait();
-		Optional<String> processedResult = result.map(fileName -> validateFileAndWarnIfNotValid(fileName, errorDialogTitleText, errorDialogHeaderText, errorDialogContentText) ? fileName : "");
+		Optional<String> processedResult = result.map(fileName -> validateFileAndWarnIfNotValid(fileName,
+				errorDialogTitleText, errorDialogHeaderText, errorDialogContentText) ? fileName : "");
 		return processedResult.isPresent() ? processedResult.get() : "";
 	}
 

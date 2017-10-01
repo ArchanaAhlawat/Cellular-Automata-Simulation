@@ -280,6 +280,7 @@ public class SimulationDisplay {
 				.add(panelDisplay.initBottomPanel(PLAY_BUTTON_IMAGE_URL, FORWARD_BUTTON_IMAGE_URL,
 						SPEEDUP_BUTTON_IMAGE_URL, SLOWDOWN_BUTTON_IMAGE_URL, e -> toggleSimulationPlayState(),
 						e -> advanceOneCycle(), onSpeedUpButtonClicked, onSlowDownButtonClicked));
+		belowSimulation.getChildren().add(new ConfigControlPanelDisplay(reader).getConfigControlPanel());
 		border.setBottom(belowSimulation);
 		border.setCenter(updateTiles(grid));
 		this.scene = new Scene(border, width, height);
