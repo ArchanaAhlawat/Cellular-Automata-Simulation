@@ -71,14 +71,13 @@ public class Main extends Application {
 	}
 
 	private void step(double elapsedTime) {
-		if (display.isInProgress()) {
-			display.advanceOneCycle();
-		}
 		if (display.hasNewConfig()) {
 			display.acknowledgeConfig();
 			System.out.println("Updating stage for new config!");
 			updateStage(display.startSimulation(e1 -> speedUp(DEFAULT_SPEEDUP_FACTOR),
 					e2 -> slowDown(DEFAULT_SPEEDUP_FACTOR)));
+		} else if (display.isInProgress()) {
+			display.advanceOneCycle();
 		}
 	}
 

@@ -1,5 +1,8 @@
 package cell;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import middleware.CurrentParameters;
 
 public class FireNewCell extends GeneralCell{
@@ -9,6 +12,7 @@ public class FireNewCell extends GeneralCell{
 		super.cellSpecificBehavior.put("fire", new Fire());
 		super.cellSpecificBehavior.put("tree", new Tree());
 		super.cellSpecificBehavior.put("empty", new Empty());
+		possibleStates = new ArrayList<String>(Arrays.asList("fire", "tree", "empty"));
 	}
 	
 	protected double getProbCatch() {

@@ -64,10 +64,10 @@ public class PanelDisplay {
 	}
 
 	public Node initConfigBox(ChangeListener<? super Number> changeListener,
-			EventHandler<? super MouseEvent> uploadHandler) {
+			EventHandler<? super MouseEvent> uploadHandler, String currentSimulation) {
 		HBox container = new HBox();
 		container.getChildren().add(initSimulationDropDownMenu(reader.getSimulationChoiceText(),
-				reader.getSimulationTexts(), changeListener));
+				reader.getSimulationTexts(), currentSimulation, changeListener));
 		container.getChildren().add(initUploadButton(uploadHandler));
 		container.getChildren().add(initGridSizeControlBox());
 		container.setAlignment(Pos.CENTER);
@@ -92,19 +92,18 @@ public class PanelDisplay {
 	}
 
 	public BorderPane initializeBorderPaneWithTopControlPanel(ChangeListener<? super Number> changeListener,
-			EventHandler<? super MouseEvent> uploadHandler) {
+			EventHandler<? super MouseEvent> uploadHandler, String currentSimulation) {
 		BorderPane border = new BorderPane();
-		border.setTop(initConfigBox(changeListener, uploadHandler));
+		border.setTop(initConfigBox(changeListener, uploadHandler, currentSimulation));
 		return border;
 	}
 
 	private static Node initSimulationDropDownMenu(String simulationChoiceText, String[] simulationTexts,
-			ChangeListener<? super Number> changeListener) {
+			String currentSimulation, ChangeListener<? super Number> changeListener) {
 		HBox container = new HBox();
 		container.getChildren().add(new Text(simulationChoiceText));
 		ChoiceBox<String> simulationChoices = new ChoiceBox<String>(FXCollections.observableArrayList(simulationTexts));
-		String defaultSimulationName = simulationChoices.getItems().get(0);
-		simulationChoices.setValue(defaultSimulationName);
+		simulationChoices.setValue(currentSimulation);
 		simulationChoices.getSelectionModel().selectedIndexProperty().addListener(changeListener);
 		container.getChildren().add(simulationChoices);
 		container.setAlignment(Pos.BASELINE_CENTER);

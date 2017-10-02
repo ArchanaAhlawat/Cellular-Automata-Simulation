@@ -20,7 +20,7 @@ public abstract class cellMovement {
 	protected ArrayList<GeneralCell> checkNeighborsCurrentParameters(GeneralCell cell, String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell dummy_cell : cell.getNeighbors()) {
-			if (dummy_cell.getCurrentGameParameters().get("state").equals(state)) {
+			if (dummy_cell.getCurrentGameStateParameters().get("state").equals(state)) {
 				stateNeighbors.add(dummy_cell);
 			}
 		}
@@ -40,7 +40,7 @@ public abstract class cellMovement {
 	protected ArrayList<GeneralCell> checkNeighborsNoNextParameters(GeneralCell cell, String state) {
 		ArrayList<GeneralCell> stateNeighbors = new ArrayList<>();
 		for (GeneralCell dummy_cell : cell.getNeighbors()) {
-			if (dummy_cell.getNextCellParameters().size()==0 && dummy_cell.getCurrentGameParameters().get("state").equals(state)) {
+			if (dummy_cell.getNextCellParameters().size()==0 && dummy_cell.getCurrentGameStateParameters().get("state").equals(state)) {
 				stateNeighbors.add(dummy_cell);
 			}
 		}
