@@ -99,7 +99,7 @@ Overall, the code is generally consistent in its layout, though my method names 
 two examples above both show classes that are similar in terms of having short and descriptive methods.  Similarly, my CellManager class
 has many methods like this, that tackle small actions and have specific names like computeAndSetState().
 
-### Your Design
+### My Design
 
 #### High level explanation of my code
 I reviewed a lot of what my code does and how it interacts in the previous section, so I will focus here on the flow of the 
